@@ -20,7 +20,7 @@
  SOFTWARE.
  */
 
-package org.firstinspires.ftc.teamcode.src.tests.fakes.sensors;
+package org.firstinspires.ftc.teamcode.src.fakes.sensors;
 
 import com.qualcomm.hardware.rev.RevTouchSensor;
 

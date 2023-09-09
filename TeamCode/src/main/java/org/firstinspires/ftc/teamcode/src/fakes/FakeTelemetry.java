@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.src.tests.fakes;/*
+package org.firstinspires.ftc.teamcode.src.fakes;/*
  Copyright (c) 2020 The Tech Ninja Team (https://ftc9929.com)
 
  Permission is hereby granted, free of charge, to any person obtaining a copy

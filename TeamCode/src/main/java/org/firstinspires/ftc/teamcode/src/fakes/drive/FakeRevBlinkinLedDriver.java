@@ -1,5 +1,5 @@
-package org.firstinspires.ftc.teamcode.src.tests.fakes.drive;/*
- Copyright (c) 2022 The Tech Ninja Team (https://ftc9929.com)
+/*
+ Copyright (c) 2021 The Tech Ninja Team (https://ftc9929.com)
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -20,64 +20,44 @@ package org.firstinspires.ftc.teamcode.src.tests.fakes.drive;/*
  SOFTWARE.
  */
 
+package org.firstinspires.ftc.teamcode.src.fakes.drive;
 
-import com.qualcomm.robotcore.hardware.CRServo;
-import com.qualcomm.robotcore.hardware.ServoController;
+import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 
-@SuppressWarnings("unused")
-public class FakeCRServo implements CRServo {
-    private double power;
+public class FakeRevBlinkinLedDriver extends RevBlinkinLedDriver {
+    private BlinkinPattern currentPattern;
 
-    private Direction direction = Direction.FORWARD;
-
-    @Override
-    public ServoController getController() {
-        throw new IllegalArgumentException("Not implemented");
+    public FakeRevBlinkinLedDriver(final int port) {
+        super(null, port);
     }
 
     @Override
-    public int getPortNumber() {
-        return 0;
+    public void setPattern(BlinkinPattern pattern) {
+        this.currentPattern = pattern;
     }
 
-    @Override
-    public void setDirection(Direction direction) {
-        this.direction = direction;
-    }
-
-    @Override
-    public Direction getDirection() {
-        return direction;
-    }
-
-    @Override
-    public void setPower(double power) {
-        this.power = power;
-    }
-
-    @Override
-    public double getPower() {
-        return power;
+    public BlinkinPattern getCurrentPattern() {
+        return currentPattern;
     }
 
     @Override
     public Manufacturer getManufacturer() {
-        throw new IllegalArgumentException("Not implemented");
+        return Manufacturer.Lynx;
     }
 
     @Override
     public String getDeviceName() {
-        throw new IllegalArgumentException("Not implemented");
+        return "TNT FakeRevBlinkinledDriver";
     }
 
     @Override
     public String getConnectionInfo() {
-        throw new IllegalArgumentException("Not implemented");
+        return "";
     }
 
     @Override
     public int getVersion() {
-        throw new IllegalArgumentException("Not implemented");
+        return 1;
     }
 
     @Override

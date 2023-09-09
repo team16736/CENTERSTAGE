@@ -1,4 +1,3 @@
-package org.firstinspires.ftc.teamcode.src.tests.fakes.sensors;
 /*
  Copyright (c) 2020 The Tech Ninja Team (https://ftc9929.com)
 
@@ -21,41 +20,24 @@ package org.firstinspires.ftc.teamcode.src.tests.fakes.sensors;
  SOFTWARE.
  */
 
+package org.firstinspires.ftc.teamcode.src.fakes.sensors;
 
-import com.qualcomm.robotcore.hardware.DigitalChannel;
-import com.qualcomm.robotcore.hardware.DigitalChannelController;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
+
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 @SuppressWarnings("unused")
-public class FakeDigitalChannel implements DigitalChannel {
-    private boolean state = true;
+public class FakeDistanceSensor implements DistanceSensor {
 
-    private Mode mode;
+    private double distance;
 
-    private DigitalChannelController.Mode controllerMode;
-
-    @Override
-    public Mode getMode() {
-        return mode;
+    public void setDistance(double distance) {
+        this.distance = distance;
     }
 
     @Override
-    public void setMode(Mode mode) {
-        this.mode =  mode;
-    }
-
-    @Override
-    public boolean getState() {
-        return state;
-    }
-
-    @Override
-    public void setState(boolean state) {
-        this.state = state;
-    }
-
-    @Override
-    public void setMode(DigitalChannelController.Mode mode) {
-        this.controllerMode = mode;
+    public double getDistance(DistanceUnit unit) {
+        return distance;
     }
 
     @Override
@@ -65,7 +47,7 @@ public class FakeDigitalChannel implements DigitalChannel {
 
     @Override
     public String getDeviceName() {
-        return "TNT Fake Digital Channel";
+        return "TNT Fake Distance Sensor";
     }
 
     @Override

@@ -20,7 +20,7 @@
  SOFTWARE.
  */
 
-package org.firstinspires.ftc.teamcode.src.tests.fakes.drive;
+package org.firstinspires.ftc.teamcode.src.fakes.drive;
 
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.ServoController;

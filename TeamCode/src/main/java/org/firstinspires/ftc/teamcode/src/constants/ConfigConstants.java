@@ -13,4 +13,7 @@ public class ConfigConstants {
     public static final String IMU = "IMU";
     public static final String WEBCAM_1 = "Webcam 1";
     public static final String WEBCAM_2 = "Webcam 2";
+
+    //Servos
+    public static final String GRABBERSERVO = "grabberServo";
 }

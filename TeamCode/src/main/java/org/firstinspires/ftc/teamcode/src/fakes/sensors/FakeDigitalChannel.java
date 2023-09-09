@@ -1,5 +1,6 @@
+package org.firstinspires.ftc.teamcode.src.fakes.sensors;
 /*
- Copyright (c) 2021 The Tech Ninja Team (https://ftc9929.com)
+ Copyright (c) 2020 The Tech Ninja Team (https://ftc9929.com)
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -20,34 +21,51 @@
  SOFTWARE.
  */
 
-package org.firstinspires.ftc.teamcode.src.tests.fakes.drive;
 
-import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
+import com.qualcomm.robotcore.hardware.DigitalChannelController;
 
-public class FakeRevBlinkinLedDriver extends RevBlinkinLedDriver {
-    private BlinkinPattern currentPattern;
+@SuppressWarnings("unused")
+public class FakeDigitalChannel implements DigitalChannel {
+    private boolean state = true;
 
-    public FakeRevBlinkinLedDriver(final int port) {
-        super(null, port);
+    private Mode mode;
+
+    private DigitalChannelController.Mode controllerMode;
+
+    @Override
+    public Mode getMode() {
+        return mode;
     }
 
     @Override
-    public void setPattern(BlinkinPattern pattern) {
-        this.currentPattern = pattern;
+    public void setMode(Mode mode) {
+        this.mode =  mode;
     }
 
-    public BlinkinPattern getCurrentPattern() {
-        return currentPattern;
+    @Override
+    public boolean getState() {
+        return state;
+    }
+
+    @Override
+    public void setState(boolean state) {
+        this.state = state;
+    }
+
+    @Override
+    public void setMode(DigitalChannelController.Mode mode) {
+        this.controllerMode = mode;
     }
 
     @Override
     public Manufacturer getManufacturer() {
-        return Manufacturer.Lynx;
+        return Manufacturer.Other;
     }
 
     @Override
     public String getDeviceName() {
-        return "TNT FakeRevBlinkinledDriver";
+        return "TNT Fake Digital Channel";
     }
 
     @Override
@@ -57,7 +75,7 @@ public class FakeRevBlinkinLedDriver extends RevBlinkinLedDriver {
 
     @Override
     public int getVersion() {
-        return 1;
+        return 0;
     }
 
     @Override

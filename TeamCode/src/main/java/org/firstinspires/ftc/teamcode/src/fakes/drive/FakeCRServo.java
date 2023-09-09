@@ -1,5 +1,5 @@
-/*
- Copyright (c) 2020 The Tech Ninja Team (https://ftc9929.com)
+package org.firstinspires.ftc.teamcode.src.fakes.drive;/*
+ Copyright (c) 2022 The Tech Ninja Team (https://ftc9929.com)
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -20,44 +20,64 @@
  SOFTWARE.
  */
 
-package org.firstinspires.ftc.teamcode.src.tests.fakes.sensors;
 
-import com.qualcomm.robotcore.hardware.DistanceSensor;
-
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.ServoController;
 
 @SuppressWarnings("unused")
-public class FakeDistanceSensor implements DistanceSensor {
+public class FakeCRServo implements CRServo {
+    private double power;
 
-    private double distance;
+    private Direction direction = Direction.FORWARD;
 
-    public void setDistance(double distance) {
-        this.distance = distance;
+    @Override
+    public ServoController getController() {
+        throw new IllegalArgumentException("Not implemented");
     }
 
     @Override
-    public double getDistance(DistanceUnit unit) {
-        return distance;
+    public int getPortNumber() {
+        return 0;
+    }
+
+    @Override
+    public void setDirection(Direction direction) {
+        this.direction = direction;
+    }
+
+    @Override
+    public Direction getDirection() {
+        return direction;
+    }
+
+    @Override
+    public void setPower(double power) {
+        this.power = power;
+    }
+
+    @Override
+    public double getPower() {
+        return power;
     }
 
     @Override
     public Manufacturer getManufacturer() {
-        return Manufacturer.Other;
+        throw new IllegalArgumentException("Not implemented");
     }
 
     @Override
     public String getDeviceName() {
-        return "TNT Fake Distance Sensor";
+        throw new IllegalArgumentException("Not implemented");
     }
 
     @Override
     public String getConnectionInfo() {
-        return "";
+        throw new IllegalArgumentException("Not implemented");
     }
 
     @Override
     public int getVersion() {
-        return 0;
+        throw new IllegalArgumentException("Not implemented");
     }
 
     @Override

@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.src.tests.fakes.util;
+package org.firstinspires.ftc.teamcode.src.fakes.util;
 /*
  Copyright (c) 2020 The Tech Ninja Team (https://ftc9929.com)
 
@@ -23,17 +23,21 @@ package org.firstinspires.ftc.teamcode.src.tests.fakes.util;
 
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.eventloop.opmode.OpModeManagerNotifier;
+import com.qualcomm.robotcore.hardware.HardwareDevice;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.teamcode.fakes.drive.FakeCRServo;
-import org.firstinspires.ftc.teamcode.fakes.drive.FakeDcMotorEx;
-import org.firstinspires.ftc.teamcode.fakes.drive.FakeRevBlinkinLedDriver;
-import org.firstinspires.ftc.teamcode.fakes.drive.FakeServo;
-import org.firstinspires.ftc.teamcode.fakes.sensors.FakeDigitalChannel;
-import org.firstinspires.ftc.teamcode.fakes.sensors.FakeDistanceSensor;
-import org.firstinspires.ftc.teamcode.fakes.sensors.FakeRevTouchSensor;
-import org.firstinspires.ftc.teamcode.fakes.sensors.FakeVoltageSensor;
+import org.firstinspires.ftc.teamcode.src.fakes.drive.FakeCRServo;
+import org.firstinspires.ftc.teamcode.src.fakes.drive.FakeDcMotorEx;
+import org.firstinspires.ftc.teamcode.src.fakes.drive.FakeRevBlinkinLedDriver;
+import org.firstinspires.ftc.teamcode.src.fakes.sensors.FakeDigitalChannel;
+import org.firstinspires.ftc.teamcode.src.fakes.sensors.FakeDistanceSensor;
+import org.firstinspires.ftc.teamcode.src.fakes.sensors.FakeRevTouchSensor;
+import org.firstinspires.ftc.teamcode.src.fakes.sensors.FakeVoltageSensor;
+import org.firstinspires.ftc.teamcode.src.fakes.drive.FakeServo;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -45,6 +49,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -102,7 +107,39 @@ public class FakeHardwareMapFactory {
     private static class HardwareMapCreator {
         private Set<String> deviceNames = new HashSet<>();
 
-        private HardwareMap hardwareMap = new HardwareMap(null);
+        private HardwareMap hardwareMap = new HardwareMap(null, new OpModeManagerNotifier() {
+            @Override
+            public OpMode registerListener(Notifications listener) {
+                return null;
+            }
+
+            @Override
+            public void unregisterListener(Notifications listener) {
+
+            }
+        }) {
+
+            @Nullable
+            @Override
+            public <T> T tryGet(Class<? extends T> classOrInterface, String deviceName) {
+                synchronized (lock) {
+                    deviceName = deviceName.trim();
+                    List<HardwareDevice> list = allDevicesMap.get(deviceName);
+                    @Nullable T result = null;
+
+                    if (list != null) {
+                        for (HardwareDevice device : list) {
+                            if (classOrInterface.isInstance(device)) {
+                                result = classOrInterface.cast(device);
+                                break;
+                            }
+                        }
+                    }
+
+                    return result;
+                }
+            }
+        };
 
         private void parseUsingDocBuilder(InputStream fileInput) throws ParserConfigurationException, SAXException, IOException {
             DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
