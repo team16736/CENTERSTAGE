@@ -25,13 +25,8 @@ public class GrabberActions {
         grabberServo.setPosition(0.9);
     }
 
-    private double getSetTime = 0;
-    public void setTime(double time) {
-        getSetTime = time;
-    }
     public double getTime() {
-//        return runtime.seconds();
-        return getSetTime;
+        return runtime.seconds();
     }
 
     public void openGrabber() {

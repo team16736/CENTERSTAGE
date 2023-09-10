@@ -1,4 +1,5 @@
-package org.firstinspires.ftc.teamcode.src.tests;
+package org.firstinspires.ftc.teamcode.src.tests.attachments;
+
 import org.firstinspires.ftc.teamcode.src.constants.ConfigConstants;
 import org.junit.Assert;
 import org.junit.Before;
@@ -35,8 +36,7 @@ public class TestGrabber {
     public void testGetAdjustedDistance() {
         grabberActions.openGrabber();
         Assert.assertEquals(false, grabberActions.isGrabberOpen());
-        double time = grabberActions.getTime();
-        grabberActions.setTime(1.1 + time);
+        while (grabberActions.getTime() < 1.1) {}
         Assert.assertEquals(true, grabberActions.isGrabberOpen());
     }
 }
