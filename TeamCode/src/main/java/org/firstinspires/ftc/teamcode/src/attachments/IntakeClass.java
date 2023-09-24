@@ -6,7 +6,7 @@ public class IntakeClass {
         this.stateManager = stateManager;
     }
     public void intakeOn(){
-        if (stateManager.MAX_PIXELS != stateManager.pixelCount) {
+        if ((stateManager.MAX_PIXELS != stateManager.pixelCount) && (stateManager.getPlacerState() != stateManager.PLACER_PLACING )) {
             stateManager.setIntakeState(stateManager.INTAKE_TAKING_PIXEL1);
         }
     }

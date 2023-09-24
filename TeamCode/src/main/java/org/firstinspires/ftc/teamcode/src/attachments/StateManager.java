@@ -7,7 +7,7 @@ public class StateManager {
     public int INTAKE_GIVING_PIXEL2 = 3;
     public int INTAKE_HASPIXEL = 4;
 
-    public int NO_PIXEL = 6;
+    public int INTAKE_HAS_NO_PIXEL = 6;
 
     // uptake states
     public int UPTAKE_TAKING_PIXEL1 = 0;
@@ -24,9 +24,9 @@ public class StateManager {
     public int PLACER_NO_PIXEL = 3;
     public int pixelCount = 0;
     public int MAX_PIXELS = 2;
-    public int placerState = 0;
-    public int uptakeState = 0;
-    public int intakeState = 0;
+    public int placerState = PLACER_NO_PIXEL;
+    public int uptakeState = UPTAKE_NO_PIXEL;
+    public int intakeState = INTAKE_HAS_NO_PIXEL;
 
     public int getPlacerState() {
         return placerState;
