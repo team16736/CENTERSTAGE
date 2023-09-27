@@ -56,6 +56,8 @@ public class GyroActions {
 
     public int strafeState = 0;
 
+    double currentTargetAngle = 0;
+
     private static LinearOpMode opModeObj;
 
 
@@ -241,18 +243,16 @@ public class GyroActions {
         }
     }
 
-    double rawHeading;
-    double prevHeading = 0;
-    boolean addBit = false;
-    boolean subtractBit = false;
-    public void gyroSpin(double speed,
-                         double targetHeading) {
+    public void initGyroSpin(double angle) {
+        currentTargetAngle += angle;
+        while (currentTargetAngle > 180) currentTargetAngle -= 360;
+        while (currentTargetAngle < -180) currentTargetAngle += 360;
         motorFrontL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorFrontR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorBackL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorBackR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         double ticksPerDegree = 5.393;
-        totalTicks = (int) (ticksPerDegree * targetHeading);
+        totalTicks = (int) (ticksPerDegree * angle);
         motorFrontL.setTargetPosition(totalTicks);
         motorFrontR.setTargetPosition(-totalTicks);
         motorBackL.setTargetPosition(totalTicks);
@@ -262,40 +262,32 @@ public class GyroActions {
         motorFrontR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         motorBackL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         motorBackR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    }
 
-        targetHeading = targetHeading + getRawHeading();
 
-        motorFrontL.setVelocity(speed);
-        motorFrontR.setVelocity(-speed);
-        motorBackL.setVelocity(speed);
-        motorBackR.setVelocity(-speed);
-
-        while (motorFrontL.isBusy()) {
-            rawHeading = getRawHeading();
-            if (prevHeading > 90 && rawHeading < -90 || addBit) {
-                rawHeading += 360;
-                addBit = true;
-            } else if (prevHeading < -90 && rawHeading > 90 || subtractBit) {
-                rawHeading -= 360;
-                subtractBit = true;
-            }
-            headingError = getRawHeading() - targetHeading;
-            int errorInTicks = (int) (ticksPerDegree * headingError);
-            motorFrontL.setTargetPosition(motorFrontL.getCurrentPosition() + errorInTicks);
-            motorFrontR.setTargetPosition(motorFrontR.getCurrentPosition() - errorInTicks);
-            motorBackR.setTargetPosition(motorBackR.getCurrentPosition() - errorInTicks);
-            motorBackL.setTargetPosition(motorBackL.getCurrentPosition() + errorInTicks);
-            RobotLog.dd("Gyro Turn:", "target pos `", motorFrontL.getTargetPosition());
-            RobotLog.dd("Gyro Turn:", "current pos `", motorFrontL.getCurrentPosition());
-            RobotLog.dd("Gyro Turn:", "current ang `", getRawHeading());
-            RobotLog.dd("Gyro Turn:", "target ang `", targetHeading);
-            RobotLog.dd("Gyro Turn:", "heading err `", headingError);
-            telemetry.update();
-            prevHeading = rawHeading;
-        }
-        prevHeading = 0;
-        addBit = false;
-        subtractBit = false;
+    public boolean gyroSpin(double speed) {
+        double rampDown = 1 - Math.pow(0.97, Math.abs(headingError) + 3);
+        setVelocity(speed * rampDown);
+        headingError = getRawHeading() - currentTargetAngle;
+        double ticksPerDegree = 5.393;
+        int errorInTicks = (int) (ticksPerDegree * headingError);
+        motorFrontL.setTargetPosition(motorFrontL.getCurrentPosition() + errorInTicks);
+        motorFrontR.setTargetPosition(motorFrontR.getCurrentPosition() - errorInTicks);
+        motorBackR.setTargetPosition(motorBackR.getCurrentPosition() - errorInTicks);
+        motorBackL.setTargetPosition(motorBackL.getCurrentPosition() + errorInTicks);
+//        RobotLog.dd("Gyro Turn", "target pos ` %d", motorFrontL.getTargetPosition());
+//        RobotLog.dd("Gyro Turn", "current pos ` %d", motorFrontL.getCurrentPosition());
+//        RobotLog.dd("Gyro Turn", "current ang ` %f", getRawHeading());
+//        RobotLog.dd("Gyro Turn", "target ang ` %f", currentTargetAngle);
+//        RobotLog.dd("Gyro Turn", "heading err ` %f", headingError);
+        telemetry.update();
+        return motorFrontL.isBusy();
+    }
+    public void setVelocity(double velocity) {
+        motorFrontL.setVelocity(velocity);
+        motorFrontR.setVelocity(velocity);
+        motorBackR.setVelocity(velocity);
+        motorBackL.setVelocity(velocity);
     }
 
     public double getSteeringCorrection(double desiredHeading, double proportionalGain) {

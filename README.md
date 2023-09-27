@@ -22,7 +22,6 @@
 - git clone git@github.com:team16736/CENTERSTAGE.git
 - open project in Android Studio
 - Download Revhub control software OR use ADB to connect
-- tru
 
 
 ## NOTICE
