@@ -29,6 +29,7 @@
 
 package org.firstinspires.ftc.teamcode.src.driving;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -79,11 +80,12 @@ import java.util.concurrent.TimeUnit;
  *
  */
 
-@TeleOp(name="Omni Drive To AprilTag Scott", group = "Concept")
+@Disabled
+@TeleOp(name="Omni Drive To AprilTag James", group = "Concept")
 public class RobotAutoDriveToAprilTagOmniEncoder extends LinearOpMode
 {
     // Adjust these numbers to suit your robot.
-    double DESIRED_Y = 24.0; //  this is how close the camera should get to the target (inches)
+    double DESIRED_Y = 4.0; //  this is how close the camera should get to the target (inches)
     double DESIRED_X = 0.0;
     double DESIRED_BEARING = 0.0;
     boolean elapsedTimeBit = true;
@@ -108,13 +110,10 @@ public class RobotAutoDriveToAprilTagOmniEncoder extends LinearOpMode
     private DcMotorEx motorBackR = null;  //  Used to control the right back drive wheel
 
     private static final boolean USE_WEBCAM = true;  // Set true to use a webcam, or false for a phone camera
-    private static final int DESIRED_TAG_ID = 0;     // Choose the tag you want to approach or set to -1 for ANY tag.
+    private static final int DESIRED_TAG_ID = 5;     // Choose the tag you want to approach or set to -1 for ANY tag.
     private VisionPortal visionPortal;               // Used to manage the video source.
     private AprilTagProcessor aprilTag;              // Used for managing the AprilTag detection process.
     private AprilTagDetection desiredTag = null;     // Used to hold the data for a detected AprilTag
-    double[] p = {0.1, 0.08, 0.01};
-    double[] i = {0.0001, 0.0001, 0.0001};
-    double[] d = {0.0001, 0.0001, 0.0001};
 
     @Override public void runOpMode()
     {
@@ -161,7 +160,7 @@ public class RobotAutoDriveToAprilTagOmniEncoder extends LinearOpMode
             List<AprilTagDetection> currentDetections = aprilTag.getDetections();
             for (AprilTagDetection detection : currentDetections) {
                 if ((detection.metadata != null)
-                        && ((DESIRED_TAG_ID >= 0) || (detection.id == DESIRED_TAG_ID))  ){
+                        && ((DESIRED_TAG_ID >= 0) && (detection.id == DESIRED_TAG_ID))  ){
                     targetFound = true;
                     desiredTag = detection;
                     break;  // don't look any further.
@@ -202,13 +201,16 @@ public class RobotAutoDriveToAprilTagOmniEncoder extends LinearOpMode
                 telemetry.addData("Desired Bearing", DESIRED_BEARING);
 
                 // Determine heading, range and Yaw (tag image rotation) error so we can use them to control the robot automatically.
-                double rangeError = (desiredTag.ftcPose.y - DESIRED_Y);
-                double headingError = (-desiredTag.ftcPose.yaw - DESIRED_BEARING);
-                double yawError = (-desiredTag.ftcPose.x - DESIRED_X);
+                double yError = (desiredTag.ftcPose.y - DESIRED_Y);
+                double headingError = (desiredTag.ftcPose.yaw - DESIRED_BEARING);
+                // Because X does not give same answer regardless of rotation, must derive it using angle and range
+                double X = Math.sin(Math.toRadians(desiredTag.ftcPose.yaw)) * desiredTag.ftcPose.range;
+                double xError = (X - DESIRED_X);
                 telemetry.update();
-                sleep(1000);
-                encoderDrive(200, rangeError);
-                encoderStrafe(150, yawError, false);
+                sleep(5000);
+                encoderSpin(300, headingError, true);
+                encoderStrafe(150, xError, false);
+                encoderDrive(200, yError);
 
                 // Use the speed and turn "gains" to calculate how we want the robot to move.
 //                drive  = Range.clip(rangeError * SPEED_GAIN, -MAX_AUTO_SPEED, MAX_AUTO_SPEED);
@@ -231,7 +233,6 @@ public class RobotAutoDriveToAprilTagOmniEncoder extends LinearOpMode
 
 //            sleep(5);
         }
-        RobotLog.dd("AprilTags", "yP %f,xP %f, turnP %f, yI %f, xI %f, turnI %f, yD %f, xD %f, turnD %f", p[0], p[1], p[2], i[0], i[1], i[2], d[0], d[1], d[2]);
     }
 
     /**
@@ -302,6 +303,50 @@ public class RobotAutoDriveToAprilTagOmniEncoder extends LinearOpMode
         motorFrontR.setVelocity(-encoderSpeed);
         motorBackL.setVelocity(-encoderSpeed);
         motorBackR.setVelocity(-encoderSpeed);
+    }
+    public void encoderSpin(double encoderSpeed,
+                            double encoderDegrees,
+                            boolean encoderSpinLeft) { // Deprecated
+        motorFrontL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorFrontR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorBackL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorBackR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        // Set the motor's target position to 6.4 rotations
+        double ticksPerDegree = 5.3;
+        int totalTicks = (int) (ticksPerDegree * encoderDegrees);
+        if (encoderSpinLeft){
+            motorFrontL.setTargetPosition(-totalTicks);
+            motorFrontR.setTargetPosition(totalTicks);
+            motorBackL.setTargetPosition(-totalTicks);
+            motorBackR.setTargetPosition(totalTicks);
+        }else{
+            motorFrontL.setTargetPosition(totalTicks);
+            motorFrontR.setTargetPosition(-totalTicks);
+            motorBackL.setTargetPosition(totalTicks);
+            motorBackR.setTargetPosition(-totalTicks);
+        }
+
+
+        // Switch to RUN_TO_POSITION mode
+        motorFrontL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        motorFrontR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        motorBackL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        motorBackR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        // Start the motor moving by setting the max velocity to 1 revolution per second
+        motorFrontL.setVelocity(-encoderSpeed);
+        motorFrontR.setVelocity(-encoderSpeed);
+        motorBackL.setVelocity(-encoderSpeed);
+        motorBackR.setVelocity(-encoderSpeed);
+
+        //motorFrontL.isBusy()hile the Op Mode is running, show the motor's status via telemetry
+        while (motorFrontL.isBusy()) {
+            telemetry.addData("FL is at target", !motorFrontL.isBusy());
+            telemetry.addData("FR is at target", !motorFrontR.isBusy());
+            telemetry.addData("BL is at target", !motorBackL.isBusy());
+            telemetry.addData("BR is at target", !motorBackR.isBusy());
+            telemetry.update();
+        }
     }
     public void whileMotorBusy(){
         while (motorFrontL.isBusy() && motorFrontR.isBusy() && motorBackL.isBusy() && motorBackR.isBusy()) {

@@ -27,4 +27,5 @@ dependencies {
     implementation project(':FtcRobotController')
     implementation 'junit:junit:4.12'
     annotationProcessor files('lib/OpModeAnnotationProcessor.jar')
+//    implementation 'com.quickbirdstudios:opencv:4.5.3.0'
 }
