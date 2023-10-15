@@ -40,5 +40,4 @@ public class OpenCV {
 //        Imgcodecs.imwrite(fileName, result);
         return matchLoc;
     }
-
 }

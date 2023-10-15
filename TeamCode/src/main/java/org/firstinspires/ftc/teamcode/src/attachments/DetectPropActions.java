@@ -60,8 +60,11 @@ public class DetectPropActions {
 
     int wherePropState = 0;
     int priorDetectionNumber = 0;
-    double sumOfXValues = 0;
-    int numOfZeroes = 0;
+    int rightCount = 0;
+    int midCount = 0;
+    int leftCount = 0;
+//    double sumOfXValues = 0;
+//    int numOfZeroes = 0;
     public String propPlace = "";
     public String whereProp(int iterations) {
         if (!Objects.equals(propPlace, "")) {
@@ -71,26 +74,22 @@ public class DetectPropActions {
             if (detectionNumber != priorDetectionNumber) {
                 priorDetectionNumber = detectionNumber;
                 wherePropState ++;
-                sumOfXValues += result.x;
-                if (result.x == 0.0) {
-                    numOfZeroes ++;
+                if (result.x < 20 || result.x > 250) {
+                    rightCount++;
+                } else if (result.x < 150) {
+                    leftCount++;
+                } else {
+                    midCount++;
                 }
             }
             propPlace = "";
         } else {
-            double averageResult;
-            if (numOfZeroes < iterations / 2 && iterations > 1){
-                wherePropState -= numOfZeroes;
-                averageResult = sumOfXValues / wherePropState;
-            } else {
-                averageResult = 0.0;
-            }
-            if (averageResult < 50) {
+            if (rightCount > leftCount && rightCount > midCount) {
                 propPlace = "right";
-            } else if (averageResult > 150) {
-                propPlace = "middle";
-            } else {
+            } else if (leftCount > midCount) {
                 propPlace = "left";
+            } else {
+                propPlace = "middle";
             }
         }
         return propPlace;
@@ -98,8 +97,9 @@ public class DetectPropActions {
     public void resetPropPlace() {
         wherePropState = 0;
         priorDetectionNumber = 0;
-        sumOfXValues = 0;
-        numOfZeroes = 0;
+        rightCount = 0;
+        leftCount = 0;
+        midCount = 0;
         propPlace = "";
     }
 
