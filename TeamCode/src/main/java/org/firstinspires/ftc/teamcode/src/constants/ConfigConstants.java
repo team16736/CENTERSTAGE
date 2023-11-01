@@ -9,6 +9,9 @@ public class ConfigConstants {
     public static final String BACK_RIGHT = "rightRear";
     public static final String BACK_LEFT = "leftRear";
 
+    //Lifty Uppy
+    public static final String FLIPPY_TURNY = "flippyturny";
+
     //Sensors
     public static final String IMU = "IMU";
     public static final String WEBCAM_1 = "Webcam 1";

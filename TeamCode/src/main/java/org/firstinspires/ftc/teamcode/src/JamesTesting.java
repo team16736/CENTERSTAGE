@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.src.attachments.DetectPropActions;
+import org.firstinspires.ftc.teamcode.src.attachments.LiftyUppyActions;
 import org.firstinspires.ftc.teamcode.src.attachments.OpenCV;
 import org.firstinspires.ftc.teamcode.src.driving.HelperActions;
 import org.junit.Assert;
@@ -25,7 +26,8 @@ public class JamesTesting extends HelperActions {
     public void runOpMode() {
 
         openCV = new OpenCV();
-        DetectPropActions detectPropActions = new DetectPropActions(hardwareMap);
+//        DetectPropActions detectPropActions = new DetectPropActions(hardwareMap);
+        LiftyUppyActions liftyUppyActions = new LiftyUppyActions(hardwareMap);
 
         //Set Speed for teleOp. Mecannum wheel speed.
         //driveActions.setSpeed(1.0);
@@ -35,15 +37,19 @@ public class JamesTesting extends HelperActions {
         telemetry.update();
         waitForStart();
 
-        while (opModeIsActive()) {
-            detectPropActions.whereProp(10);
-            while (detectPropActions.propPlace == "") {
-                detectPropActions.whereProp(10);
-//                RobotLog.dd("OpenCV", "Result" + detectPropActions.propPlace);
+        if (opModeIsActive()) {
+            liftyUppyActions.goUp();
+            while(!(liftyUppyActions.isDone())) {
+                telemetry.addData("is done", liftyUppyActions.isDone());
+                telemetry.addData("numberOfTicks", liftyUppyActions.getTick());
+                telemetry.update();
             }
-            RobotLog.dd("OpenCV", "Result %s", detectPropActions.propPlace);
-            telemetry.addData("Prop is on the", detectPropActions.propPlace);
-            telemetry.update();
+            liftyUppyActions.goDown();
+            while(!( liftyUppyActions.isDone())) {
+                telemetry.addData("is done", liftyUppyActions.isDone());
+                telemetry.addData("numberOfTicks", liftyUppyActions.getTick());
+                telemetry.update();
+            }
 //            String pathTemplate = "/sdcard/FIRST/java/src/blackboxtemplatedownsized.jpg";
 //
 //            RobotLog.dd("OpenCV", "Reached 1");

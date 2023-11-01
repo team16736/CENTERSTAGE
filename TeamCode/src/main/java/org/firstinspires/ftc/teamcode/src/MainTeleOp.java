@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.src.driving.DriveActions;
 import org.firstinspires.ftc.teamcode.src.driving.GyroActions;
 import org.firstinspires.ftc.teamcode.src.driving.HelperActions;
+import org.firstinspires.ftc.teamcode.src.attachments.LiftyUppyActions;
 
 @Disabled
 @TeleOp(name = "Tele Op", group = "Linear Opmode")
@@ -14,6 +15,7 @@ public class MainTeleOp extends HelperActions {
 
     private GyroActions gyroActions = null;
     private DriveActions driveActions = null;
+    private LiftyUppyActions liftyUppyActions = null;
     boolean correctRotation = false;
     double rotationPosition = 0;
     double rotation = 0;
@@ -23,6 +25,7 @@ public class MainTeleOp extends HelperActions {
 
         gyroActions = new GyroActions(this, telemetry, hardwareMap);
         driveActions = new DriveActions(telemetry, hardwareMap);
+        liftyUppyActions = new LiftyUppyActions(hardwareMap);
 
         //Set Speed for teleOp. Mecannum wheel speed.
         //driveActions.setSpeed(1.0);
@@ -45,6 +48,13 @@ public class MainTeleOp extends HelperActions {
             telemetry.addData("Joystick", gamepad2.right_stick_y);
 
             changeSpeed(driveActions, gamepad1.dpad_up, gamepad1.dpad_down, false, false);
+
+            liftyUppyActions.update();
+            if(gamepad2.dpad_down) {
+                liftyUppyActions.goDown();
+            } else if (gamepad2.dpad_up){
+                liftyUppyActions.goUp();
+            }
 
             telemetry.update();
         }
