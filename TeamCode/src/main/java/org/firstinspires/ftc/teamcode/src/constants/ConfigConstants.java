@@ -19,4 +19,10 @@ public class ConfigConstants {
 
     //Servos
     public static final String GRABBERSERVO = "grabberServo";
+
+    public static final String INTAKE_LEFT = "intakeLeft";
+
+    public static final String INTAKE_RIGHT = "intakeRight";
+
+    public static final String UPTAKE = "uptake";
 }
