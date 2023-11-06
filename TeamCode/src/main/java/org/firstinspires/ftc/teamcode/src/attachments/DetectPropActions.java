@@ -83,7 +83,8 @@ public class DetectPropActions {
                 }
             }
             propPlace = "";
-        } else {
+        }
+        if (!(wherePropState < 1)){
             if (rightCount > leftCount && rightCount > midCount) {
                 propPlace = "right";
             } else if (leftCount > midCount) {

@@ -25,6 +25,7 @@ import org.xml.sax.SAXException;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Objects;
 
 import javax.xml.parsers.ParserConfigurationException;
 //import java.awt.image.BufferedImage;
@@ -82,5 +83,42 @@ public class TestOpenCV {
         absolutePathImg = fileImg.getAbsolutePath();
         img = Imgcodecs.imread(absolutePathImg, Imgcodecs.IMREAD_COLOR);
         return img;
+    }
+
+    @Test
+    public void testWhereProp() {
+        int wherePropState = 0;
+        int priorDetectionNumber = 0;
+        int rightCount = 0;
+        int midCount = 0;
+        int leftCount = 0;
+        Point result = new Point(100,0);
+//    double sumOfXValues = 0;
+//    int numOfZeroes = 0;
+        String propPlace = "";
+        if (wherePropState < 1) {
+            if (1 != priorDetectionNumber) {
+                priorDetectionNumber = 1;
+                wherePropState ++;
+                if (result.x < 20 || result.x > 250) {
+                    rightCount++;
+                } else if (result.x < 150) {
+                    leftCount++;
+                } else {
+                    midCount++;
+                }
+            }
+            propPlace = "";
+        }
+        if (!(wherePropState < 1)){
+            if (rightCount > leftCount && rightCount > midCount) {
+                propPlace = "right";
+            } else if (leftCount > midCount) {
+                propPlace = "left";
+            } else {
+                propPlace = "middle";
+            }
+        }
+        Assert.assertEquals("right", propPlace);
     }
 }

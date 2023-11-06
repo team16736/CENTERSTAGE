@@ -56,7 +56,7 @@ public class GyroActions {
 
     public int strafeState = 0;
 
-    double currentTargetAngle = 0;
+    public double currentTargetAngle = 0;
 
     private static LinearOpMode opModeObj;
 
