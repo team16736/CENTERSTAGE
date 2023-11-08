@@ -19,16 +19,16 @@ public class UpTake {
     }
 
     public void setUptakeUp() {
-        stateManager.setIntakeState(stateManager.UPTAKE_UP);
+        stateManager.setUptakeState(stateManager.UPTAKE_UP);
         uptake.setPower(1.0);
     }
 
     public void setUptakeDown() {
-        stateManager.setIntakeState(stateManager.UPTAKE_DOWN);
+        stateManager.setUptakeState(stateManager.UPTAKE_DOWN);
         uptake.setPower(-1.0);
     }
     public void setUptakeOff() {
-        stateManager.setIntakeState(stateManager.UPTAKE_OFF);
+        stateManager.setUptakeState(stateManager.UPTAKE_OFF);
         uptake.setPower(0.0);
     }
 
@@ -40,5 +40,16 @@ public class UpTake {
         } else {
             setUptakeOff();
         }
+    }
+
+    public void setPower(double power) {
+        if (power < 0) {
+            stateManager.setUptakeState(stateManager.UPTAKE_DOWN);
+        } else if (power > 0) {
+            stateManager.setUptakeState(stateManager.UPTAKE_UP);
+        } else {
+            stateManager.setUptakeState(stateManager.UPTAKE_OFF);
+        }
+        uptake.setPower(power);
     }
 }

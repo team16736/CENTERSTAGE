@@ -1,21 +1,11 @@
 
 package org.firstinspires.ftc.teamcode.src;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.util.RobotLog;
 
-import org.firstinspires.ftc.teamcode.src.attachments.DetectPropActions;
 import org.firstinspires.ftc.teamcode.src.attachments.LiftyUppyActions;
 import org.firstinspires.ftc.teamcode.src.attachments.OpenCV;
 import org.firstinspires.ftc.teamcode.src.driving.HelperActions;
-import org.junit.Assert;
-import org.opencv.core.Core;
-import org.opencv.core.Mat;
-import org.opencv.core.Point;
-import org.opencv.imgcodecs.Imgcodecs;
-
-import java.io.File;
 
 @TeleOp(name = "James Test", group = "Linear Opmode")
 public class JamesTesting extends HelperActions {
@@ -38,13 +28,13 @@ public class JamesTesting extends HelperActions {
         waitForStart();
 
         if (opModeIsActive()) {
-            liftyUppyActions.goUp();
+            liftyUppyActions.flippyTurnyUp();
             while(!(liftyUppyActions.isDone())) {
                 telemetry.addData("is done", liftyUppyActions.isDone());
                 telemetry.addData("numberOfTicks", liftyUppyActions.getTick());
                 telemetry.update();
             }
-            liftyUppyActions.goDown();
+            liftyUppyActions.flippyTurnyDown();
             while(!( liftyUppyActions.isDone())) {
                 telemetry.addData("is done", liftyUppyActions.isDone());
                 telemetry.addData("numberOfTicks", liftyUppyActions.getTick());

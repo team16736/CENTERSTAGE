@@ -56,5 +56,17 @@ public class IntakeClass {
             intakeOff();
         }
     }
+
+    public void setPower(double power) {
+        if (power < 0) {
+            stateManager.setIntakeState(stateManager.INTAKE_OUT);
+        } else if (power > 0) {
+            stateManager.setIntakeState(stateManager.INTAKE_ON);
+        } else {
+            stateManager.setIntakeState(stateManager.INTAKE_OUT);
+        }
+        intakeLeft.setPower(power);
+        intakeRight.setPower(-power);
+    }
 }
 

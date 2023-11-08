@@ -24,6 +24,15 @@ public class StateManager {
     public int UPTAKE_UP = 1;
     public int UPTAKE_DOWN = 1;
 
+    public int FLIPPYTURNY_DOWN = 0;
+    public int FLIPPYTURNY_UPPING = 1;
+    public int FLIPPYTURNY_UP = 2;
+    public int FLIPPYTURNY_DOWNING = 3;
+
+    public int LIFTYUPPY_UPPING = 0;
+    public int LIFTYUPPY_DOWNING = 1;
+    public int LIFTYUPPY_STOPPED = 2;
+
     // placer states
     public int PLACER_PLACING = 1;
     public int PLACER_HAS_PIXEL = 2;
@@ -33,6 +42,8 @@ public class StateManager {
     public int placerState = PLACER_NO_PIXEL;
     public int uptakeState = UPTAKE_OFF;
     public int intakeState = INTAKE_OFF;
+    public int flippyTurnyState = FLIPPYTURNY_DOWN;
+    public int liftyUppyState = LIFTYUPPY_STOPPED;
 
     public int getPlacerState() {
         return placerState;
@@ -49,10 +60,13 @@ public class StateManager {
     public int getUptakeState() {
         return uptakeState;
     }
-    public void setUptakerState(int State){
+    public void setUptakeState(int State){
         uptakeState = State;
     }
-
+    public int getFlippyTurnyState() { return flippyTurnyState; }
+    public void setFlippyTurnyState(int State) { flippyTurnyState = State; }
+    public int getLiftyUppyState() { return liftyUppyState; }
+    public void setLiftyUppyState(int State) { liftyUppyState = State; }
 }
 
 

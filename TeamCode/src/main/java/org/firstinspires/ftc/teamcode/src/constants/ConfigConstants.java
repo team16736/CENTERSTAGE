@@ -11,6 +11,7 @@ public class ConfigConstants {
 
     //Lifty Uppy
     public static final String FLIPPY_TURNY = "flippyturny";
+    public static final String LIFTY_UPPY = "liftyuppy";
 
     //Sensors
     public static final String IMU = "IMU";

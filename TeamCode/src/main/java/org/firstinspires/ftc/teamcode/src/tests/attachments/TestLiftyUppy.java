@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.src.tests.attachments;
 
-import org.firstinspires.ftc.teamcode.src.attachments.GrabberActions;
 import org.firstinspires.ftc.teamcode.src.constants.ConfigConstants;
 import org.firstinspires.ftc.teamcode.src.fakes.drive.FakeDcMotorEx;
 import org.junit.Assert;
@@ -10,7 +9,6 @@ import org.xml.sax.SAXException;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.src.fakes.FakeTelemetry;
-import org.firstinspires.ftc.teamcode.src.fakes.drive.FakeServo;
 import org.firstinspires.ftc.teamcode.src.fakes.util.FakeHardwareMapFactory;
 
 import java.io.IOException;
@@ -38,7 +36,7 @@ public class TestLiftyUppy {
     @Test
     public void testFlippyTurny() {
         fakeFlippyTurny.setCurrentPosition(0);
-        liftyUppyActions.goUp();
+        liftyUppyActions.flippyTurnyUp();
         fakeFlippyTurny.setBusy(true);
         Assert.assertEquals(LiftyUppyActions.FlippyTurnyState.upping, liftyUppyActions.flippyTurnyState);
         liftyUppyActions.update();
@@ -46,7 +44,7 @@ public class TestLiftyUppy {
         fakeFlippyTurny.setBusy(false);
         liftyUppyActions.update();
         Assert.assertEquals(LiftyUppyActions.FlippyTurnyState.up, liftyUppyActions.flippyTurnyState);
-        liftyUppyActions.goDown();
+        liftyUppyActions.flippyTurnyDown();
         fakeFlippyTurny.setBusy(false);
         liftyUppyActions.update();
         Assert.assertEquals(LiftyUppyActions.FlippyTurnyState.down, liftyUppyActions.flippyTurnyState);

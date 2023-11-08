@@ -58,11 +58,15 @@ public class MainTeleOp extends HelperActions {
             changeSpeed(driveActions, gamepad1.dpad_up, gamepad1.dpad_down, false, false);
 
             liftyUppyActions.update();
-            if(gamepad2.dpad_down) {
-                liftyUppyActions.goDown();
-            } else if (gamepad2.dpad_up){
-                liftyUppyActions.goUp();
+            if(gamepad2.b) {
+                liftyUppyActions.flippyTurnyDown();
+            } else if (gamepad2.x){
+                liftyUppyActions.flippyTurnyUp();
             }
+            double intakePower = (gamepad1.right_trigger + gamepad2.right_trigger - gamepad1.left_trigger - gamepad2.left_trigger);
+            intakeClass.setPower(intakePower);
+            upTake.setPower(intakePower);
+            liftyUppyActions.setLiftyUppyPower(gamepad2.left_stick_y);
 
             telemetry.update();
         }
