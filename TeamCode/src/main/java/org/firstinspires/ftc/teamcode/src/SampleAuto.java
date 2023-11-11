@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 // Import Statements. Important if you want to use anything from a file
 import org.firstinspires.ftc.teamcode.src.attachments.LiftyUppyActions;
 import org.firstinspires.ftc.teamcode.src.attachments.DetectPropActions;
+import org.firstinspires.ftc.teamcode.src.attachments.StateManager;
 import org.firstinspires.ftc.teamcode.src.driving.GyroActions;
 import org.firstinspires.ftc.teamcode.src.driving.HelperActions;
 import org.firstinspires.ftc.teamcode.src.constants.ConfigConstants;
@@ -16,6 +17,7 @@ public class SampleAuto extends HelperActions {
     private GyroActions gyroActions = null;
     private DetectPropActions detectPropActions = null;
     private LiftyUppyActions liftyUppyActions = null;
+    private StateManager stateManager = null;
 
     //Initial variable declarations
     private double speed = 200;
@@ -24,9 +26,10 @@ public class SampleAuto extends HelperActions {
 
         //Done during initialization
         //Before this, the actions we created are empty. Assigns the actions to stop being nothing
+        stateManager = new StateManager();
         gyroActions = new GyroActions(this, telemetry, hardwareMap);
         detectPropActions = new DetectPropActions(hardwareMap);
-        liftyUppyActions = new LiftyUppyActions(hardwareMap);
+        liftyUppyActions = new LiftyUppyActions(hardwareMap, stateManager);
 
         //Ends initialization, waits for the player to hit the start button
         telemetry.addData(">", "Press Play to start op mode");

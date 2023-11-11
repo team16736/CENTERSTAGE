@@ -10,8 +10,8 @@ public class ConfigConstants {
     public static final String BACK_LEFT = "leftRear";
 
     //Lifty Uppy
-    public static final String FLIPPY_TURNY = "flippyturny";
-    public static final String LIFTY_UPPY = "liftyuppy";
+    public static final String FLIPPY_TURNY = "flippyTurny";
+    public static final String LIFTY_UPPY = "liftyUppy";
 
     //Sensors
     public static final String IMU = "IMU";
@@ -26,4 +26,6 @@ public class ConfigConstants {
     public static final String INTAKE_RIGHT = "intakeRight";
 
     public static final String UPTAKE = "uptake";
+
+    public static final String PLACER = "placer";
 }

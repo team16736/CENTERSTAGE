@@ -2,11 +2,13 @@ package org.firstinspires.ftc.teamcode.src.driving;
 
 import static android.os.SystemClock.sleep;
 
+import com.qualcomm.hardware.bosch.BHI260IMU;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 import com.qualcomm.robotcore.util.RobotLog;
@@ -23,7 +25,7 @@ public class GyroActions {
     DcMotorEx motorFrontR;
     DcMotorEx motorBackL;
     DcMotorEx motorBackR;
-    private BNO055IMU imu = null;
+    private BHI260IMU imu = null;
 
 
     private double robotHeading = 0;
@@ -82,10 +84,11 @@ public class GyroActions {
         motorBackR.setDirection(MotorConstants.FORWARD);
 
         // define initialization values for IMU, and then initialize it.
-        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
-        imu = hardwareMap.get(BNO055IMU.class, "imu");
-        imu.initialize(parameters);
+//        IMU.Parameters parameters = new IMU.Parameters();
+//        parameters.angleUnit = BHI260IMU.AngleUnit.DEGREES;
+
+        imu = hardwareMap.get(BHI260IMU.class, "imu");
+//        imu.initialize(parameters);
 
         //Probably necessary
         motorFrontL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -314,8 +317,9 @@ public class GyroActions {
     }
 
     public double getRawHeading() {
-        Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-        return angles.firstAngle;
+//        Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+//        return angles.firstAngle;
+        return 0;
     }
 
     public void resetHeading() {

@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.src.constants.ConfigConstants;
 
@@ -21,6 +22,9 @@ public class LiftyUppyActions {
         flippyTurny.setDirection(DcMotorSimple.Direction.REVERSE);
         liftyUppy = hardwareMap.get(DcMotorEx.class, ConfigConstants.LIFTY_UPPY);
         liftyUppy.setDirection(DcMotorSimple.Direction.REVERSE);
+        liftyUppy.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        liftyUppy.setTargetPosition(0);
+        liftyUppy.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         flippyTurny.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
@@ -34,31 +38,35 @@ public class LiftyUppyActions {
         } else if (stateManager.flippyTurnyState == stateManager.FLIPPYTURNY_DOWNING && isDone()) {
             stateManager.flippyTurnyState = stateManager.FLIPPYTURNY_DOWN;
         }
-        if (stateManager.flippyTurnyState == stateManager.FLIPPYTURNY_DOWN) {
-            flippyTurny.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        if (stateManager.flippyTurnyState == stateManager.FLIPPYTURNY_DOWN || stateManager.flippyTurnyState == stateManager.FLIPPYTURNY_UP) {
+            flippyTurny.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             flippyTurny.setPower(0.0);
         }
     }
 
     public void flippyTurnyUp() {
         if (stateManager.flippyTurnyState != stateManager.FLIPPYTURNY_UP || stateManager.flippyTurnyState != stateManager.FLIPPYTURNY_UPPING) {
-            flippyTurny.setTargetPosition(800);
+            flippyTurny.setTargetPosition(1250); //originally 800 ticks
             flippyTurny.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            flippyTurny.setVelocity(300.0);
+            flippyTurny.setVelocity(600.0);
             stateManager.flippyTurnyState = stateManager.FLIPPYTURNY_UPPING;
         }
     }
 
+    static int ARM_DOWN_TICKS = -120;
     public void flippyTurnyDown() {
-        if (stateManager.flippyTurnyState != stateManager.FLIPPYTURNY_DOWN || stateManager.flippyTurnyState != stateManager.FLIPPYTURNY_DOWNING) {
+        if ((stateManager.flippyTurnyState != stateManager.FLIPPYTURNY_DOWN || stateManager.flippyTurnyState != stateManager.FLIPPYTURNY_DOWNING) && liftyUppyPosition > ARM_DOWN_TICKS) {
             flippyTurny.setTargetPosition(0);
             flippyTurny.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            flippyTurny.setVelocity(300.0);
+            flippyTurny.setVelocity(600.0);
             stateManager.flippyTurnyState = stateManager.FLIPPYTURNY_DOWNING;
         }
     }
 
     public void setLiftyUppyPower(double power) {
+        if (liftyUppy.getMode() != DcMotor.RunMode.RUN_WITHOUT_ENCODER) {
+            liftyUppy.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        }
         if (power < 0) {
             stateManager.liftyUppyState = stateManager.LIFTYUPPY_DOWNING;
         } else if (power > 0) {
@@ -67,6 +75,40 @@ public class LiftyUppyActions {
             stateManager.liftyUppyState = stateManager.LIFTYUPPY_STOPPED;
         }
         liftyUppy.setPower(power);
+    }
+
+
+    double prevTime = System.currentTimeMillis();
+    public void teleOpLiftyUppy(double power, double liftSpeedMultiplier) {
+        if (power != 0 && stateManager.flippyTurnyState == stateManager.FLIPPYTURNY_UP) {
+            double time = System.currentTimeMillis();
+            liftyUppyPosition += power * (time - prevTime) * liftSpeedMultiplier;
+            setLiftyUppyPosition((int) liftyUppyPosition, 3000 * liftSpeedMultiplier);
+            prevTime = time;
+            RobotLog.dd("LiftyUppy", "Target Position %f, time %f", liftyUppyPosition, time);
+        }
+    }
+
+    int preset1 = 0;
+    int preset2 = -1900;
+    int preset3 = -2900;
+    public void goToPreset(boolean goTo1, boolean goTo2, boolean goTo3) {
+        if (goTo1) {
+            setLiftyUppyPosition(preset1, 900);
+        } else if (stateManager.flippyTurnyState == stateManager.FLIPPYTURNY_UP) {
+            if (goTo2) {
+                setLiftyUppyPosition(preset2, 1800);
+            } else if (goTo3) {
+                setLiftyUppyPosition(preset3, 1800);
+            }
+        }
+    }
+
+    double liftyUppyPosition = 0;
+    public void setLiftyUppyPosition(int position, double velocity) {
+        liftyUppy.setTargetPosition(position);
+        liftyUppy.setVelocity(velocity);
+        liftyUppyPosition = position;
     }
 
     public Boolean isDone() {

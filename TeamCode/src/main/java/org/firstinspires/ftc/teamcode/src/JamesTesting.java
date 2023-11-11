@@ -17,7 +17,7 @@ public class JamesTesting extends HelperActions {
 
         openCV = new OpenCV();
 //        DetectPropActions detectPropActions = new DetectPropActions(hardwareMap);
-        LiftyUppyActions liftyUppyActions = new LiftyUppyActions(hardwareMap);
+//        LiftyUppyActions liftyUppyActions = new LiftyUppyActions(hardwareMap);
 
         //Set Speed for teleOp. Mecannum wheel speed.
         //driveActions.setSpeed(1.0);
@@ -28,18 +28,18 @@ public class JamesTesting extends HelperActions {
         waitForStart();
 
         if (opModeIsActive()) {
-            liftyUppyActions.flippyTurnyUp();
-            while(!(liftyUppyActions.isDone())) {
-                telemetry.addData("is done", liftyUppyActions.isDone());
-                telemetry.addData("numberOfTicks", liftyUppyActions.getTick());
-                telemetry.update();
-            }
-            liftyUppyActions.flippyTurnyDown();
-            while(!( liftyUppyActions.isDone())) {
-                telemetry.addData("is done", liftyUppyActions.isDone());
-                telemetry.addData("numberOfTicks", liftyUppyActions.getTick());
-                telemetry.update();
-            }
+//            liftyUppyActions.flippyTurnyUp();
+//            while(!(liftyUppyActions.isDone())) {
+//                telemetry.addData("is done", liftyUppyActions.isDone());
+//                telemetry.addData("numberOfTicks", liftyUppyActions.getTick());
+//                telemetry.update();
+//            }
+//            liftyUppyActions.flippyTurnyDown();
+//            while(!( liftyUppyActions.isDone())) {
+//                telemetry.addData("is done", liftyUppyActions.isDone());
+//                telemetry.addData("numberOfTicks", liftyUppyActions.getTick());
+//                telemetry.update();
+//            }
 //            String pathTemplate = "/sdcard/FIRST/java/src/blackboxtemplatedownsized.jpg";
 //
 //            RobotLog.dd("OpenCV", "Reached 1");

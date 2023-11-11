@@ -134,9 +134,9 @@ public class DriveActions {
     //This methods is meant for AUTONOMOUS
     public void setMotorDirection_Forward() {
         leftFront.setDirection(MotorConstants.REVERSE);
-        leftRear.setDirection(MotorConstants.FORWARD);
+        leftRear.setDirection(MotorConstants.REVERSE);
 
-        rightFront.setDirection(MotorConstants.REVERSE);
+        rightFront.setDirection(MotorConstants.FORWARD);
         rightRear.setDirection(MotorConstants.FORWARD);
     }
 }
