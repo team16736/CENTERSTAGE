@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.util.Range;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.src.constants.ConfigConstants;
@@ -82,7 +83,7 @@ public class LiftyUppyActions {
     public void teleOpLiftyUppy(double power, double liftSpeedMultiplier) {
         if (power != 0 && stateManager.flippyTurnyState == stateManager.FLIPPYTURNY_UP) {
             double time = System.currentTimeMillis();
-            liftyUppyPosition += power * (time - prevTime) * liftSpeedMultiplier;
+            liftyUppyPosition = Range.clip(liftyUppyPosition + power * (time - prevTime) * liftSpeedMultiplier, -3000, 0);
             setLiftyUppyPosition((int) liftyUppyPosition, 3000 * liftSpeedMultiplier);
             prevTime = time;
             RobotLog.dd("LiftyUppy", "Target Position %f, time %f", liftyUppyPosition, time);
@@ -94,12 +95,12 @@ public class LiftyUppyActions {
     int preset3 = -2900;
     public void goToPreset(boolean goTo1, boolean goTo2, boolean goTo3) {
         if (goTo1) {
-            setLiftyUppyPosition(preset1, 900);
+            setLiftyUppyPosition(preset1, 1200);
         } else if (stateManager.flippyTurnyState == stateManager.FLIPPYTURNY_UP) {
             if (goTo2) {
-                setLiftyUppyPosition(preset2, 1800);
+                setLiftyUppyPosition(preset2, 2500);
             } else if (goTo3) {
-                setLiftyUppyPosition(preset3, 1800);
+                setLiftyUppyPosition(preset3, 2500);
             }
         }
     }

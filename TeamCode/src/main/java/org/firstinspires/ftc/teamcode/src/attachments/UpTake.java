@@ -20,12 +20,12 @@ public class UpTake {
 
     public void setUptakeUp() {
         stateManager.setUptakeState(stateManager.UPTAKE_UP);
-        uptake.setPower(1.0);
+        uptake.setPower(-1.0);
     }
 
     public void setUptakeDown() {
         stateManager.setUptakeState(stateManager.UPTAKE_DOWN);
-        uptake.setPower(-1.0);
+        uptake.setPower(1.0);
     }
     public void setUptakeOff() {
         stateManager.setUptakeState(stateManager.UPTAKE_OFF);

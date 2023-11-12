@@ -21,8 +21,9 @@ import java.util.Objects;
 public class DetectPropActions {
     OpenCvWebcam webcam;
     Point result = new Point(0,0);
-    String imageName = "blackboxtemplatedownsized";
-    public DetectPropActions(HardwareMap hardwareMap) {
+    Mat templ;
+    OpenCV openCV;
+    public DetectPropActions(HardwareMap hardwareMap, String imageName) {
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
 
@@ -45,6 +46,22 @@ public class DetectPropActions {
                  */
             }
         });
+        //Image MUST be png, to have same type as input
+        //Use UtilityFrameCapture to grab frame, USB-C to robot, grab VisionPortal-CameraFrameCapture- latest one
+        //Crop down to size
+        String pathTemplate = "/sdcard/FIRST/java/src/" + imageName + ".png";
+        File fileTemplate = new File(pathTemplate);
+        String absolutePathTemplate = fileTemplate.getAbsolutePath();
+
+            /* In order for this to work, download OpenCV version 4.7.0 and extract the file.
+            In the OpenCV file, go into build then java then x64.
+            Copy the opencv_java470.dll and paste it into Program Files/Android/AndroidStudio/jre/bin
+             */
+
+        this.openCV = new OpenCV();
+
+        templ = Imgcodecs.imread(absolutePathTemplate, Imgcodecs.IMREAD_COLOR);
+        RobotLog.dd("OpenCV", "type %d", templ.type());
     }
 
     public void startStreaming() {
@@ -74,17 +91,17 @@ public class DetectPropActions {
             if (detectionNumber != priorDetectionNumber) {
                 priorDetectionNumber = detectionNumber;
                 wherePropState ++;
-                if (result.x < 20 || result.x > 250) {
-                    rightCount++;
-                } else if (result.x < 150) {
+                if (result.x < 60 || result.x > 250) {
                     leftCount++;
-                } else {
+                } else if (result.x < 200) {
                     midCount++;
+                } else {
+                    rightCount++;
                 }
             }
             propPlace = "";
         }
-        if (!(wherePropState < 1)){
+        if (!(wherePropState < iterations)){
             if (rightCount > leftCount && rightCount > midCount) {
                 propPlace = "right";
             } else if (leftCount > midCount) {
@@ -102,10 +119,7 @@ public class DetectPropActions {
         leftCount = 0;
         midCount = 0;
         propPlace = "";
-    }
-
-    public void changeName(String name) {
-        imageName = name;
+        RobotLog.dd("OpenCV", "Reset");
     }
 
     public void setDetectionNumber(int num) {
@@ -122,22 +136,11 @@ public class DetectPropActions {
         @Override
         public Mat processFrame(Mat input) {
 
-            String pathTemplate = "/sdcard/FIRST/java/src/" + imageName + ".jpg";
-            File fileTemplate = new File(pathTemplate);
-            String absolutePathTemplate = fileTemplate.getAbsolutePath();
-
-            /* In order for this to work, download OpenCV version 4.7.0 and extract the file.
-            In the OpenCV file, go into build then java then x64.
-            Copy the opencv_java470.dll and paste it into Program Files/Android/AndroidStudio/jre/bin
-             */
-
-            OpenCV openCv = new OpenCV();
-
-            Mat templ = Imgcodecs.imread(absolutePathTemplate, Imgcodecs.IMREAD_COLOR);
-            // image type is supposed to be 16, but setting it as 32 makes it 16, I guess.
             Imgproc.cvtColor(input, input, 32);
+            Imgproc.cvtColor(input, input, Imgproc.COLOR_BGR2RGB);
+            RobotLog.dd("OpenCV", "here");
 
-            result = openCv.itemExists(input, templ);
+            result = openCV.itemExists(input, templ);
 
             RobotLog.dd("OpenCV", "Point X %f", result.x);
             RobotLog.dd("OpenCV", "Point Y %f", result.y);

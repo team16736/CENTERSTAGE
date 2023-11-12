@@ -2,21 +2,27 @@
 package org.firstinspires.ftc.teamcode.src;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.util.RobotLog;
 
+import org.firstinspires.ftc.teamcode.src.attachments.DetectPropActions;
 import org.firstinspires.ftc.teamcode.src.attachments.LiftyUppyActions;
 import org.firstinspires.ftc.teamcode.src.attachments.OpenCV;
+import org.firstinspires.ftc.teamcode.src.driving.GyroActions;
 import org.firstinspires.ftc.teamcode.src.driving.HelperActions;
 
 @TeleOp(name = "James Test", group = "Linear Opmode")
 public class JamesTesting extends HelperActions {
 
     private OpenCV openCV = null;
+    private GyroActions gyroActions = null;
 
     @Override
     public void runOpMode() {
 
         openCV = new OpenCV();
-//        DetectPropActions detectPropActions = new DetectPropActions(hardwareMap);
+        gyroActions = new GyroActions(this, telemetry, hardwareMap);
+        DetectPropActions detectPropActions = new DetectPropActions(hardwareMap, "RedBoxTemplate");
 //        LiftyUppyActions liftyUppyActions = new LiftyUppyActions(hardwareMap);
 
         //Set Speed for teleOp. Mecannum wheel speed.
@@ -27,7 +33,17 @@ public class JamesTesting extends HelperActions {
         telemetry.update();
         waitForStart();
 
-        if (opModeIsActive()) {
+        while (opModeIsActive()) {
+            detectPropActions.whereProp(10);
+            RobotLog.dd("OpenCV", "Prop Place %S", detectPropActions.propPlace);
+            while (detectPropActions.propPlace == "") {
+                detectPropActions.whereProp(10);
+//                telemetry.addData("Point X", detectPropActions.getResult().x);
+//                telemetry.update();
+            }
+            RobotLog.dd("OpenCV", "Prop Place %S", detectPropActions.propPlace);
+            telemetry.addData("prop place", detectPropActions.propPlace);
+            telemetry.update();
 //            liftyUppyActions.flippyTurnyUp();
 //            while(!(liftyUppyActions.isDone())) {
 //                telemetry.addData("is done", liftyUppyActions.isDone());

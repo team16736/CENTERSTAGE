@@ -16,7 +16,7 @@ import org.firstinspires.ftc.teamcode.src.attachments.LiftyUppyActions;
 @TeleOp(name = "Tele Op", group = "Linear Opmode")
 public class MainTeleOp extends HelperActions {
 
-//    private GyroActions gyroActions = null;
+    private GyroActions gyroActions = null;
     private DriveActions driveActions = null;
     private LiftyUppyActions liftyUppyActions = null;
     boolean correctRotation = false;
@@ -28,7 +28,7 @@ public class MainTeleOp extends HelperActions {
     public void runOpMode() {
 
         StateManager stateManager = new StateManager();
-//        gyroActions = new GyroActions(this, telemetry, hardwareMap);
+        gyroActions = new GyroActions(this, telemetry, hardwareMap);
         driveActions = new DriveActions(telemetry, hardwareMap);
         liftyUppyActions = new LiftyUppyActions(hardwareMap, stateManager);
         IntakeClass intakeClass = new IntakeClass(stateManager, hardwareMap);
@@ -51,7 +51,7 @@ public class MainTeleOp extends HelperActions {
             driveActions.drive(
                     (gamepad1.left_stick_x * Math.abs(gamepad1.left_stick_x)),      //joystick controlling strafe
                     (-gamepad1.left_stick_y * Math.abs(gamepad1.left_stick_y)),     //joystick controlling forward/backward
-                    /*driveStraight(gamepad1.right_stick_x)*/ (gamepad1.right_stick_x));    //joystick controlling rotation
+                    driveStraight(gamepad1.right_stick_x));    //joystick controlling rotation
             telemetry.addData("Left stick x", gamepad1.left_stick_x);
             telemetry.addData("left stick y", gamepad1.left_stick_y);
             telemetry.addData("right stick x", gamepad1.right_stick_x);
@@ -104,11 +104,11 @@ public class MainTeleOp extends HelperActions {
         } else if (!correctRotation){ // If not rotating, get the position rotationally once when the turn is done
             if (Math.abs(driveActions.leftFront.getVelocity()) < 3) {
                 correctRotation = true;
-//                rotationPosition = gyroActions.getRawHeading() - gyroActions.headingOffset;
+                rotationPosition = gyroActions.getRawHeading() - gyroActions.headingOffset;
             }
             rotation = 0;
         } else { // Correct rotation when not turning
-//            rotation = -gyroActions.getSteeringCorrection(rotationPosition, 0.02);
+            rotation = -gyroActions.getSteeringCorrection(rotationPosition, 0.02);
         }
         return rotation;
     }

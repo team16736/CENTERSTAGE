@@ -43,8 +43,8 @@ public class IntakeClass {
 
     public void outTake() {
         stateManager.setIntakeState(stateManager.INTAKE_OUT);
-        intakeLeft.setPower(-1.0);
-        intakeRight.setPower(1.0);
+        intakeLeft.setPower(1.0);
+        intakeRight.setPower(-1.0);
     }
 
     public void intakeButtons(Gamepad gamepad) {

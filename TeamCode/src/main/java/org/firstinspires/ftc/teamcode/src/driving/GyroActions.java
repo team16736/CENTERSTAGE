@@ -4,6 +4,7 @@ import static android.os.SystemClock.sleep;
 
 import com.qualcomm.hardware.bosch.BHI260IMU;
 import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -18,14 +19,15 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.teamcode.src.constants.MotorConstants;
 
 public class GyroActions {
-    DcMotorEx motorFrontL;
-    DcMotorEx motorFrontR;
-    DcMotorEx motorBackL;
-    DcMotorEx motorBackR;
-    private BHI260IMU imu = null;
+    public DcMotorEx motorFrontL;
+    public DcMotorEx motorFrontR;
+    public DcMotorEx motorBackL;
+    public DcMotorEx motorBackR;
+    private IMU imu = null;
 
 
     private double robotHeading = 0;
@@ -78,17 +80,19 @@ public class GyroActions {
 
         //Probably necessary
         motorFrontL.setDirection(MotorConstants.REVERSE);
-        motorBackL.setDirection(MotorConstants.FORWARD);
+        motorBackL.setDirection(MotorConstants.REVERSE);
 
-        motorFrontR.setDirection(MotorConstants.REVERSE);
+        motorFrontR.setDirection(MotorConstants.FORWARD);
         motorBackR.setDirection(MotorConstants.FORWARD);
 
         // define initialization values for IMU, and then initialize it.
-//        IMU.Parameters parameters = new IMU.Parameters();
-//        parameters.angleUnit = BHI260IMU.AngleUnit.DEGREES;
 
-        imu = hardwareMap.get(BHI260IMU.class, "imu");
-//        imu.initialize(parameters);
+        RevHubOrientationOnRobot.LogoFacingDirection logoDirection = RevHubOrientationOnRobot.LogoFacingDirection.UP;
+        RevHubOrientationOnRobot.UsbFacingDirection  usbDirection  = RevHubOrientationOnRobot.UsbFacingDirection.LEFT;
+        RevHubOrientationOnRobot orientationOnRobot = new RevHubOrientationOnRobot(logoDirection, usbDirection);
+
+        imu = hardwareMap.get(IMU.class, "imu");
+        imu.initialize(new IMU.Parameters(orientationOnRobot));
 
         //Probably necessary
         motorFrontL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -105,9 +109,9 @@ public class GyroActions {
     public void initEncoderGyroDriveStateMachine(double speed, double distance, double heading) { // For driving straight forwards/backwards
         // Set the direction to forwards/backwards
         motorFrontL.setDirection(MotorConstants.REVERSE);
-        motorBackL.setDirection(MotorConstants.FORWARD);
+        motorBackL.setDirection(MotorConstants.REVERSE);
 
-        motorFrontR.setDirection(MotorConstants.REVERSE);
+        motorFrontR.setDirection(MotorConstants.FORWARD);
         motorBackR.setDirection(MotorConstants.FORWARD);
 
         adjSpeed = speed;
@@ -247,6 +251,13 @@ public class GyroActions {
     }
 
     public void initGyroSpin(double angle) {
+        // Set the direction to forwards/backwards
+        motorFrontL.setDirection(MotorConstants.REVERSE);
+        motorBackL.setDirection(MotorConstants.REVERSE);
+
+        motorFrontR.setDirection(MotorConstants.FORWARD);
+        motorBackR.setDirection(MotorConstants.FORWARD);
+
         currentTargetAngle += angle;
         while (currentTargetAngle > 180) currentTargetAngle -= 360;
         while (currentTargetAngle < -180) currentTargetAngle += 360;
@@ -317,9 +328,8 @@ public class GyroActions {
     }
 
     public double getRawHeading() {
-//        Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-//        return angles.firstAngle;
-        return 0;
+        YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
+        return orientation.getYaw(AngleUnit.DEGREES);
     }
 
     public void resetHeading() {
