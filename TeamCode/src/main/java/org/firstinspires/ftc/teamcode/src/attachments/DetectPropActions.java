@@ -64,6 +64,13 @@ public class DetectPropActions {
         RobotLog.dd("OpenCV", "type %d", templ.type());
     }
 
+    public void setToHoughCircles() {
+        webcam.setPipeline(new HoughCirclesPipeline());
+    }
+    public void setToTemplateMatching() {
+        webcam.setPipeline(new TemplateMatchingPipeline());
+    }
+
     public void startStreaming() {
         webcam.startStreaming(320, 240);
     }
@@ -141,6 +148,41 @@ public class DetectPropActions {
             RobotLog.dd("OpenCV", "here");
 
             result = openCV.templateMatching(input, templ);
+
+            RobotLog.dd("OpenCV", "Point X %f", result.x);
+            RobotLog.dd("OpenCV", "Point Y %f", result.y);
+
+            detectionNumber ++;
+
+            /**
+             * NOTE: to see how to get data from your pipeline to your OpMode as well as how
+             * to change which stage of the pipeline is rendered to the viewport when it is
+             * tapped, please see {@link PipelineStageSwitchingExample}
+             */
+
+            return input;
+        }
+
+        @Override
+        public void onViewportTapped() {
+            viewportPaused = !viewportPaused;
+
+            if (viewportPaused) {
+                webcam.pauseViewport();
+            } else {
+                webcam.resumeViewport();
+            }
+        }
+    }
+    class HoughCirclesPipeline extends OpenCvPipeline {
+        boolean viewportPaused;
+
+        @Override
+        public Mat processFrame(Mat input) {
+
+            Imgproc.cvtColor(input, input, 32);
+
+            result = openCV.houghCircles(input);
 
             RobotLog.dd("OpenCV", "Point X %f", result.x);
             RobotLog.dd("OpenCV", "Point Y %f", result.y);

@@ -51,15 +51,11 @@ public class OpenCV {
         Mat circles = new Mat();
 
         Imgproc.HoughCircles(img, circles, Imgproc.HOUGH_GRADIENT_ALT, 1.5, (double) img.rows()/16,
-                100.0, 0.1, 10, 40);
-        double[] c = new double[100];
-        int cols = circles.cols();
-        for (int i = 0; i < circles.cols(); i++) {
-            c[3*i] = circles.get(0, i)[0];
-            c[3*i+1] = circles.get(0, i)[1];
-            c[3*i+2] = circles.get(0, i)[2];
-        }
+                100.0, 0.3, 10, 40);
+
+        double[] c = circles.get(0,0);
         Point center = new Point(Math.round(c[0]), Math.round(c[1]));
+
         return center;
     }
 }
