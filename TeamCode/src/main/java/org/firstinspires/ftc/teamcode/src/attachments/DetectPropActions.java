@@ -140,7 +140,7 @@ public class DetectPropActions {
             Imgproc.cvtColor(input, input, Imgproc.COLOR_BGR2RGB);
             RobotLog.dd("OpenCV", "here");
 
-            result = openCV.itemExists(input, templ);
+            result = openCV.templateMatching(input, templ);
 
             RobotLog.dd("OpenCV", "Point X %f", result.x);
             RobotLog.dd("OpenCV", "Point Y %f", result.y);

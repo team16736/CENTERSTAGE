@@ -27,10 +27,8 @@ import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.src.attachments.OpenCV;
-import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
-import org.opencv.core.Scalar;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.OpenCvCamera;
@@ -247,7 +245,7 @@ public class MatchTemplate extends LinearOpMode
             Imgproc.cvtColor(input, input, 32);
             RobotLog.dd("OpenCV", "img type 2nd %d", input.type());
             RobotLog.dd("OpenCV", "templ type %d", templ.type());
-            resultL = openCv.itemExists(input, templ);
+            resultL = openCv.templateMatching(input, templ);
             telemetry.addData("Point X", resultL.x);
             telemetry.addData("Point Y", resultL.y);
             telemetry.update();

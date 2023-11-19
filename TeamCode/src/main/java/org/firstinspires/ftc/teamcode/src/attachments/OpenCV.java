@@ -9,7 +9,7 @@ import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
 public class OpenCV {
-    public Point itemExists(Mat img, Mat templ){
+    public Point templateMatching(Mat img, Mat templ){
         //These should be able to vary
         int match_method = 1;
         Boolean use_mask = false;
@@ -39,5 +39,27 @@ public class OpenCV {
 
 //        Imgcodecs.imwrite(fileName, result);
         return matchLoc;
+    }
+    public Point houghCircles(Mat img) {
+        Imgproc.cvtColor(img, img, Imgproc.COLOR_BGR2GRAY);
+
+        Imgproc.threshold(img, img, 124, 206, Imgproc.THRESH_BINARY);
+        Imgproc.medianBlur(img, img, 5);
+        Imgcodecs.imwrite("src/main/java/org/firstinspires/ftc/teamcode/src/attachments/data/threshold.jpg", img);
+
+
+        Mat circles = new Mat();
+
+        Imgproc.HoughCircles(img, circles, Imgproc.HOUGH_GRADIENT_ALT, 1.5, (double) img.rows()/16,
+                100.0, 0.1, 10, 40);
+        double[] c = new double[100];
+        int cols = circles.cols();
+        for (int i = 0; i < circles.cols(); i++) {
+            c[3*i] = circles.get(0, i)[0];
+            c[3*i+1] = circles.get(0, i)[1];
+            c[3*i+2] = circles.get(0, i)[2];
+        }
+        Point center = new Point(Math.round(c[0]), Math.round(c[1]));
+        return center;
     }
 }

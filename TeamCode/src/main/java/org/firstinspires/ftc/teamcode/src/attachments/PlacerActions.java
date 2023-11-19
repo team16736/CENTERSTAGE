@@ -26,7 +26,7 @@ public class PlacerActions {
     }
 
     public void closePlacer() {
-        placer.setPosition(0.2);
+        placer.setPosition(0.4);
         stateManager.setPlacerState(stateManager.PLACER_NO_PIXEL);
     }
 }

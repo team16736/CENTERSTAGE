@@ -30,7 +30,7 @@ public class MainTeleOp extends HelperActions {
         StateManager stateManager = new StateManager();
         gyroActions = new GyroActions(this, telemetry, hardwareMap);
         driveActions = new DriveActions(telemetry, hardwareMap);
-        liftyUppyActions = new LiftyUppyActions(hardwareMap, stateManager);
+        liftyUppyActions = new LiftyUppyActions(hardwareMap, stateManager, telemetry);
         IntakeClass intakeClass = new IntakeClass(stateManager, hardwareMap);
         UpTake upTake = new UpTake(stateManager, hardwareMap);
         PlacerActions placer = new PlacerActions(stateManager, hardwareMap);
@@ -62,6 +62,8 @@ public class MainTeleOp extends HelperActions {
             telemetry.addData("Joystick", gamepad2.right_stick_y);
 
             changeSpeed(driveActions, gamepad1.dpad_up, gamepad1.dpad_down, false, false);
+            toggleSpeed(gamepad1.a);
+            automatedPlacing(liftyUppyActions, placer, gamepad2.right_bumper);
 
             liftyUppyActions.update();
             if(gamepad2.b) {
@@ -75,9 +77,12 @@ public class MainTeleOp extends HelperActions {
             upTake.setPower(intakePower);
 
             liftyUppyActions.teleOpLiftyUppy(gamepad2.left_stick_y * Math.abs(gamepad2.left_stick_y), liftSpdMult);
-            liftyUppyActions.goToPreset(gamepad2.dpad_down, gamepad2.dpad_left || gamepad2.dpad_right, gamepad2.dpad_up);
+            liftyUppyActions.goToPreset(gamepad2.dpad_down, gamepad2.dpad_left, gamepad2.dpad_right, gamepad2.dpad_up);
+            if (gamepad2.a) {
+                liftyUppyActions.resetLiftyUppy();
+            }
 
-            if (gamepad2.y && stateManager.flippyTurnyState == stateManager.FLIPPYTURNY_UP) {
+            if (gamepad2.y) {
                 placer.releasePixel();
                 placerBit = true;
                 prevTime = System.currentTimeMillis();

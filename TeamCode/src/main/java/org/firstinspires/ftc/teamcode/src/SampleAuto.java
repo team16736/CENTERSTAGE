@@ -35,7 +35,7 @@ public class SampleAuto extends HelperActions {
         detectPropActions = new DetectPropActions(hardwareMap, "RedBoxTemplate");
         intake = new IntakeClass(stateManager, hardwareMap);
         uptake = new UpTake(stateManager, hardwareMap);
-        liftyUppyActions = new LiftyUppyActions(hardwareMap, stateManager);
+        liftyUppyActions = new LiftyUppyActions(hardwareMap, stateManager, telemetry);
 
         //Ends initialization, waits for the player to hit the start button
         telemetry.addData(">", "Press Play to start op mode");
