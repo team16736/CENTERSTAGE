@@ -14,13 +14,11 @@ public class LiftyUppyActions {
 
     public DcMotorEx flippyTurny = null;
     private DcMotorEx liftyUppy = null;
-    private HardwareMap hardwareMap;
     private Telemetry telemetry;
     public StateManager stateManager;
 
     public LiftyUppyActions(HardwareMap hardwareMap, StateManager stateManager, Telemetry telemetry) {
         this.stateManager = stateManager;
-        this.hardwareMap = hardwareMap;
         this.telemetry = telemetry;
         flippyTurny = hardwareMap.get(DcMotorEx.class, ConfigConstants.FLIPPY_TURNY);
         flippyTurny.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -30,10 +28,6 @@ public class LiftyUppyActions {
         liftyUppy.setTargetPosition(0);
         liftyUppy.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         flippyTurny.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-    }
-
-    public int getTick() {
-        return flippyTurny.getCurrentPosition();
     }
 
     public void update() {
@@ -90,21 +84,6 @@ public class LiftyUppyActions {
             stateManager.flippyTurnyState = stateManager.FLIPPYTURNY_DOWNING;
         }
     }
-
-    public void setLiftyUppyPower(double power) {
-        if (liftyUppy.getMode() != DcMotor.RunMode.RUN_WITHOUT_ENCODER) {
-            liftyUppy.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        }
-        if (power < 0) {
-            stateManager.liftyUppyState = stateManager.LIFTYUPPY_DOWNING;
-        } else if (power > 0) {
-            stateManager.liftyUppyState = stateManager.LIFTYUPPY_UPPING;
-        } else {
-            stateManager.liftyUppyState = stateManager.LIFTYUPPY_STOPPED;
-        }
-        liftyUppy.setPower(power);
-    }
-
 
     double prevTime = System.currentTimeMillis();
     public void teleOpLiftyUppy(double power, double liftSpeedMultiplier) {

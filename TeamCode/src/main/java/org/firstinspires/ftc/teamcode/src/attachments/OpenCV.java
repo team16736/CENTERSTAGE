@@ -60,12 +60,10 @@ public class OpenCV {
         return center;
     }
     public Point ROI(Mat img, boolean detectRed) {
-        Mat right = new Mat();
-        Mat mid = new Mat();
-        Mat left = new Mat();
-        right = img.submat(140, 215, 270, 319);
-        mid = img.submat(135, 200, 140, 200);
-        left = img.submat(140, 215, 0, 75);
+        Mat right = img.submat(140, 215, 270, 319);;
+        Mat mid = img.submat(135, 200, 140, 200);;
+        Mat left = img.submat(140, 215, 0, 75);
+
         int colour;
         if (detectRed) {
             colour = 2;
