@@ -57,27 +57,35 @@ public class TestOpenCV {
 
     @Test
     public void testHoughCircles() {
-        String pathImg = "src/main/java/org/firstinspires/ftc/teamcode/src/attachments/data/redBoxImage.jpg";
+        for (int i = 0; i < 7; i++) {
+            String pathImg = "src/main/java/org/firstinspires/ftc/teamcode/src/attachments/data/redSphereImage" + i + ".png";
 
-        File fileImg = new File(pathImg);
-        String absolutePathImg = fileImg.getAbsolutePath();
+            File fileImg = new File(pathImg);
+            String absolutePathImg = fileImg.getAbsolutePath();
 
 
 //        try {
 //            Image img = ImageIO.read(new File("strawberry.jpg"));
 //        } catch (IOException e) {
 //        }
-        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+            System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
         /* In order for this to work, download OpenCV version 4.7.0 and extract the file.
         In the OpenCV file, go into build then java then x64.
         Copy the opencv_java470.dll and paste it into Program Files/Android/AndroidStudio/jre/bin
         */
-        OpenCV openCv = new OpenCV();
+            OpenCV openCv = new OpenCV();
 
-        Mat img = Imgcodecs.imread(absolutePathImg, Imgcodecs.IMREAD_COLOR);
+            Mat img = Imgcodecs.imread(absolutePathImg, Imgcodecs.IMREAD_COLOR);
 
-        Point result = openCv.houghCircles(img);
-        Assert.assertEquals(150, result.x, 20);
+            Point result = openCv.ROI(img, true);
+            if (i == 2 || i == 3 || i == 4) {
+                Assert.assertEquals(35 + i, result.x, 20);
+            } else if (i == 1 || i == 5) {
+                Assert.assertEquals(160 + i, result.x, 20);
+            } else if (i == 0 || i == 6) {
+                Assert.assertEquals(300 + i, result.x, 20);
+            }
+        }
     }
 
     @NonNull

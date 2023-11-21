@@ -41,6 +41,7 @@ public class OpenCV {
         return matchLoc;
     }
     public Point houghCircles(Mat img) {
+        img = img.submat(img.rows() / 2, img.rows(), 0, img.cols());
         Imgproc.cvtColor(img, img, Imgproc.COLOR_BGR2GRAY);
 
         Imgproc.threshold(img, img, 124, 206, Imgproc.THRESH_BINARY);
@@ -57,5 +58,32 @@ public class OpenCV {
         Point center = new Point(Math.round(c[0]), Math.round(c[1]));
 
         return center;
+    }
+    public Point ROI(Mat img, boolean detectRed) {
+        Mat right = new Mat();
+        Mat mid = new Mat();
+        Mat left = new Mat();
+        right = img.submat(140, 215, 270, 319);
+        mid = img.submat(135, 200, 140, 200);
+        left = img.submat(140, 215, 0, 75);
+        int colour;
+        if (detectRed) {
+            colour = 2;
+        } else {
+            colour = 0;
+        }
+        double rightColour = Core.mean(right).val[colour];
+        double midColour = Core.mean(mid).val[colour];
+        double leftColour = Core.mean(left).val[colour];
+
+        Point result;
+        if (rightColour < midColour && rightColour < leftColour) {
+            result = new Point(310, 170);
+        } else if (midColour < leftColour) {
+            result = new Point(174, 154);
+        } else {
+            result = new Point(33, 176);
+        }
+        return result;
     }
 }
