@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.src.attachments.UpTake;
 import org.firstinspires.ftc.teamcode.src.driving.GyroActions;
 import org.firstinspires.ftc.teamcode.src.driving.HelperActions;
 // THIS HAS NOT BEEN DEBUGGED YET.
-@Autonomous(name = "AutoLeftSideBlue4")
+@Autonomous(name = "AutoLeftSideBlue")
 public class AutoLeftSideBlue extends HelperActions {
 
     //Create the actions as objects. This is so we can use the methods inside of them
@@ -46,7 +46,7 @@ public class AutoLeftSideBlue extends HelperActions {
 //            while (propPlace == "") {
 //                propPlace = detectPropActions.whereProp(10);
 //            }
-            String propPlace = "right";
+            String propPlace = "right ";
             telemetry.addData("prop place", propPlace);
 
             //Start the robot moving forwards
@@ -61,15 +61,16 @@ public class AutoLeftSideBlue extends HelperActions {
                 while (gyroActions.gyroSpin(speed)) ;
 
                 //Move to the prop. Because moving at an angle, must pass that in
-                int distance = 4;
+                int distance = 2;
                 gyroActions.initEncoderGyroDriveStateMachine(speed, distance, 45);
                 while (gyroActions.encoderGyroDriveStateMachine(speed, distance, 45)) ;
+
 
             } else if (propPlace == "right") {
                 //Other situation, if the propPlace is on the right this triggers
                 //Turn towards the prop
                 // changed distance 4 to 8 because we are now on the left side and forward longer
-                int distance = 8;
+                int distance = 11;
                 gyroActions.initGyroSpin(-45);
                 while (gyroActions.gyroSpin(speed)) ;
 
@@ -77,6 +78,7 @@ public class AutoLeftSideBlue extends HelperActions {
 
                 gyroActions.initEncoderGyroDriveStateMachine(speed, distance, -45);
                 while (gyroActions.encoderGyroDriveStateMachine(speed, distance, -45)) ;
+
 
             } else {
                 //For when it is in the middle. Do not need to use an if statement to check if it is, because
@@ -86,6 +88,7 @@ public class AutoLeftSideBlue extends HelperActions {
                 int distance = 8;
                 gyroActions.initEncoderGyroDriveStateMachine(speed, distance, 0);
                 while (gyroActions.encoderGyroDriveStateMachine(speed, distance, 0)) ;
+
             }
             intake.outTake();
             uptake.setUptakeDown();

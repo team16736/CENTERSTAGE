@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import org.firstinspires.ftc.teamcode.src.attachments.IntakeClass;
 import org.firstinspires.ftc.teamcode.src.attachments.LiftyUppyActions;
 import org.firstinspires.ftc.teamcode.src.attachments.DetectPropActions;
+import org.firstinspires.ftc.teamcode.src.attachments.PlacerActions;
 import org.firstinspires.ftc.teamcode.src.attachments.StateManager;
 import org.firstinspires.ftc.teamcode.src.attachments.UpTake;
 import org.firstinspires.ftc.teamcode.src.driving.GyroActions;
@@ -35,6 +36,7 @@ public class AutoRightSideRed extends HelperActions {
         intake = new IntakeClass(stateManager, hardwareMap);
         uptake = new UpTake(stateManager, hardwareMap);
         liftyUppyActions = new LiftyUppyActions(hardwareMap, stateManager, telemetry);
+        PlacerActions placer = new PlacerActions(stateManager, hardwareMap);
 
         //Ends initialization, waits for the player to hit the start button
         telemetry.addData(">", "Press Play to start op mode");
@@ -42,12 +44,15 @@ public class AutoRightSideRed extends HelperActions {
         waitForStart();
 
         if (opModeIsActive()) {
-            //First, uses detectPropActions to find the prop. Assigns it to a variable so we can use it later.
-//            String propPlace = detectPropActions.whereProp(10);
+//            First, uses detectPropActions to find the prop. Assigns it to a variable so we can use it later.
+            String propPlace = detectPropActions.whereProp(10);
+            telemetry.addData("result", detectPropActions.getResult().x);
+            telemetry.update();
+            sleep(20000);
 //            while (propPlace == "") {
 //                propPlace = detectPropActions.whereProp(10);
 //            }
-            String propPlace = "right";
+//            String propPlace = "right";
             telemetry.addData("prop place", propPlace);
 
             //Start the robot moving forwards
@@ -68,14 +73,48 @@ public class AutoRightSideRed extends HelperActions {
             } else if (propPlace == "right") {
                 //Other situation, if the propPlace is on the right this triggers
                 //Turn towards the prop
+                int angle = -45;
                 int distance = 4;
-                gyroActions.initGyroSpin(-45);
+                gyroActions.initGyroSpin(angle);
                 while (gyroActions.gyroSpin(speed)) ;
 
                 //Move to the prop. Because moving at an angle, must pass that in
 
-                gyroActions.initEncoderGyroDriveStateMachine(speed, distance, -45);
-                while (gyroActions.encoderGyroDriveStateMachine(speed, distance, -45)) ;
+                gyroActions.initEncoderGyroDriveStateMachine(speed, distance, angle);
+                while (gyroActions.encoderGyroDriveStateMachine(speed, distance, angle)) ;
+                intake.outTake();
+                //THIS IS UNTESTED CODE TO PLACE PIXELS ON THE BACKBOARD
+                // drive backwards to get away from the pixel
+                sleep(500);
+                 distance = -13;
+                gyroActions.initEncoderGyroDriveStateMachine(speed,distance, 0);
+                while (gyroActions.encoderGyroDriveStateMachine(speed, distance, 0)) ;
+                intake.intakeOff();
+                // spin right to straighten out the robot
+                gyroActions.initGyroSpin(135);
+                while (gyroActions.gyroSpin(speed)) ;
+//                // drive forward to get to the backboard
+                liftyUppyActions.flippyTurnyUp();
+                liftyUppyActions.goToPreset(false,false,true,false);
+                gyroActions.initEncoderGyroDriveStateMachine(speed, -34, 90);
+                while(gyroActions.encoderGyroDriveStateMachine(speed,-34,90));
+//                //extending the arms
+
+//                // presets the arms to the correct height
+
+//                boolean notDone = true;
+//                while(notDone){
+//                    liftyUppyActions.update();
+//                    if(stateManager.flippyTurnyState== stateManager.FLIPPYTURNY_UP){
+//                        notDone = false;
+//
+//                    }
+//                }
+                // releases the pixels
+                placer.releasePixel();
+
+
+
 
             } else {
                 //For when it is in the middle. Do not need to use an if statement to check if it is, because
@@ -86,9 +125,12 @@ public class AutoRightSideRed extends HelperActions {
                 gyroActions.initEncoderGyroDriveStateMachine(speed, distance, 0);
                 while (gyroActions.encoderGyroDriveStateMachine(speed, distance, 0)) ;
             }
-            intake.outTake();
-            uptake.setUptakeDown();
+//            intake.outTake();
+           // uptake.setUptakeDown();
             sleep(5000);
+
+
+
         }
     }
 }

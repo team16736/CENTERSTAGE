@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
 import org.opencv.imgcodecs.Imgcodecs;
@@ -146,7 +147,7 @@ public class DetectPropActions {
             Imgproc.cvtColor(input, input, 32);
             Imgproc.cvtColor(input, input, Imgproc.COLOR_BGR2RGB);
             RobotLog.dd("OpenCV", "here");
-
+            Core.rotate(input,input,Core.ROTATE_180);
             result = openCV.templateMatching(input, templ);
 
             RobotLog.dd("OpenCV", "Point X %f", result.x);
