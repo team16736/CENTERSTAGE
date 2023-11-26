@@ -30,7 +30,7 @@ public class DetectPropActions {
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
 
-        webcam.setPipeline(new TemplateMatchingPipeline());
+        webcam.setPipeline(new ROIPipeline());
 
         webcam.setMillisecondsPermissionTimeout(5000); // Timeout for obtaining permission is configurable. Set before opening.
         webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
@@ -149,8 +149,9 @@ public class DetectPropActions {
 
             Imgproc.cvtColor(input, input, 32);
             Imgproc.cvtColor(input, input, Imgproc.COLOR_BGR2RGB);
-            Core.rotate(input, input, Core.ROTATE_180);
 
+            Core.rotate(input, input, Core.ROTATE_180);
+            
             result = openCV.templateMatching(input, templ);
 
             RobotLog.dd("OpenCV", "Point X %f", result.x);
