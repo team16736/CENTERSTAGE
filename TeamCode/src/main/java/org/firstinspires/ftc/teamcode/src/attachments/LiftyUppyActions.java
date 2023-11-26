@@ -53,6 +53,7 @@ public class LiftyUppyActions {
         if (stateManager.flippyTurnyState != stateManager.FLIPPYTURNY_UP && stateManager.flippyTurnyState != stateManager.FLIPPYTURNY_UPPING) {
             flippyTurny.setTargetPosition(1250); //originally 800 ticks
             flippyTurny.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            flippyTurny.setPower(1.0);
             flippyTurny.setVelocity(600.0);
             stateManager.flippyTurnyState = stateManager.FLIPPYTURNY_UPPING;
         }
@@ -71,6 +72,7 @@ public class LiftyUppyActions {
             if (liftyUppy.getCurrentPosition() < ARM_DOWN_TICKS) {
                 flippyTurny.setTargetPosition(300);
                 flippyTurny.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                flippyTurny.setPower(1.0);
                 //Change the speed so that it's slow at
                 double velocity = 400 * (1.4 - ((liftyUppy.getCurrentPosition() + 300) / 3000));
                 flippyTurny.setVelocity(velocity);
@@ -78,6 +80,7 @@ public class LiftyUppyActions {
             } else {
                 flippyTurny.setTargetPosition(0);
                 flippyTurny.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                flippyTurny.setPower(1.0);
                 flippyTurny.setVelocity(600.0);
                 flippyTurnyDown = false;
             }
@@ -90,6 +93,7 @@ public class LiftyUppyActions {
         if (power != 0 && flippyTurny.getCurrentPosition() > 300) {
             if (liftyUppy.getMode() == DcMotor.RunMode.RUN_USING_ENCODER) {
                 liftyUppy.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                liftyUppy.setPower(1.0);
             }
             double time = System.currentTimeMillis();
             liftyUppyPosition = Range.clip(liftyUppyPosition + power * (time - prevTime) * liftSpeedMultiplier, -3000, 100);
@@ -107,6 +111,7 @@ public class LiftyUppyActions {
     public void goToPreset(boolean goTo1, boolean goTo2, boolean goTo3, boolean goTo4) {
         if ((goTo1 || goTo2 || goTo3) && liftyUppy.getMode() == DcMotor.RunMode.RUN_USING_ENCODER) {
             liftyUppy.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            liftyUppy.setPower(1.0);
         }
         if (goTo1) {
             setLiftyUppyPosition(preset1, 1200);

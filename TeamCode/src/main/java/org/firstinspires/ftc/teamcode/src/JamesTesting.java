@@ -22,8 +22,9 @@ public class JamesTesting extends HelperActions {
 
         openCV = new OpenCV();
         gyroActions = new GyroActions(this, telemetry, hardwareMap);
-        DetectPropActions detectPropActions = new DetectPropActions(hardwareMap, "RedBoxTemplate");
-//        LiftyUppyActions liftyUppyActions = new LiftyUppyActions(hardwareMap);
+        DetectPropActions detectPropActions = new DetectPropActions(hardwareMap, "RedBoxTemplate", false);
+        detectPropActions.setToROI();
+        //        LiftyUppyActions liftyUppyActions = new LiftyUppyActions(hardwareMap);
 
         //Set Speed for teleOp. Mecannum wheel speed.
         //driveActions.setSpeed(1.0);

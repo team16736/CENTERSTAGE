@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
 import org.opencv.imgcodecs.Imgcodecs;
@@ -23,7 +24,9 @@ public class DetectPropActions {
     Point result = new Point(0,0);
     Mat templ;
     OpenCV openCV;
-    public DetectPropActions(HardwareMap hardwareMap, String imageName) {
+    boolean isRed;
+    public DetectPropActions(HardwareMap hardwareMap, String imageName, boolean isRed) {
+        this.isRed = isRed;
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
 
@@ -70,6 +73,7 @@ public class DetectPropActions {
     public void setToTemplateMatching() {
         webcam.setPipeline(new TemplateMatchingPipeline());
     }
+    public void setToROI() { webcam.setPipeline(new ROIPipeline()); }
 
     public void startStreaming() {
         webcam.startStreaming(320, 240);
@@ -145,7 +149,7 @@ public class DetectPropActions {
 
             Imgproc.cvtColor(input, input, 32);
             Imgproc.cvtColor(input, input, Imgproc.COLOR_BGR2RGB);
-            RobotLog.dd("OpenCV", "here");
+            Core.rotate(input, input, Core.ROTATE_180);
 
             result = openCV.templateMatching(input, templ);
 
@@ -181,8 +185,45 @@ public class DetectPropActions {
         public Mat processFrame(Mat input) {
 
             Imgproc.cvtColor(input, input, 32);
+            Core.rotate(input, input, Core.ROTATE_180);
 
             result = openCV.houghCircles(input);
+
+            RobotLog.dd("OpenCV", "Point X %f", result.x);
+            RobotLog.dd("OpenCV", "Point Y %f", result.y);
+
+            detectionNumber ++;
+
+            /**
+             * NOTE: to see how to get data from your pipeline to your OpMode as well as how
+             * to change which stage of the pipeline is rendered to the viewport when it is
+             * tapped, please see {@link PipelineStageSwitchingExample}
+             */
+
+            return input;
+        }
+
+        @Override
+        public void onViewportTapped() {
+            viewportPaused = !viewportPaused;
+
+            if (viewportPaused) {
+                webcam.pauseViewport();
+            } else {
+                webcam.resumeViewport();
+            }
+        }
+    }
+    class ROIPipeline extends OpenCvPipeline {
+        boolean viewportPaused;
+
+        @Override
+        public Mat processFrame(Mat input) {
+
+            Imgproc.cvtColor(input, input, 32);
+            Core.rotate(input, input, Core.ROTATE_180);
+
+            result = openCV.ROI(input, isRed);
 
             RobotLog.dd("OpenCV", "Point X %f", result.x);
             RobotLog.dd("OpenCV", "Point Y %f", result.y);

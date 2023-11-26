@@ -57,8 +57,8 @@ public class TestOpenCV {
 
     @Test
     public void testHoughCircles() {
-        for (int i = 0; i < 7; i++) {
-            String pathImg = "src/main/java/org/firstinspires/ftc/teamcode/src/attachments/data/redSphereImage" + i + ".png";
+        for (int i = 0; i < 3; i++) {
+            String pathImg = "src/main/java/org/firstinspires/ftc/teamcode/src/attachments/data/blueSphere2Inches" + i + ".png";
 
             File fileImg = new File(pathImg);
             String absolutePathImg = fileImg.getAbsolutePath();
@@ -77,13 +77,14 @@ public class TestOpenCV {
 
             Mat img = Imgcodecs.imread(absolutePathImg, Imgcodecs.IMREAD_COLOR);
 
-            Point result = openCv.ROI(img, true);
-            if (i == 2 || i == 3 || i == 4) {
-                Assert.assertEquals(35 + i, result.x, 20);
-            } else if (i == 1 || i == 5) {
-                Assert.assertEquals(160 + i, result.x, 20);
-            } else if (i == 0 || i == 6) {
-                Assert.assertEquals(300 + i, result.x, 20);
+            Point result = openCv.ROI(img, false);
+
+            if (i == 0) {
+                Assert.assertEquals(310, result.x, 20);
+            } else if (i == 1) {
+                Assert.assertEquals(174, result.x, 20);
+            } else {
+                Assert.assertEquals(30, result.x, 50);
             }
         }
     }

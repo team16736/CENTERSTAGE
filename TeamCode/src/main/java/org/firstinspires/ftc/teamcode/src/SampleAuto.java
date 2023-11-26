@@ -32,7 +32,7 @@ public class SampleAuto extends HelperActions {
         //Before this, the actions we created are empty. Assigns the actions to stop being nothing
         stateManager = new StateManager();
         gyroActions = new GyroActions(this, telemetry, hardwareMap);
-        detectPropActions = new DetectPropActions(hardwareMap, "RedBoxTemplate");
+        detectPropActions = new DetectPropActions(hardwareMap, "RedBoxTemplate", true);
         intake = new IntakeClass(stateManager, hardwareMap);
         uptake = new UpTake(stateManager, hardwareMap);
         liftyUppyActions = new LiftyUppyActions(hardwareMap, stateManager, telemetry);
