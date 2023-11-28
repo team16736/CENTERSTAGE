@@ -22,7 +22,7 @@ public class JamesTesting extends HelperActions {
 
         openCV = new OpenCV();
         gyroActions = new GyroActions(this, telemetry, hardwareMap);
-        DetectPropActions detectPropActions = new DetectPropActions(hardwareMap, "RedBoxTemplate", false);
+        DetectPropActions detectPropActions = new DetectPropActions(hardwareMap, "RedBoxTemplate", true);
         detectPropActions.setToROI();
         //        LiftyUppyActions liftyUppyActions = new LiftyUppyActions(hardwareMap);
 
@@ -34,17 +34,20 @@ public class JamesTesting extends HelperActions {
         telemetry.update();
         waitForStart();
 
-        while (opModeIsActive()) {
-            detectPropActions.whereProp(10);
-            RobotLog.dd("OpenCV", "Prop Place %S", detectPropActions.propPlace);
-            while (detectPropActions.propPlace == "") {
-                detectPropActions.whereProp(10);
-//                telemetry.addData("Point X", detectPropActions.getResult().x);
-//                telemetry.update();
-            }
-            RobotLog.dd("OpenCV", "Prop Place %S", detectPropActions.propPlace);
-            telemetry.addData("prop place", detectPropActions.propPlace);
-            telemetry.update();
+        if (opModeIsActive()) {
+            gyroActions.initGyroSpin(90);
+            gyroActions.setVelocity(500);
+            sleep(10000);
+//            detectPropActions.whereProp(10);
+//            RobotLog.dd("OpenCV", "Prop Place %S", detectPropActions.propPlace);
+//            while (detectPropActions.propPlace == "") {
+//                detectPropActions.whereProp(10);
+////                telemetry.addData("Point X", detectPropActions.getResult().x);
+////                telemetry.update();
+//            }
+//            RobotLog.dd("OpenCV", "Prop Place %S", detectPropActions.propPlace);
+//            telemetry.addData("prop place", detectPropActions.propPlace);
+//            telemetry.update();
 //            liftyUppyActions.flippyTurnyUp();
 //            while(!(liftyUppyActions.isDone())) {
 //                telemetry.addData("is done", liftyUppyActions.isDone());
