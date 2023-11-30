@@ -4,6 +4,7 @@ package org.firstinspires.ftc.teamcode.src;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.src.attachments.HangerActions;
 import org.firstinspires.ftc.teamcode.src.attachments.IntakeClass;
 import org.firstinspires.ftc.teamcode.src.attachments.PlacerActions;
 import org.firstinspires.ftc.teamcode.src.attachments.StateManager;
@@ -19,6 +20,7 @@ public class MainTeleOp extends HelperActions {
     private GyroActions gyroActions = null;
     private DriveActions driveActions = null;
     private LiftyUppyActions liftyUppyActions = null;
+    private HangerActions hanger = null;
     boolean correctRotation = false;
     double rotationPosition = 0;
     double rotation = 0;
@@ -31,6 +33,7 @@ public class MainTeleOp extends HelperActions {
         gyroActions = new GyroActions(this, telemetry, hardwareMap);
         driveActions = new DriveActions(telemetry, hardwareMap);
         liftyUppyActions = new LiftyUppyActions(hardwareMap, stateManager, telemetry);
+        hanger = new HangerActions(hardwareMap);
         IntakeClass intakeClass = new IntakeClass(stateManager, hardwareMap);
         UpTake upTake = new UpTake(stateManager, hardwareMap);
         PlacerActions placer = new PlacerActions(stateManager, hardwareMap);
@@ -63,6 +66,13 @@ public class MainTeleOp extends HelperActions {
 
             changeSpeed(driveActions, gamepad1.dpad_up, gamepad1.dpad_down, false, false);
             toggleSpeed(gamepad1.a);
+
+            if (gamepad1.y) {
+                hanger.releaseHanger();
+                hanger.hangerUp();
+            }
+            hanger.hangerDown(gamepad1.x);
+
             automatedPlacing(liftyUppyActions, placer, gamepad2.right_bumper);
 
             liftyUppyActions.update();
