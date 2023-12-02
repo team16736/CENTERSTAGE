@@ -52,4 +52,29 @@ public class HangerActions {
             rightPuller.setPower(0.0);
         }
     }
+
+    public void hangerDirect(boolean up, boolean down) {
+        if(up) {
+            leftPuller.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            rightPuller.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            leftPuller.setPower(0.5);
+            rightPuller.setPower(0.5);
+        }
+        if(down) {
+            leftPuller.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            rightPuller.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            leftPuller.setPower(-0.5);
+            rightPuller.setPower(-0.5);
+        }
+        leftPuller.setPower(0.0);
+        rightPuller.setPower(0.0);
+    }
+
+    public void resetHanger(boolean reset) {
+        if(reset) {
+            leftPuller.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            rightPuller.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        }
+    }
+
 }

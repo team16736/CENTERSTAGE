@@ -67,13 +67,16 @@ public class MainTeleOp extends HelperActions {
             changeSpeed(driveActions, gamepad1.dpad_up, gamepad1.dpad_down, false, false);
             toggleSpeed(gamepad1.a);
 
-            if (gamepad1.y) {
+            if (gamepad2.right_bumper) {
                 hanger.releaseHanger();
                 hanger.hangerUp();
             }
-            hanger.hangerDown(gamepad1.x);
+            hanger.hangerDown(gamepad2.left_bumper);
 
-            automatedPlacing(liftyUppyActions, placer, gamepad2.right_bumper);
+            hanger.hangerDirect(gamepad1.right_bumper, gamepad1.left_bumper);
+            hanger.resetHanger(gamepad1.b);
+
+//            automatedPlacing(liftyUppyActions, placer, gamepad2.right_bumper);
 
             liftyUppyActions.update();
             if(gamepad2.b) {
