@@ -90,7 +90,7 @@ public class MainTeleOp extends HelperActions {
             upTake.setPower(intakePower);
 
             liftyUppyActions.teleOpLiftyUppy(gamepad2.left_stick_y * Math.abs(gamepad2.left_stick_y), liftSpdMult);
-            liftyUppyActions.goToPreset(gamepad2.dpad_down, gamepad2.dpad_left, gamepad2.dpad_right, gamepad2.dpad_up);
+            liftyUppyActions.goToPreset(gamepad2.dpad_down, gamepad2.dpad_left, gamepad2.dpad_right, false);
             if (gamepad2.a) {
                 liftyUppyActions.resetLiftyUppy();
             }

@@ -144,6 +144,8 @@ public class AutoRightSideRed extends HelperActions {
             }
         }
         placeAndPark(placer);
+        gyroActions.initEncoderGyroStrafeStateMachine(speed, 4, true);
+        while (gyroActions.encoderGyroStrafeStateMachine(speed, 4, true));
     }
 
     private void goToRight(PlacerActions placer) {
@@ -184,6 +186,8 @@ public class AutoRightSideRed extends HelperActions {
         while (gyroActions.encoderGyroStrafeStateMachine(speed, 3, false));
 
         placeAndPark(placer);
+        gyroActions.initEncoderGyroStrafeStateMachine(speed, 4, true);
+        while (gyroActions.encoderGyroStrafeStateMachine(speed, 4, true));
     }
 
     private void placeAndPark(PlacerActions placer) {

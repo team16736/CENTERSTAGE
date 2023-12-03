@@ -71,12 +71,8 @@ public class OpenCV {
     public Point ROI(Mat img, boolean detectRed) {
         double adjRows = (double) img.rows() / 240;
         double adjCols = (double) img.cols() / 320;
-        int rowStart = 50;
-        int rowEnd = 100;
-        if (detectRed) {
-            rowStart = 70;
-            rowEnd = 130;
-        }
+        int rowStart = 100;
+        int rowEnd = 150;
         Mat left = img.submat(rowStart, rowEnd, 0, 55);
         Mat mid = img.submat(70, 121, 130, 181);
         Mat right = img.submat(rowStart, rowEnd, 270, 319);
@@ -94,7 +90,7 @@ public class OpenCV {
         Imgproc.cvtColor(right, rightGray, Imgproc.COLOR_BGR2GRAY);
         Imgproc.cvtColor(mid, midGray, Imgproc.COLOR_BGR2GRAY);
         Imgproc.cvtColor(left, leftGray, Imgproc.COLOR_BGR2GRAY);
-//        Imgcodecs.imwrite("/sdcard/FIRST/java/src/img.png", img);
+        Imgcodecs.imwrite("/sdcard/FIRST/java/src/img.png", img);
 
         double rightColour = Core.mean(right).val[colour] / Core.mean(rightGray).val[0];
         double midColour = Core.mean(mid).val[colour] / Core.mean(midGray).val[0];

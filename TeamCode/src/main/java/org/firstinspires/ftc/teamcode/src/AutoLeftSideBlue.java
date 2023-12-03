@@ -24,7 +24,7 @@ public class AutoLeftSideBlue extends HelperActions {
     private StateManager stateManager = null;
 
     //Initial variable declarations
-    private double speed = 300;
+    private double speed = 400;
 
     public void runOpMode() {
 
@@ -146,6 +146,8 @@ public class AutoLeftSideBlue extends HelperActions {
             }
         }
         placeAndPark();
+        gyroActions.initEncoderGyroStrafeStateMachine(speed, 4, false);
+        while (gyroActions.encoderGyroStrafeStateMachine(speed, 4, false));
     }
     private void goToRight() {
         //Turn towards the prop
@@ -176,6 +178,8 @@ public class AutoLeftSideBlue extends HelperActions {
         gyroActions.initEncoderGyroStrafeStateMachine(speed,8,true);
         while (gyroActions.encoderGyroStrafeStateMachine(speed,8,true));
         placeAndPark();
+        gyroActions.initEncoderGyroStrafeStateMachine(speed, 4, false);
+        while (gyroActions.encoderGyroStrafeStateMachine(speed, 4, false));
     }
     private void placeAndPark() {
         placer.releasePixel();
