@@ -41,46 +41,68 @@ public class OpenCV {
         return matchLoc;
     }
     public Point houghCircles(Mat img) {
-        img = img.submat(img.rows() / 2, img.rows(), 0, img.cols());
+        img = img.submat((int) (img.rows() * 0.5), img.rows(), 0, img.cols());
         Imgproc.cvtColor(img, img, Imgproc.COLOR_BGR2GRAY);
 
-        Imgproc.threshold(img, img, 124, 206, Imgproc.THRESH_BINARY);
-        Imgproc.medianBlur(img, img, 5);
+        Imgcodecs.imwrite("src/main/java/org/firstinspires/ftc/teamcode/src/attachments/data/gray.jpg", img);
+
+        Imgproc.threshold(img, img, 142, 255, Imgproc.THRESH_BINARY);
+//        Imgproc.medianBlur(img, img, 5);
         Imgcodecs.imwrite("src/main/java/org/firstinspires/ftc/teamcode/src/attachments/data/threshold.jpg", img);
 
 
         Mat circles = new Mat();
 
-        Imgproc.HoughCircles(img, circles, Imgproc.HOUGH_GRADIENT_ALT, 1.5, (double) img.rows()/16,
-                100.0, 0.3, 10, 40);
+        Imgproc.HoughCircles(img, circles, Imgproc.HOUGH_GRADIENT, 1.0, (double) img.rows()/16,
+                100.0, 1.0, 20, 50);
 
+        double[] d = new double[circles.cols()];
+        for (int i = 0; i < circles.cols(); i++) {
+            d[i] = circles.get(0, i)[0];
+        }
         double[] c = circles.get(0,0);
-        Point center = new Point(Math.round(c[0]), Math.round(c[1]));
+        Point center = new Point(0, 0);
+        if (c != null) {
+            center = new Point(Math.round(c[0]), Math.round(c[1]));
+        }
 
         return center;
     }
     public Point ROI(Mat img, boolean detectRed) {
-        Mat right = img.submat(140, 215, 270, 319);;
-        Mat mid = img.submat(135, 200, 140, 200);;
-        Mat left = img.submat(140, 215, 0, 75);
-
+        double adjRows = (double) img.rows() / 240;
+        double adjCols = (double) img.cols() / 320;
+        int rowStart = 100;
+        int rowEnd = 150;
+        Mat left = img.submat(rowStart, rowEnd, 0, 55);
+        Mat mid = img.submat(70, 121, 130, 181);
+        Mat right = img.submat(rowStart, rowEnd, 270, 319);
+        
         int colour;
         if (detectRed) {
             colour = 2;
         } else {
             colour = 0;
         }
-        double rightColour = Core.mean(right).val[colour];
-        double midColour = Core.mean(mid).val[colour];
-        double leftColour = Core.mean(left).val[colour];
+
+        Mat rightGray = new Mat();
+        Mat midGray = new Mat();
+        Mat leftGray = new Mat();
+        Imgproc.cvtColor(right, rightGray, Imgproc.COLOR_BGR2GRAY);
+        Imgproc.cvtColor(mid, midGray, Imgproc.COLOR_BGR2GRAY);
+        Imgproc.cvtColor(left, leftGray, Imgproc.COLOR_BGR2GRAY);
+        Imgcodecs.imwrite("/sdcard/FIRST/java/src/img.png", img);
+
+        double rightColour = Core.mean(right).val[colour] / Core.mean(rightGray).val[0];
+        double midColour = Core.mean(mid).val[colour] / Core.mean(midGray).val[0];
+        double leftColour = Core.mean(left).val[colour] / Core.mean(leftGray).val[0];
 
         Point result;
-        if (rightColour < midColour && rightColour < leftColour) {
-            result = new Point(310, 170);
-        } else if (midColour < leftColour) {
-            result = new Point(174, 154);
+        if (rightColour > midColour && rightColour > leftColour) {
+            result = new Point(249 * adjCols, 170);
+        } else if (midColour > leftColour) {
+            result = new Point(174 * adjCols, 154);
         } else {
-            result = new Point(33, 176);
+            result = new Point(33 * adjCols, 176);
         }
         return result;
     }

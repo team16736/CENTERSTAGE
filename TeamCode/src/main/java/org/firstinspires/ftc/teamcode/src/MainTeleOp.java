@@ -4,6 +4,7 @@ package org.firstinspires.ftc.teamcode.src;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.src.attachments.HangerActions;
 import org.firstinspires.ftc.teamcode.src.attachments.IntakeClass;
 import org.firstinspires.ftc.teamcode.src.attachments.PlacerActions;
 import org.firstinspires.ftc.teamcode.src.attachments.StateManager;
@@ -19,6 +20,7 @@ public class MainTeleOp extends HelperActions {
     private GyroActions gyroActions = null;
     private DriveActions driveActions = null;
     private LiftyUppyActions liftyUppyActions = null;
+    private HangerActions hanger = null;
     boolean correctRotation = false;
     double rotationPosition = 0;
     double rotation = 0;
@@ -31,6 +33,7 @@ public class MainTeleOp extends HelperActions {
         gyroActions = new GyroActions(this, telemetry, hardwareMap);
         driveActions = new DriveActions(telemetry, hardwareMap);
         liftyUppyActions = new LiftyUppyActions(hardwareMap, stateManager, telemetry);
+        hanger = new HangerActions(hardwareMap);
         IntakeClass intakeClass = new IntakeClass(stateManager, hardwareMap);
         UpTake upTake = new UpTake(stateManager, hardwareMap);
         PlacerActions placer = new PlacerActions(stateManager, hardwareMap);
@@ -63,7 +66,17 @@ public class MainTeleOp extends HelperActions {
 
             changeSpeed(driveActions, gamepad1.dpad_up, gamepad1.dpad_down, false, false);
             toggleSpeed(gamepad1.a);
-            automatedPlacing(liftyUppyActions, placer, gamepad2.right_bumper);
+
+            if (gamepad2.right_bumper) {
+                hanger.releaseHanger();
+                hanger.hangerUp();
+            }
+            hanger.hangerDown(gamepad2.left_bumper);
+
+            hanger.hangerDirect(gamepad1.right_bumper, gamepad1.left_bumper);
+            hanger.resetHanger(gamepad1.b);
+
+//            automatedPlacing(liftyUppyActions, placer, gamepad2.right_bumper);
 
             liftyUppyActions.update();
             if(gamepad2.b) {
@@ -77,7 +90,7 @@ public class MainTeleOp extends HelperActions {
             upTake.setPower(intakePower);
 
             liftyUppyActions.teleOpLiftyUppy(gamepad2.left_stick_y * Math.abs(gamepad2.left_stick_y), liftSpdMult);
-            liftyUppyActions.goToPreset(gamepad2.dpad_down, gamepad2.dpad_left, gamepad2.dpad_right, gamepad2.dpad_up);
+            liftyUppyActions.goToPreset(gamepad2.dpad_down, gamepad2.dpad_left, gamepad2.dpad_right, false);
             if (gamepad2.a) {
                 liftyUppyActions.resetLiftyUppy();
             }

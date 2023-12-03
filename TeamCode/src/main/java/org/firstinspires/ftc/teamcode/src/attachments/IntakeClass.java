@@ -41,7 +41,7 @@ public class IntakeClass {
         intakeRight.setPower(0.0);
     }
 
-    public void  outTake() {
+    public void outTake() {
         stateManager.setIntakeState(stateManager.INTAKE_OUT);
         intakeLeft.setPower(1.0);
         intakeRight.setPower(-1.0);
