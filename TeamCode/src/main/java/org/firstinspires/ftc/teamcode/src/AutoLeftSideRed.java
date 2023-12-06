@@ -68,7 +68,25 @@ public class AutoLeftSideRed extends HelperActions {
             if (propPlace == "left") {
                 //Prop is at the left side
                 placePixelLeft(placer);
-                //placeAndPark(placer);
+                // go towards the back board
+                gyroActions.encoderGyroDriveStateMachine(speed,-44,90);
+                while(gyroActions.encoderGyroDriveStateMachine(speed,-44,90));
+                //raise the arms
+                liftyUppyActions.flippyTurnyUp();
+                // keep going towards the back board
+                gyroActions.encoderGyroDriveStateMachine(speed,-44,90);
+                while(gyroActions.encoderGyroDriveStateMachine(speed,-44,90));
+
+                gyroActions.initEncoderGyroStrafeStateMachine(speed,25,false);
+                while(gyroActions.encoderGyroStrafeStateMachine(speed,25,false));
+                // raise the viper slides
+                if (liftyUppyActions.flippyTurny.getCurrentPosition() > 300) {
+                    liftyUppyActions.goToPreset(true, false, false, false);
+
+                }
+                // lowers the viper slides and parks the robot
+                placeAndPark(placer);
+
             } else if (propPlace == "right") {
                 placePixelRight(placer);
                 //placeAndPark(placer);
@@ -141,7 +159,7 @@ public class AutoLeftSideRed extends HelperActions {
         sleep(1000);
         intake.intakeOff();
 
-        // come back 5 inches to avoid the pixel/prop
+        // come back 15 inches to avoid the pixel/prop
         gyroActions.initEncoderGyroDriveStateMachine(speed, -15, 0);
         while (gyroActions.encoderGyroDriveStateMachine(speed, -15, 0)) ;
 
