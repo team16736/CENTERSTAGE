@@ -101,6 +101,8 @@ public class LiftyUppyActions {
             prevTime = time;
             RobotLog.dd("LiftyUppy", "Target Position %f, time %f", liftyUppyPosition, time);
         }
+        telemetry.addData("target position", liftyUppyPosition);
+        telemetry.addData("current position", liftyUppy.getCurrentPosition());
     }
 
     boolean downTo0 = false;
