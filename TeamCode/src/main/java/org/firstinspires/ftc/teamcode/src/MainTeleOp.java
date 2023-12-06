@@ -40,7 +40,7 @@ public class MainTeleOp extends HelperActions {
 
         boolean placerBit = false;
         double prevTime = 0;
-        double pixelReleaseTime = 800; //Millis
+        double pixelReleaseTime = 400; //Millis
 
         //Set Speed for teleOp. Mecannum wheel speed.
         //driveActions.setSpeed(1.0);

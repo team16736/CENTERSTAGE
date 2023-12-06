@@ -32,7 +32,7 @@ public class DriveActions {
     public DcMotorEx rightRear;
 
     //the amount to throttle the power of the motors
-    public double THROTTLE = 0.6;
+    public double THROTTLE = 1.0;
 
     private Telemetry telemetry;
     private HardwareMap hardwareMap;
