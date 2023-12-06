@@ -12,8 +12,11 @@ import org.firstinspires.ftc.teamcode.src.driving.GyroActions;
 import org.firstinspires.ftc.teamcode.src.driving.HelperActions;
 
 
-@Autonomous(name = "AutoLeftSideBlue")
-public class AutoLeftSideBlue extends HelperActions {
+@Autonomous(name = "AutoRightSideBlue")
+/*
+This the far side blue, Mel
+ */
+public class AutoRightSideBlue extends HelperActions {
     //Create the actions as objects. This is so we can use the methods inside of them
     private GyroActions gyroActions = null;
     private DetectPropActions detectPropActions = null;
@@ -42,8 +45,8 @@ public class AutoLeftSideBlue extends HelperActions {
         waitForStart();
 
         if (opModeIsActive()) {
-            gyroActions.initEncoderGyroStrafeStateMachine(speed, 2, false);
-            while (gyroActions.encoderGyroStrafeStateMachine(speed, 2, false));
+            gyroActions.initEncoderGyroStrafeStateMachine(speed, 2, true);
+            while (gyroActions.encoderGyroStrafeStateMachine(speed, 2, true));
             // First, uses detectPropActions to find the prop. Assigns it to a variable so we can use it later.
             String propPlace = detectPropActions.whereProp(10);
             telemetry.addData("result", detectPropActions.getResult().x);
@@ -59,20 +62,20 @@ public class AutoLeftSideBlue extends HelperActions {
             //while (gyroActions.encoderGyroDriveStateMachine(speed, 20, 0)) ;
 
             ///// remove the hardcoded value /////
-            propPlace = "right";
+            propPlace = "left";
             //If statements, in case something could change in the program
-            if (propPlace == "left") {
+            if (propPlace == "right") {
                 //Prop is at the left side
-                placePixelLeft(placer);
-                //placeAndPark(placer);
-            } else if (propPlace == "right") {
                 placePixelRight(placer);
+                //placeAndPark(placer);
+            } else if (propPlace == "left") {
+                placePixelLeft(placer);
                 //placeAndPark(placer);
             } else {
                 //Mid is the default position, if it is not on the left or the right, the only remaining option is the middle
                 placePixelMid(placer);
-                driveToBoardMid(placer);
-                placeAndPark(placer);
+                //driveToBoardMid(placer);
+                //placeAndPark(placer);
             }
         }
     }
@@ -80,7 +83,7 @@ public class AutoLeftSideBlue extends HelperActions {
     private void placePixelMid(PlacerActions placer) {
         //Move to the prop 30 inches
         double distance = 30;
-        int angle = 90;
+        int angle = -90;
         gyroActions.encoderGyroDriveStateMachine(speed, distance, 0);
         while (gyroActions.encoderGyroDriveStateMachine(speed, distance, 0)) ;
 
@@ -97,9 +100,9 @@ public class AutoLeftSideBlue extends HelperActions {
         gyroActions.initGyroSpin(angle);
         while (gyroActions.gyroSpin(speed)) ;
 
-        // move 2 inch to center the robot, to avoid hitting the right bar
-        gyroActions.initEncoderGyroStrafeStateMachine(speed, 1, false);
-        while (gyroActions.encoderGyroStrafeStateMachine(speed, 1, false)) ;
+        // move 1 inch to center the robot, to avoid hitting the right bar
+        gyroActions.initEncoderGyroStrafeStateMachine(speed, 1, true);
+        while (gyroActions.encoderGyroStrafeStateMachine(speed, 1, true)) ;
     }
 
     private void driveToBoardMid(PlacerActions placer) {
@@ -120,13 +123,13 @@ public class AutoLeftSideBlue extends HelperActions {
         }
     }
 
-    private void placePixelLeft(PlacerActions placer) {
+    private void placePixelRight(PlacerActions placer) {
         double distance = 22;
-        int angle = 90;
+        int angle = -90;
 
         // Strafe to the left center line
-        gyroActions.initEncoderGyroStrafeStateMachine(speed, 11, true);
-        while (gyroActions.encoderGyroStrafeStateMachine(speed, 11, true));
+        gyroActions.initEncoderGyroStrafeStateMachine(speed, 11.5, false);
+        while (gyroActions.encoderGyroStrafeStateMachine(speed, 11.5, false));
 
         // move to the prop and push it forward
         gyroActions.encoderGyroDriveStateMachine(speed, distance, 0);
@@ -146,18 +149,18 @@ public class AutoLeftSideBlue extends HelperActions {
         while (gyroActions.gyroSpin(speed));
 
         // Strafe to the original lane
-        gyroActions.initEncoderGyroStrafeStateMachine(speed, 5, true);
-        while (gyroActions.encoderGyroStrafeStateMachine(speed, 5, true));
+        gyroActions.initEncoderGyroStrafeStateMachine(speed, 4, false);
+        while (gyroActions.encoderGyroStrafeStateMachine(speed, 4, false));
 
     }
 
-    private void placePixelRight(PlacerActions placer) {
+    private void placePixelLeft(PlacerActions placer) {
         double distance = 28;
-        int angle = -90;
+        int angle = 90;
 
         // Strafe away from the prop
-        gyroActions.initEncoderGyroStrafeStateMachine(speed, 5, true);
-        while (gyroActions.encoderGyroStrafeStateMachine(speed, 5, true));
+        gyroActions.initEncoderGyroStrafeStateMachine(speed, 5, false);
+        while (gyroActions.encoderGyroStrafeStateMachine(speed, 5, false));
 
         // go forward 28  inches
         gyroActions.encoderGyroDriveStateMachine(speed, distance, 0);
@@ -167,8 +170,8 @@ public class AutoLeftSideBlue extends HelperActions {
         gyroActions.initGyroSpin(angle);
         while (gyroActions.gyroSpin(speed)) ;
 
-        gyroActions.initEncoderGyroDriveStateMachine(speed, 7, angle);
-        while (gyroActions.encoderGyroDriveStateMachine(speed, 7, angle));
+        gyroActions.initEncoderGyroDriveStateMachine(speed, 5, angle);
+        while (gyroActions.encoderGyroDriveStateMachine(speed, 5, angle));
 
         intake.outTake();
         sleep(1000);
@@ -178,8 +181,8 @@ public class AutoLeftSideBlue extends HelperActions {
         gyroActions.initEncoderGyroDriveStateMachine(speed, -2, angle);
         while (gyroActions.encoderGyroDriveStateMachine(speed, -2, angle));
 
-        gyroActions.initEncoderGyroStrafeStateMachine(speed, 23, true);
-        while (gyroActions.encoderGyroStrafeStateMachine(speed, 23 , true));
+        gyroActions.initEncoderGyroStrafeStateMachine(speed, 26, true);
+        while (gyroActions.encoderGyroStrafeStateMachine(speed, 26 , true));
     }
 
     private void placeAndPark(PlacerActions placer) {

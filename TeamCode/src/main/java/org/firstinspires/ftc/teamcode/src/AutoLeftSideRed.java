@@ -2,19 +2,21 @@ package org.firstinspires.ftc.teamcode.src;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-// Import Statements. Important if you want to use anything from a file
+import org.firstinspires.ftc.teamcode.src.attachments.DetectPropActions;
 import org.firstinspires.ftc.teamcode.src.attachments.IntakeClass;
 import org.firstinspires.ftc.teamcode.src.attachments.LiftyUppyActions;
-import org.firstinspires.ftc.teamcode.src.attachments.DetectPropActions;
 import org.firstinspires.ftc.teamcode.src.attachments.PlacerActions;
 import org.firstinspires.ftc.teamcode.src.attachments.StateManager;
 import org.firstinspires.ftc.teamcode.src.attachments.UpTake;
 import org.firstinspires.ftc.teamcode.src.driving.GyroActions;
 import org.firstinspires.ftc.teamcode.src.driving.HelperActions;
 
-@Autonomous(name = "AutoRightSideRed")
-public class AutoRightSideRed extends HelperActions {
 
+@Autonomous(name = "AutoLeftSideRed")
+/*
+This the far side red, Mel
+ */
+public class AutoLeftSideRed extends HelperActions {
     //Create the actions as objects. This is so we can use the methods inside of them
     private GyroActions gyroActions = null;
     private DetectPropActions detectPropActions = null;
@@ -24,15 +26,14 @@ public class AutoRightSideRed extends HelperActions {
     private StateManager stateManager = null;
 
     //Initial variable declarations
-    private double speed = 200;
+    private double speed = 300;
 
     public void runOpMode() {
-
         //Done during initialization
         //Before this, the actions we created are empty. Assigns the actions to stop being nothing
         stateManager = new StateManager();
         gyroActions = new GyroActions(this, telemetry, hardwareMap);
-        detectPropActions = new DetectPropActions(hardwareMap, "RedBoxTemplate");
+        detectPropActions = new DetectPropActions(hardwareMap, "RedBoxTemplate", true);
         intake = new IntakeClass(stateManager, hardwareMap);
         uptake = new UpTake(stateManager, hardwareMap);
         liftyUppyActions = new LiftyUppyActions(hardwareMap, stateManager, telemetry);
@@ -44,93 +45,164 @@ public class AutoRightSideRed extends HelperActions {
         waitForStart();
 
         if (opModeIsActive()) {
-//            First, uses detectPropActions to find the prop. Assigns it to a variable so we can use it later.
+            gyroActions.initEncoderGyroStrafeStateMachine(speed, 2, false);
+            while (gyroActions.encoderGyroStrafeStateMachine(speed, 2, false));
+            // First, uses detectPropActions to find the prop. Assigns it to a variable so we can use it later.
             String propPlace = detectPropActions.whereProp(10);
             telemetry.addData("result", detectPropActions.getResult().x);
             telemetry.update();
-            sleep(20000);
-//            while (propPlace == "") {
-//                propPlace = detectPropActions.whereProp(10);
-//            }
-//            String propPlace = "right";
+            while (propPlace == "") {
+                propPlace = detectPropActions.whereProp(10);
+            }
             telemetry.addData("prop place", propPlace);
 
-            //Start the robot moving forwards
-            gyroActions.initEncoderGyroDriveStateMachine(speed, 20, 0);
+            //Start the robot moving forwards - 20 inches irrespective of the placer location
+            //gyroActions.initEncoderGyroDriveStateMachine(speed, 20, 0);
             //Because the driving uses feedback from the gyroscope, we constantly have to update the driving
-            while (gyroActions.encoderGyroDriveStateMachine(speed, 20, 0)) ;
+            //while (gyroActions.encoderGyroDriveStateMachine(speed, 20, 0)) ;
+
+            ///// remove the hardcoded value /////
+            // propPlace = "right";
 
             //If statements, in case something could change in the program
             if (propPlace == "left") {
-                //Turn towards the prop
-                gyroActions.initGyroSpin(45);
-                while (gyroActions.gyroSpin(speed)) ;
-
-                //Move to the prop. Because moving at an angle, must pass that in
-                gyroActions.initEncoderGyroDriveStateMachine(speed, 8, 45);
-                while (gyroActions.encoderGyroDriveStateMachine(speed, 8, 45)) ;
-
+                //Prop is at the left side
+                placePixelLeft(placer);
+                //placeAndPark(placer);
             } else if (propPlace == "right") {
-                //Other situation, if the propPlace is on the right this triggers
-                //Turn towards the prop
-                int angle = -45;
-                int distance = 4;
-                gyroActions.initGyroSpin(angle);
-                while (gyroActions.gyroSpin(speed)) ;
-
-                //Move to the prop. Because moving at an angle, must pass that in
-
-                gyroActions.initEncoderGyroDriveStateMachine(speed, distance, angle);
-                while (gyroActions.encoderGyroDriveStateMachine(speed, distance, angle)) ;
-                intake.outTake();
-                //THIS IS UNTESTED CODE TO PLACE PIXELS ON THE BACKBOARD
-                // drive backwards to get away from the pixel
-                sleep(500);
-                 distance = -13;
-                gyroActions.initEncoderGyroDriveStateMachine(speed,distance, 0);
-                while (gyroActions.encoderGyroDriveStateMachine(speed, distance, 0)) ;
-                intake.intakeOff();
-                // spin right to straighten out the robot
-                gyroActions.initGyroSpin(135);
-                while (gyroActions.gyroSpin(speed)) ;
-//                // drive forward to get to the backboard
-                liftyUppyActions.flippyTurnyUp();
-                liftyUppyActions.goToPreset(false,false,true,false);
-                gyroActions.initEncoderGyroDriveStateMachine(speed, -34, 90);
-                while(gyroActions.encoderGyroDriveStateMachine(speed,-34,90));
-//
-
-//
-
-//                boolean notDone = true;
-//                while(notDone){
-//                    liftyUppyActions.update();
-//                    if(stateManager.flippyTurnyState== stateManager.FLIPPYTURNY_UP){
-//                        notDone = false;
-//
-//                    }
-//                }
-                // releases the pixels
-                placer.releasePixel();
-
-
-
-
+                placePixelRight(placer);
+                //placeAndPark(placer);
             } else {
-                //For when it is in the middle. Do not need to use an if statement to check if it is, because
-                //if it is not on the left or the right, the only remaining option is the middle
-
-                //Move to the prop.
-                int distance = 8;
-                gyroActions.initEncoderGyroDriveStateMachine(speed, distance, 0);
-                while (gyroActions.encoderGyroDriveStateMachine(speed, distance, 0)) ;
+                //Mid is the default position, if it is not on the left or the right, the only remaining option is the middle
+                placePixelMid(placer);
+                driveToBoardMid(placer);
+                placeAndPark(placer);
             }
-//            intake.outTake();
-           // uptake.setUptakeDown();
-            sleep(5000);
+        }
+    }
+
+    private void placePixelMid(PlacerActions placer) {
+        //Move to the prop 30 inches
+        double distance = 30;
+        int angle = 90;
+        gyroActions.encoderGyroDriveStateMachine(speed, distance, 0);
+        while (gyroActions.encoderGyroDriveStateMachine(speed, distance, 0)) ;
+
+        // place pixel on the line
+        intake.outTake();
+        sleep(1000);
+        intake.intakeOff();
+
+        // move back 5 inches to avoid hitting the pixel/prop
+        gyroActions.initEncoderGyroDriveStateMachine(speed, -5, 0);
+        while (gyroActions.encoderGyroDriveStateMachine(speed, -5, 0)) ;
+
+        // turn 45, prep to move backward
+        gyroActions.initGyroSpin(angle);
+        while (gyroActions.gyroSpin(speed)) ;
+
+        // move 2 inch to center the robot, to avoid hitting the right bar
+        gyroActions.initEncoderGyroStrafeStateMachine(speed, 1, false);
+        while (gyroActions.encoderGyroStrafeStateMachine(speed, 1, false)) ;
+    }
+
+    private void driveToBoardMid(PlacerActions placer) {
+        int angle = 90;
+          // go past the middle bar
+        gyroActions.initEncoderGyroDriveStateMachine(speed, -44, angle);
+        while (gyroActions.encoderGyroDriveStateMachine(speed, -44, angle)) ;
+
+        // lift the pixel arm
+        liftyUppyActions.flippyTurnyUp();
+
+        // move to the board
+        gyroActions.initEncoderGyroDriveStateMachine(speed, -44, angle);
+        while (gyroActions.encoderGyroDriveStateMachine(speed, -44, angle)) {
+            if (liftyUppyActions.flippyTurny.getCurrentPosition() > 300) {
+                liftyUppyActions.goToPreset(false, true, false, false);
+            }
+        }
+    }
+
+    private void placePixelLeft(PlacerActions placer) {
+        double distance = 22;
+        int angle = 90;
+
+        // Strafe to the left center line
+        gyroActions.initEncoderGyroStrafeStateMachine(speed, 11, true);
+        while (gyroActions.encoderGyroStrafeStateMachine(speed, 11, true));
+
+        // move to the prop and push it forward
+        gyroActions.encoderGyroDriveStateMachine(speed, distance, 0);
+        while (gyroActions.encoderGyroDriveStateMachine(speed, distance, 0));
+
+        // place the pixel
+        intake.outTake();
+        sleep(1000);
+        intake.intakeOff();
+
+        // come back 5 inches to avoid the pixel/prop
+        gyroActions.initEncoderGyroDriveStateMachine(speed, -15, 0);
+        while (gyroActions.encoderGyroDriveStateMachine(speed, -15, 0)) ;
+
+        // turn backward
+        gyroActions.initGyroSpin(angle);
+        while (gyroActions.gyroSpin(speed));
+
+        // Strafe to the original lane
+        gyroActions.initEncoderGyroStrafeStateMachine(speed, 5, true);
+        while (gyroActions.encoderGyroStrafeStateMachine(speed, 5, true));
+
+    }
+
+    private void placePixelRight(PlacerActions placer) {
+        double distance = 28;
+        int angle = -90;
+
+        // Strafe away from the prop
+        gyroActions.initEncoderGyroStrafeStateMachine(speed, 5, true);
+        while (gyroActions.encoderGyroStrafeStateMachine(speed, 5, true));
+
+        // go forward 28  inches
+        gyroActions.encoderGyroDriveStateMachine(speed, distance, 0);
+        while (gyroActions.encoderGyroDriveStateMachine(speed, distance, 0));
 
 
+        gyroActions.initGyroSpin(angle);
+        while (gyroActions.gyroSpin(speed)) ;
+
+        gyroActions.initEncoderGyroDriveStateMachine(speed, 7, angle);
+        while (gyroActions.encoderGyroDriveStateMachine(speed, 7, angle));
+
+        intake.outTake();
+        sleep(1000);
+        intake.intakeOff();
+        
+
+        gyroActions.initEncoderGyroDriveStateMachine(speed, -2, angle);
+        while (gyroActions.encoderGyroDriveStateMachine(speed, -2, angle));
+
+        gyroActions.initEncoderGyroStrafeStateMachine(speed, 23, true);
+        while (gyroActions.encoderGyroStrafeStateMachine(speed, 23 , true));
+    }
+
+    private void placeAndPark(PlacerActions placer) {
+        // release pixel
+        placer.releasePixel();
+        sleep(700);
+        if (liftyUppyActions.flippyTurny.getCurrentPosition() > 300) {
+            liftyUppyActions.goToPreset(true, false, false, false);
 
         }
+        liftyUppyActions.flippyTurnyDown();
+
+        // go 3 inches away from the board
+        gyroActions.encoderGyroDriveStateMachine(speed, 3);
+        while (gyroActions.encoderGyroDriveStateMachine(speed, 3)) ;
+
+        // move away from the board towards the wall
+        gyroActions.encoderGyroStrafeStateMachine(speed, 24, false);
+        while (gyroActions.encoderGyroStrafeStateMachine(speed, 24, false)) ;
+        placer.closePlacer();
     }
 }
