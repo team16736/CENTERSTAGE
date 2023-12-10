@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.util.Range;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.src.constants.ConfigConstants;
 
 public class LiftyUppyActions {
@@ -90,18 +91,22 @@ public class LiftyUppyActions {
 
     double prevTime = System.currentTimeMillis();
     public void teleOpLiftyUppy(double power, double liftSpeedMultiplier) {
+        double time = System.currentTimeMillis();
         if (power != 0 && flippyTurny.getCurrentPosition() > 300) {
             if (liftyUppy.getMode() == DcMotor.RunMode.RUN_USING_ENCODER) {
                 liftyUppy.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 liftyUppy.setPower(1.0);
             }
-            double time = System.currentTimeMillis();
+//            double time = System.currentTimeMillis();
             liftyUppyPosition = Range.clip(liftyUppyPosition + power * (time - prevTime) * liftSpeedMultiplier, -3000, 100);
             setLiftyUppyPosition((int) liftyUppyPosition, 3000 * liftSpeedMultiplier);
-            prevTime = time;
+//            prevTime = time;
             RobotLog.dd("LiftyUppy", "Target Position %f, time %f", liftyUppyPosition, time);
         }
+        prevTime = time;
         telemetry.addData("target position", liftyUppyPosition);
+        telemetry.addData("liftyPower", liftyUppy.getPower());
+        telemetry.addData("liftyCurrent mA", liftyUppy.getCurrent(CurrentUnit.MILLIAMPS));
         telemetry.addData("current position", liftyUppy.getCurrentPosition());
     }
 
