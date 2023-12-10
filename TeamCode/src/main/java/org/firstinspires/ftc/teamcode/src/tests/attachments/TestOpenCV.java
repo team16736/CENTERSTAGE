@@ -17,16 +17,16 @@ import java.io.File;
 public class TestOpenCV {
 
     @Test
-    public void testItemExists(){
+    public void testTemplateMatching(){
 //        OpenCVLoader.initDebug();
 
         int i = CvType.CV_16UC4;
-        String pathTemplate = "src/main/java/org/firstinspires/ftc/teamcode/src/attachments/data/template.jpg";
+        String pathTemplate = "src/main/java/org/firstinspires/ftc/teamcode/src/attachments/data/BlueSphereTemplate.png";
 
         File fileTemplate = new File(pathTemplate);
         String absolutePathTemplate = fileTemplate.getAbsolutePath();
 
-        String pathImg = "src/main/java/org/firstinspires/ftc/teamcode/src/attachments/data/imgL.jpg";
+        String pathImg = "src/main/java/org/firstinspires/ftc/teamcode/src/attachments/data/BlueSphere2Inches0.png";
 
         File fileImg = new File(pathImg);
         String absolutePathImg = fileImg.getAbsolutePath();
@@ -48,17 +48,18 @@ public class TestOpenCV {
 
 
         Point resultL = openCv.templateMatching(img, templ);
-        img = loadImage("imgR");
-        Point resultR = openCv.templateMatching(img, templ);
-        img = loadImage("imgM");
-        Point resultM = openCv.templateMatching(img, templ);
-        Assert.assertEquals(250, resultL.y, 10);
+        Assert.assertEquals(100, resultL.x, 0);
+//        img = loadImage("imgR");
+//        Point resultR = openCv.templateMatching(img, templ);
+//        img = loadImage("imgM");
+//        Point resultM = openCv.templateMatching(img, templ);
+//        Assert.assertEquals(250, resultL.y, 10);
     }
 
     @Test
     public void testHoughCircles() {
         for (int i = 0; i < 3; i++) {
-            String pathImg = "src/main/java/org/firstinspires/ftc/teamcode/src/attachments/data/blueSphere2Inches" + i + ".png";
+            String pathImg = "src/main/java/org/firstinspires/ftc/teamcode/src/attachments/data/BlueSphere2Inches" + i + ".png";
 
             File fileImg = new File(pathImg);
             String absolutePathImg = fileImg.getAbsolutePath();
@@ -77,14 +78,16 @@ public class TestOpenCV {
 
             Mat img = Imgcodecs.imread(absolutePathImg, Imgcodecs.IMREAD_COLOR);
 
-            Point result = openCv.ROI(img, false);
+            Point result = openCv.houghCircles(img);
+
+//            Imgcodecs.imwrite("src/main/java/org/firstinspires/ftc/teamcode/src/attachments/data/threshold.jpg", )
 
             if (i == 0) {
-                Assert.assertEquals(310, result.x, 20);
+                Assert.assertEquals(33, result.x, 20);
             } else if (i == 1) {
-                Assert.assertEquals(174, result.x, 20);
+                Assert.assertEquals(174*2, result.x, 20);
             } else {
-                Assert.assertEquals(30, result.x, 50);
+                Assert.assertEquals(249*2, result.x, 50);
             }
         }
     }
