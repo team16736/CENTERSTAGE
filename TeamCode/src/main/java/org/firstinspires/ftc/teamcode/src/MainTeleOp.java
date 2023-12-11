@@ -21,6 +21,7 @@ public class MainTeleOp extends HelperActions {
     private DriveActions driveActions = null;
     private LiftyUppyActions liftyUppyActions = null;
     private HangerActions hanger = null;
+    private PlacerActions placer = null;
     boolean correctRotation = false;
     double rotationPosition = 0;
     double rotation = 0;
@@ -36,11 +37,10 @@ public class MainTeleOp extends HelperActions {
         hanger = new HangerActions(hardwareMap);
         IntakeClass intakeClass = new IntakeClass(stateManager, hardwareMap);
         UpTake upTake = new UpTake(stateManager, hardwareMap);
-        PlacerActions placer = new PlacerActions(stateManager, hardwareMap);
+        placer = new PlacerActions(stateManager, hardwareMap);
 
         boolean placerBit = false;
         double prevTime = 0;
-        double pixelReleaseTime = 400; //Millis
 
         //Set Speed for teleOp. Mecannum wheel speed.
         //driveActions.setSpeed(1.0);
@@ -62,7 +62,7 @@ public class MainTeleOp extends HelperActions {
             intakeClass.intakeButtons(gamepad1);
             upTake.uptakeButtons(gamepad1);
 
-            telemetry.addData("Joystick", gamepad2.right_stick_y);
+            telemetry.addData("Joystick", gamepad2.left_stick_y);
 
             changeSpeed(driveActions, gamepad1.dpad_up, gamepad1.dpad_down, false, false);
             toggleSpeed(gamepad1.a);
@@ -95,15 +95,17 @@ public class MainTeleOp extends HelperActions {
                 liftyUppyActions.resetLiftyUppy();
             }
 
-            if (gamepad2.y) {
-                placer.releasePixel();
-                placerBit = true;
-                prevTime = System.currentTimeMillis();
-            }
-            if (placerBit && System.currentTimeMillis() > prevTime + pixelReleaseTime) {
-                placer.closePlacer();
-                placerBit = false;
-            }
+//
+//            if (gamepad2.y) {
+//                placer.releasePixel();
+//                placerBit = true;
+//                prevTime = System.currentTimeMillis();
+//            }
+//            if (placerBit && System.currentTimeMillis() > prevTime + pixelReleaseTime) {
+//                placer.closePlacer();
+//                placerBit = false;
+//            }
+            releasePixel(gamepad2.y);
 
             telemetry.update();
         }
@@ -129,5 +131,25 @@ public class MainTeleOp extends HelperActions {
             rotation = -gyroActions.getSteeringCorrection(rotationPosition, 0.02);
         }
         return rotation;
+    }
+
+    double pixelReleaseTime = 200; //Millis
+    boolean prevInput = false;
+    int releaseState = 0;
+    double prevTime = System.currentTimeMillis();
+    private void releasePixel(boolean input) {
+        if (!prevInput && input) {
+            releaseState = 1;
+        }
+        if (releaseState == 1) {
+            placer.releasePixel();
+            prevTime = System.currentTimeMillis();
+            releaseState = 2;
+        }
+        if (releaseState == 2 && System.currentTimeMillis() > prevTime + pixelReleaseTime) {
+            placer.closePlacer();
+            releaseState = 0;
+        }
+        prevInput = input;
     }
 }

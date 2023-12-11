@@ -38,7 +38,7 @@ public class DetectPropActions {
             @Override
             public void onOpened()
             {
-                webcam.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
+                webcam.startStreaming(640, 360, OpenCvCameraRotation.UPRIGHT);
             }
 
             @Override
@@ -102,9 +102,9 @@ public class DetectPropActions {
             if (detectionNumber != priorDetectionNumber) {
                 priorDetectionNumber = detectionNumber;
                 wherePropState ++;
-                if (result.x < 60 || result.x > 250) {
+                if (result.x < 230) {
                     leftCount++;
-                } else if (result.x < 200) {
+                } else if (result.x < 480) {
                     midCount++;
                 } else {
                     rightCount++;
@@ -151,8 +151,10 @@ public class DetectPropActions {
             Imgproc.cvtColor(input, input, Imgproc.COLOR_BGR2RGB);
 
             Core.rotate(input, input, Core.ROTATE_180);
+
+            input.submat(100, input.rows(), 0, input.cols());
             
-            result = openCV.templateMatching(input, templ);
+            result = openCV.templateMatchingHalfImg(input, templ);
 
             RobotLog.dd("OpenCV", "Point X %f", result.x);
             RobotLog.dd("OpenCV", "Point Y %f", result.y);

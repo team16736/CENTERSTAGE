@@ -22,18 +22,17 @@ public class JamesTesting extends HelperActions {
     public void runOpMode() {
        // servo = hardwareMap.get(Servo.class, "intakeRight");
         servo = hardwareMap.get(Servo.class, ConfigConstants.LEFT_RELEASE);
+        DetectPropActions detectPropActions = new DetectPropActions(hardwareMap, "RedSphereTemplate", true);
+        detectPropActions.setToTemplateMatching();
         telemetry.addData("Waiting for start", "");
         telemetry.update();
         waitForStart();
 
-        if (opModeIsActive()) {
-            if (gamepad1.x) {
-                servo.setPosition(1.0);
-            } else if (gamepad1.y) {
-                servo.setPosition(0.0);
-            }
-
-
+        while (opModeIsActive()) {
+            detectPropActions.whereProp(10);
+            while (detectPropActions.whereProp(10) == "") ;
+            telemetry.addData("prop place", detectPropActions.propPlace);
+            telemetry.update();
         }
     }
 }
