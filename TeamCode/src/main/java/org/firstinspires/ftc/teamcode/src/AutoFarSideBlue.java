@@ -33,7 +33,8 @@ public class AutoFarSideBlue extends HelperActions {
         //Before this, the actions we created are empty. Assigns the actions to stop being nothing
         stateManager = new StateManager();
         gyroActions = new GyroActions(this, telemetry, hardwareMap);
-        detectPropActions = new DetectPropActions(hardwareMap, "RedBoxTemplate", false);
+        detectPropActions = new DetectPropActions(hardwareMap, "BlueSphereTemplate", false);
+        detectPropActions.setToTemplateMatching();
         intake = new IntakeClass(stateManager, hardwareMap);
         uptake = new UpTake(stateManager, hardwareMap);
         liftyUppyActions = new LiftyUppyActions(hardwareMap, stateManager, telemetry);
@@ -56,7 +57,6 @@ public class AutoFarSideBlue extends HelperActions {
             while (propPlace == "") {
                 propPlace = detectPropActions.whereProp(3);
             }
-            propPlace = "left";
             detectPropActions.stopStreaming();
             telemetry.addData("prop place", propPlace);
 
@@ -130,7 +130,7 @@ public class AutoFarSideBlue extends HelperActions {
         gyroActions.initEncoderGyroDriveStateMachine(speed, -44, angle);
         while (gyroActions.encoderGyroDriveStateMachine(speed, -44, angle)) {
             if (liftyUppyActions.flippyTurny.getCurrentPosition() > 300) {
-                liftyUppyActions.goToPreset(false, true, false, false);
+                liftyUppyActions.setLiftyUppyPosition(-800, 2500);
             }
         }
     }
@@ -217,7 +217,7 @@ public class AutoFarSideBlue extends HelperActions {
         // raise the viper slides
         while (gyroActions.encoderGyroDriveStateMachine(speed, distance2, angle)) {
             if (liftyUppyActions.flippyTurny.getCurrentPosition() > 300) {
-                liftyUppyActions.goToPreset(false, true, false, false);
+                liftyUppyActions.setLiftyUppyPosition(-800, 2500);
 //              liftyUppyActions.setLiftyUppyPosition(-1200, 2500);
             }
         }
@@ -226,14 +226,14 @@ public class AutoFarSideBlue extends HelperActions {
     private void placeAndPark(PlacerActions placer) {
         // release pixel
         placer.releasePixel();
-        sleep(800);
+        sleep(700);
         placer.closePlacer();
-        if (liftyUppyActions.flippyTurny.getCurrentPosition() > 300) {
-            liftyUppyActions.goToPreset(true, false, false, false);
 
-        }
-        liftyUppyActions.flippyTurnyDown();
+        //liftyUppyActions.goToPreset(false, true, false, false);
+        liftyUppyActions.goToPreset(false, true, false, false);
         sleep(300);
+        liftyUppyActions.flippyTurnyDown();
+        sleep(200);
         liftyUppyActions.goToPreset(true, false, false, false);
 
         // go 3 inches away from the board

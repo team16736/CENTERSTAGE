@@ -33,7 +33,8 @@ public class AutoFarSideRed extends HelperActions {
         //Before this, the actions we created are empty. Assigns the actions to stop being nothing
         stateManager = new StateManager();
         gyroActions = new GyroActions(this, telemetry, hardwareMap);
-        detectPropActions = new DetectPropActions(hardwareMap, "RedBoxTemplate", true);
+        detectPropActions = new DetectPropActions(hardwareMap, "RedSphereTemplate", true);
+        detectPropActions.setToTemplateMatching();
         intake = new IntakeClass(stateManager, hardwareMap);
         uptake = new UpTake(stateManager, hardwareMap);
         liftyUppyActions = new LiftyUppyActions(hardwareMap, stateManager, telemetry);
@@ -50,11 +51,11 @@ public class AutoFarSideRed extends HelperActions {
 
 
             // First, uses detectPropActions to find the prop. Assigns it to a variable so we can use it later.
-            String propPlace = detectPropActions.whereProp(10);
+            String propPlace = detectPropActions.whereProp(3);
             telemetry.addData("result", detectPropActions.getResult().x);
             telemetry.update();
             while (propPlace == "") {
-                propPlace = detectPropActions.whereProp(10);
+                propPlace = detectPropActions.whereProp(3);
             }
             telemetry.addData("prop place", propPlace);
 
@@ -99,7 +100,7 @@ public class AutoFarSideRed extends HelperActions {
      */
     private void placePixelMid(PlacerActions placer) {
         //Move to the prop 30 inches
-        double distance = 30;
+        double distance = 29;
         int angle = 90;
         gyroActions.encoderGyroDriveStateMachine(speed, distance, 0);
         while (gyroActions.encoderGyroDriveStateMachine(speed, distance, 0)) ;
@@ -118,8 +119,8 @@ public class AutoFarSideRed extends HelperActions {
         while (gyroActions.gyroSpin(speed)) ;
 
         // move 2 inch to center the robot, to avoid hitting the right bar
-        gyroActions.initEncoderGyroStrafeStateMachine(speed, 1, false);
-        while (gyroActions.encoderGyroStrafeStateMachine(speed, 1, false)) ;
+        gyroActions.initEncoderGyroStrafeStateMachine(speed, 2, false);
+        while (gyroActions.encoderGyroStrafeStateMachine(speed, 2, false)) ;
     }
 
     /*
@@ -208,7 +209,7 @@ public class AutoFarSideRed extends HelperActions {
         gyroActions.initEncoderGyroDriveStateMachine(speed, -44, angle);
         while (gyroActions.encoderGyroDriveStateMachine(speed, -44, angle)) {
             if (liftyUppyActions.flippyTurny.getCurrentPosition() > 300) {
-                liftyUppyActions.goToPreset(false, true, false, false);
+                liftyUppyActions.setLiftyUppyPosition(-800, 2500);
             }
         }
     }
@@ -233,7 +234,7 @@ public class AutoFarSideRed extends HelperActions {
         // raise the viper slides
         while (gyroActions.encoderGyroDriveStateMachine(speed, distance2, angle)) {
             if (liftyUppyActions.flippyTurny.getCurrentPosition() > 300) {
-                liftyUppyActions.goToPreset(false, true, false, false);
+                liftyUppyActions.setLiftyUppyPosition(-800, 2500);
             }
         }
     }
@@ -241,13 +242,14 @@ public class AutoFarSideRed extends HelperActions {
     private void placeAndPark(PlacerActions placer) {
         // release pixel
         placer.releasePixel();
-        sleep(800);
+        sleep(700);
         placer.closePlacer();
 
         //liftyUppyActions.goToPreset(false, true, false, false);
+        liftyUppyActions.goToPreset(false, true, false, false);
         sleep(300);
         liftyUppyActions.flippyTurnyDown();
-        sleep(300);
+        sleep(200);
         liftyUppyActions.goToPreset(true, false, false, false);
 
         // go 3 inches away from the board

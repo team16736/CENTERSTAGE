@@ -20,6 +20,9 @@ public class ConfigConstants {
     public static final String LEFT_PULLER = "leftPuller";
     public static final String RIGHT_PULLER = "rightPuller";
 
+    //Launcher
+    public static final String LIFTOFF = "airplaneShooty";
+
     //Sensors
     public static final String IMU = "IMU";
     public static final String WEBCAM_1 = "Webcam 1"; //Front Controlhub

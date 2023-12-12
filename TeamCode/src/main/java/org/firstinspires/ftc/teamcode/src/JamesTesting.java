@@ -29,8 +29,8 @@ public class JamesTesting extends HelperActions {
         waitForStart();
 
         while (opModeIsActive()) {
-            detectPropActions.whereProp(10);
-            while (detectPropActions.whereProp(10) == "") ;
+            detectPropActions.whereProp(3);
+            while (detectPropActions.whereProp(3) == "") ;
             telemetry.addData("prop place", detectPropActions.propPlace);
             telemetry.update();
         }

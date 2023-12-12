@@ -32,7 +32,8 @@ public class AutoRightSideRed extends HelperActions {
         //Before this, the actions we created are empty. Assigns the actions to stop being nothing
         stateManager = new StateManager();
         gyroActions = new GyroActions(this, telemetry, hardwareMap);
-        detectPropActions = new DetectPropActions(hardwareMap, "RedBoxTemplate", true);
+        detectPropActions = new DetectPropActions(hardwareMap, "RedSphereTemplate", true);
+        detectPropActions.setToTemplateMatching();
         intake = new IntakeClass(stateManager, hardwareMap);
         uptake = new UpTake(stateManager, hardwareMap);
         liftyUppyActions = new LiftyUppyActions(hardwareMap, stateManager, telemetry);
@@ -49,8 +50,8 @@ public class AutoRightSideRed extends HelperActions {
             while (gyroActions.encoderGyroStrafeStateMachine(speed, 2, true));
 
 //            First, uses detectPropActions to find the prop. Assigns it to a variable so we can use it later.
-            String propPlace = detectPropActions.whereProp(10);
-            while (detectPropActions.whereProp(10) == "");
+            String propPlace = detectPropActions.whereProp(3);
+            while (detectPropActions.whereProp(3) == "");
             propPlace = detectPropActions.propPlace;
 //            String propPlace = "left";
             telemetry.addData("result", detectPropActions.getResult().x);
@@ -123,6 +124,8 @@ public class AutoRightSideRed extends HelperActions {
         gyroActions.initEncoderGyroStrafeStateMachine(speed,5,false);
         while (gyroActions.encoderGyroStrafeStateMachine(speed,5,false));
         placeAndPark(placer);
+        gyroActions.initEncoderGyroStrafeStateMachine(speed,5,true);
+        while (gyroActions.encoderGyroStrafeStateMachine(speed,5,true));
     }
 
     private void goToMid(PlacerActions placer) {
@@ -165,7 +168,7 @@ public class AutoRightSideRed extends HelperActions {
         sleep(800);
         gyroActions.initEncoderGyroDriveStateMachine(speed, -4);
         while(gyroActions.encoderGyroDriveStateMachine(speed,-4));
-        distance = 4;
+        distance = 5;
         gyroActions.initEncoderGyroStrafeStateMachine(speed,distance, false);
         while (gyroActions.encoderGyroStrafeStateMachine(speed, distance, false));
         intake.intakeOff();
@@ -175,8 +178,8 @@ public class AutoRightSideRed extends HelperActions {
 //                // drive forward to get to the backboard
         liftyUppyActions.flippyTurnyUp();
 
-        gyroActions.initEncoderGyroDriveStateMachine(speed, -35);
-        while(gyroActions.encoderGyroDriveStateMachine(speed,-35)) {
+        gyroActions.initEncoderGyroDriveStateMachine(speed, -34.5);
+        while(gyroActions.encoderGyroDriveStateMachine(speed,-34.5)) {
             if (liftyUppyActions.flippyTurny.getCurrentPosition() > 300) {
                 liftyUppyActions.setLiftyUppyPosition(-800, 2500);
             }
@@ -186,8 +189,6 @@ public class AutoRightSideRed extends HelperActions {
         while (gyroActions.encoderGyroStrafeStateMachine(speed, 3, false));
 
         placeAndPark(placer);
-        gyroActions.initEncoderGyroStrafeStateMachine(speed, 4, true);
-        while (gyroActions.encoderGyroStrafeStateMachine(speed, 4, true));
     }
 
     private void placeAndPark(PlacerActions placer) {

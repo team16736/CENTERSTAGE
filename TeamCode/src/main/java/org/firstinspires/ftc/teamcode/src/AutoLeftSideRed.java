@@ -33,7 +33,8 @@ public class AutoLeftSideRed extends HelperActions {
         //Before this, the actions we created are empty. Assigns the actions to stop being nothing
         stateManager = new StateManager();
         gyroActions = new GyroActions(this, telemetry, hardwareMap);
-        detectPropActions = new DetectPropActions(hardwareMap, "RedBoxTemplate", true);
+        detectPropActions = new DetectPropActions(hardwareMap, "RedSphereTemplate", true);
+        detectPropActions.setToTemplateMatching();
         intake = new IntakeClass(stateManager, hardwareMap);
         uptake = new UpTake(stateManager, hardwareMap);
         liftyUppyActions = new LiftyUppyActions(hardwareMap, stateManager, telemetry);
@@ -48,11 +49,11 @@ public class AutoLeftSideRed extends HelperActions {
             gyroActions.initEncoderGyroStrafeStateMachine(speed, 2, false);
             while (gyroActions.encoderGyroStrafeStateMachine(speed, 2, false));
             // First, uses detectPropActions to find the prop. Assigns it to a variable so we can use it later.
-            String propPlace = detectPropActions.whereProp(10);
+            String propPlace = detectPropActions.whereProp(3);
             telemetry.addData("result", detectPropActions.getResult().x);
             telemetry.update();
             while (propPlace == "") {
-                propPlace = detectPropActions.whereProp(10);
+                propPlace = detectPropActions.whereProp(3);
             }
             telemetry.addData("prop place", propPlace);
 

@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.src.attachments.HangerActions;
 import org.firstinspires.ftc.teamcode.src.attachments.IntakeClass;
+import org.firstinspires.ftc.teamcode.src.attachments.LauncherActions;
 import org.firstinspires.ftc.teamcode.src.attachments.PlacerActions;
 import org.firstinspires.ftc.teamcode.src.attachments.StateManager;
 import org.firstinspires.ftc.teamcode.src.attachments.UpTake;
@@ -38,6 +39,7 @@ public class MainTeleOp extends HelperActions {
         IntakeClass intakeClass = new IntakeClass(stateManager, hardwareMap);
         UpTake upTake = new UpTake(stateManager, hardwareMap);
         placer = new PlacerActions(stateManager, hardwareMap);
+        LauncherActions launcherActions = new LauncherActions(telemetry, hardwareMap);
 
         boolean placerBit = false;
         double prevTime = 0;
@@ -59,13 +61,14 @@ public class MainTeleOp extends HelperActions {
             telemetry.addData("left stick y", gamepad1.left_stick_y);
             telemetry.addData("right stick x", gamepad1.right_stick_x);
 
-            intakeClass.intakeButtons(gamepad1);
-            upTake.uptakeButtons(gamepad1);
-
             telemetry.addData("Joystick", gamepad2.left_stick_y);
 
             changeSpeed(driveActions, gamepad1.dpad_up, gamepad1.dpad_down, false, false);
             toggleSpeed(gamepad1.a);
+
+            if(gamepad1.right_trigger > 0) {
+                launcherActions.launch();
+            }
 
             if (gamepad2.right_bumper) {
                 hanger.releaseHanger();
@@ -85,7 +88,7 @@ public class MainTeleOp extends HelperActions {
                 liftyUppyActions.flippyTurnyUp();
             }
 
-            double intakePower = (gamepad1.left_trigger + gamepad2.left_trigger - gamepad1.right_trigger - gamepad2.right_trigger);
+            double intakePower = (gamepad2.left_trigger - gamepad2.right_trigger);
             intakeClass.setPower(intakePower);
             upTake.setPower(intakePower);
 
