@@ -105,7 +105,7 @@ public class AutoRightSideRed extends HelperActions {
         //Move to the prop. Because moving at an angle, must pass that in
         gyroActions.initEncoderGyroDriveStateMachine(speed, 9);
         while (gyroActions.encoderGyroDriveStateMachine(speed, 9)) ;
-        intake.setPower();
+        intake.outTake();
         sleep(1000);
         intake.intakeOff();
         int distance = -3;
