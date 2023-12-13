@@ -22,6 +22,7 @@ public class OpenCV {
         }
     }
     public Point templateMatching(Mat img, Mat templ){
+        Imgcodecs.imwrite("/sdcard/FIRST/java/src/img.png", img);
         //These should be able to vary
         int match_method = Imgproc.TM_SQDIFF;
         Boolean use_mask = false;

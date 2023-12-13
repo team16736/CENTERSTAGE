@@ -65,7 +65,6 @@ public class MainTeleOp extends HelperActions {
 
             changeSpeed(driveActions, gamepad1.dpad_up, gamepad1.dpad_down, false, false);
             toggleSpeed(gamepad1.a);
-
             if(gamepad1.right_trigger > 0) {
                 launcherActions.launch();
             }

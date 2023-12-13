@@ -24,7 +24,7 @@ public class AutoRightSideRed extends HelperActions {
     private StateManager stateManager = null;
 
     //Initial variable declarations
-    private double speed = 300;
+    private double speed = 400;
 
     public void runOpMode() {
 
@@ -105,7 +105,7 @@ public class AutoRightSideRed extends HelperActions {
         //Move to the prop. Because moving at an angle, must pass that in
         gyroActions.initEncoderGyroDriveStateMachine(speed, 9);
         while (gyroActions.encoderGyroDriveStateMachine(speed, 9)) ;
-        intake.outTake();
+        intake.setPower();
         sleep(1000);
         intake.intakeOff();
         int distance = -3;
@@ -166,9 +166,9 @@ public class AutoRightSideRed extends HelperActions {
         intake.outTake();
         // drive backwards to get away from the pixel
         sleep(800);
-        gyroActions.initEncoderGyroDriveStateMachine(speed, -4);
-        while(gyroActions.encoderGyroDriveStateMachine(speed,-4));
-        distance = 5;
+        gyroActions.initEncoderGyroDriveStateMachine(speed, -5);
+        while(gyroActions.encoderGyroDriveStateMachine(speed,-5));
+        distance = 6;
         gyroActions.initEncoderGyroStrafeStateMachine(speed,distance, false);
         while (gyroActions.encoderGyroStrafeStateMachine(speed, distance, false));
         intake.intakeOff();
@@ -178,15 +178,15 @@ public class AutoRightSideRed extends HelperActions {
 //                // drive forward to get to the backboard
         liftyUppyActions.flippyTurnyUp();
 
-        gyroActions.initEncoderGyroDriveStateMachine(speed, -34.5);
-        while(gyroActions.encoderGyroDriveStateMachine(speed,-34.5)) {
+        gyroActions.initEncoderGyroDriveStateMachine(speed, -34);
+        while(gyroActions.encoderGyroDriveStateMachine(speed,-34)) {
             if (liftyUppyActions.flippyTurny.getCurrentPosition() > 300) {
                 liftyUppyActions.setLiftyUppyPosition(-800, 2500);
             }
         }
 
-        gyroActions.initEncoderGyroStrafeStateMachine(speed, 3, false);
-        while (gyroActions.encoderGyroStrafeStateMachine(speed, 3, false));
+        gyroActions.initEncoderGyroStrafeStateMachine(speed, 4, false);
+        while (gyroActions.encoderGyroStrafeStateMachine(speed, 4, false));
 
         placeAndPark(placer);
     }
