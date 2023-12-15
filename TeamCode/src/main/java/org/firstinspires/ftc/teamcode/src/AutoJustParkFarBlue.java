@@ -12,11 +12,11 @@ import org.firstinspires.ftc.teamcode.src.driving.GyroActions;
 import org.firstinspires.ftc.teamcode.src.driving.HelperActions;
 
 
-@Autonomous(name = "AutoFarSideRedOnePixel")
+@Autonomous(name = "Just Park Far Blue")
 /*
-This the far side red, Mel
+This the far side blue, Mel
  */
-public class AutoFarSideRedOnePixel extends HelperActions {
+public class AutoJustParkFarBlue extends HelperActions {
     //Create the actions as objects. This is so we can use the methods inside of them
     private GyroActions gyroActions = null;
     private DetectPropActions detectPropActions = null;
@@ -26,14 +26,14 @@ public class AutoFarSideRedOnePixel extends HelperActions {
     private StateManager stateManager = null;
 
     //Initial variable declarations
-    private double speed = 350;
+    private double speed = 400;
 
     public void runOpMode() {
         //Done during initialization
         //Before this, the actions we created are empty. Assigns the actions to stop being nothing
         stateManager = new StateManager();
         gyroActions = new GyroActions(this, telemetry, hardwareMap);
-        detectPropActions = new DetectPropActions(hardwareMap, "RedSphereTemplate", true);
+        detectPropActions = new DetectPropActions(hardwareMap, "BlueSphereTemplate", false);
         detectPropActions.setToTemplateMatching();
         intake = new IntakeClass(stateManager, hardwareMap);
         uptake = new UpTake(stateManager, hardwareMap);
@@ -46,8 +46,8 @@ public class AutoFarSideRedOnePixel extends HelperActions {
         waitForStart();
 
         if (opModeIsActive()) {
-            gyroActions.initEncoderGyroStrafeStateMachine(speed, 2, false);
-            while (gyroActions.encoderGyroStrafeStateMachine(speed, 2, false)) ;
+            gyroActions.initEncoderGyroStrafeStateMachine(speed, 2, true);
+            while (gyroActions.encoderGyroStrafeStateMachine(speed, 2, true)) ;
 
             // First, uses detectPropActions to find the prop. Assigns it to a variable so we can use it later.
             String propPlace = detectPropActions.whereProp(3);
@@ -56,23 +56,16 @@ public class AutoFarSideRedOnePixel extends HelperActions {
             while (propPlace == "") {
                 propPlace = detectPropActions.whereProp(3);
             }
+            detectPropActions.stopStreaming();
             telemetry.addData("prop place", propPlace);
 
-            //Start the robot moving forwards - 20 inches irrespective of the placer location
-            //gyroActions.initEncoderGyroDriveStateMachine(speed, 20, 0);
-            //Because the driving uses feedback from the gyroscope, we constantly have to update the driving
-            //while (gyroActions.encoderGyroDriveStateMachine(speed, 20, 0)) ;
-
-            ///// remove the hardcoded value /////
-            //String propPlace = "right";
-
             //If statements, in case something could change in the program
-            if (propPlace == "left") {
-                //Prop is at the left side
-                //places pixel on the line
-                placePixelLeft(placer);
-              } else if (propPlace == "right") {
+            if (propPlace == "right") {
+                // if Prop is at the right side
                 placePixelRight(placer);
+            } else if (propPlace == "left") {
+                // if prop is on the left side
+                placePixelLeft(placer);
             } else {
                 //Mid is the default position, if it is not on the left or the right, the only remaining option is the middle
                 placePixelMid(placer);
@@ -80,13 +73,10 @@ public class AutoFarSideRedOnePixel extends HelperActions {
         }
     }
 
-    /*
-    This method is for placing pixel on the middle line
-     */
     private void placePixelMid(PlacerActions placer) {
         //Move to the prop 30 inches
         double distance = 30;
-        int angle = 90;
+        int angle = -90;
         gyroActions.encoderGyroDriveStateMachine(speed, distance, 0);
         while (gyroActions.encoderGyroDriveStateMachine(speed, distance, 0)) ;
 
@@ -103,21 +93,18 @@ public class AutoFarSideRedOnePixel extends HelperActions {
         gyroActions.initGyroSpin(angle);
         while (gyroActions.gyroSpin(speed)) ;
 
-        // move 2 inch to center the robot, to avoid hitting the right bar
-        gyroActions.initEncoderGyroStrafeStateMachine(speed, 1, false);
-        while (gyroActions.encoderGyroStrafeStateMachine(speed, 1, false)) ;
+        // move 1 inch to center the robot, to avoid hitting the right bar
+        gyroActions.initEncoderGyroStrafeStateMachine(speed, 1, true);
+        while (gyroActions.encoderGyroStrafeStateMachine(speed, 1, true)) ;
     }
 
-    /*
-    This method under is for placing pixels on the left line
-    */
-    private void placePixelLeft(PlacerActions placer) {
+    private void placePixelRight(PlacerActions placer) {
         double distance = 22;
-        int angle = 90;
+        int angle = -90;
 
         // Strafe to the left center line
-        gyroActions.initEncoderGyroStrafeStateMachine(speed, 11, true);
-        while (gyroActions.encoderGyroStrafeStateMachine(speed, 11, true)) ;
+        gyroActions.initEncoderGyroStrafeStateMachine(speed, 11.5, false);
+        while (gyroActions.encoderGyroStrafeStateMachine(speed, 11.5, false)) ;
 
         // move to the prop and push it forward
         gyroActions.encoderGyroDriveStateMachine(speed, distance, 0);
@@ -128,7 +115,7 @@ public class AutoFarSideRedOnePixel extends HelperActions {
         sleep(1000);
         intake.intakeOff();
 
-        // come back 15 inches to avoid the pixel/prop
+        // come back 5 inches to avoid the pixel/prop
         gyroActions.initEncoderGyroDriveStateMachine(speed, -15, 0);
         while (gyroActions.encoderGyroDriveStateMachine(speed, -15, 0)) ;
 
@@ -137,20 +124,18 @@ public class AutoFarSideRedOnePixel extends HelperActions {
         while (gyroActions.gyroSpin(speed)) ;
 
         // Strafe to the original lane
-        gyroActions.initEncoderGyroStrafeStateMachine(speed, 5, true);
-        while (gyroActions.encoderGyroStrafeStateMachine(speed, 5, true)) ;
+        gyroActions.initEncoderGyroStrafeStateMachine(speed, 4, false);
+        while (gyroActions.encoderGyroStrafeStateMachine(speed, 4, false)) ;
 
     }
-    /*
-     method under is for placing pixels on the right line
-     */
-    private void placePixelRight(PlacerActions placer) {
-        double distance = 28;
-        int angle = -90;
+
+    private void placePixelLeft(PlacerActions placer) {
+        double distance = 30;
+        int angle = 90;
 
         // Strafe away from the prop
-        gyroActions.initEncoderGyroStrafeStateMachine(speed, 5, true);
-        while (gyroActions.encoderGyroStrafeStateMachine(speed, 5, true)) ;
+        gyroActions.initEncoderGyroStrafeStateMachine(speed, 5, false);
+        while (gyroActions.encoderGyroStrafeStateMachine(speed, 5, false)) ;
 
         // go forward 28  inches
         gyroActions.encoderGyroDriveStateMachine(speed, distance, 0);
@@ -160,21 +145,18 @@ public class AutoFarSideRedOnePixel extends HelperActions {
         gyroActions.initGyroSpin(angle);
         while (gyroActions.gyroSpin(speed)) ;
 
-        gyroActions.initEncoderGyroDriveStateMachine(speed, 7, angle);
-        while (gyroActions.encoderGyroDriveStateMachine(speed, 7, angle)) ;
+        gyroActions.initEncoderGyroDriveStateMachine(speed, 8, angle);
+        while (gyroActions.encoderGyroDriveStateMachine(speed, 8, angle)) ;
 
         intake.outTake();
         sleep(1000);
         intake.intakeOff();
 
-        gyroActions.initEncoderGyroDriveStateMachine(speed, -6, angle);
-        while (gyroActions.encoderGyroDriveStateMachine(speed, -6, angle)) ;
 
-        //gyroActions.initGyroSpin(-180);
-        //while (gyroActions.gyroSpin(speed));
+        gyroActions.initEncoderGyroDriveStateMachine(speed, -5, angle);
+        while (gyroActions.encoderGyroDriveStateMachine(speed, -5, angle)) ;
 
-       // gyroActions.initEncoderGyroStrafeStateMachine(speed, 28, true);
-        //while (gyroActions.encoderGyroStrafeStateMachine(speed, 28, true));
     }
+
 
 }
