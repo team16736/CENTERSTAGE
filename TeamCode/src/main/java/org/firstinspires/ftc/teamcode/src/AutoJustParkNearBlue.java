@@ -61,7 +61,7 @@ public class AutoJustParkNearBlue extends HelperActions {
             //If statements, in case something could change in the program
             if (propPlace == "left") {
                 //places pixel on the line
-                placePixelRight(placer);
+                placePixelLeft(placer);
             } else if (propPlace == "right") {
                 placePixelRight(placer);
                } else {
@@ -104,8 +104,8 @@ public class AutoJustParkNearBlue extends HelperActions {
         int angle = -90;
 
         // Strafe to the left center line
-        gyroActions.initEncoderGyroStrafeStateMachine(speed, 11, false);
-        while (gyroActions.encoderGyroStrafeStateMachine(speed, 11, false)) ;
+        gyroActions.initEncoderGyroStrafeStateMachine(speed, 11, true);
+        while (gyroActions.encoderGyroStrafeStateMachine(speed, 11, true)) ;
 
         // move to the prop and push it forward
         gyroActions.encoderGyroDriveStateMachine(speed, distance, 0);
