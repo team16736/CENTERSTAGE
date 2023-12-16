@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.src;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 // Import Statements. Important if you want to use anything from a file
 import org.firstinspires.ftc.teamcode.src.attachments.IntakeClass;
@@ -13,6 +14,7 @@ import org.firstinspires.ftc.teamcode.src.driving.GyroActions;
 import org.firstinspires.ftc.teamcode.src.driving.HelperActions;
 import org.firstinspires.ftc.teamcode.src.constants.ConfigConstants;
 
+@Disabled
 @Autonomous(name = "Just Park Blue")
 public class JustParkBlue extends HelperActions {
 

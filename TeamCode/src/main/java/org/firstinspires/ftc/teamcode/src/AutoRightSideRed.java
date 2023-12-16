@@ -58,19 +58,7 @@ public class AutoRightSideRed extends HelperActions {
             telemetry.update();
             detectPropActions.stopStreaming();
 
-            gyroActions.initEncoderGyroStrafeStateMachine(speed, 2, false);
-            while (gyroActions.encoderGyroStrafeStateMachine(speed, 2, false));
 
-//            while (propPlace == "") {
-//                propPlace = detectPropActions.whereProp(10);
-//            }
-//            String propPlace = "right";
-            telemetry.addData("prop place", propPlace);
-
-            //Start the robot moving forwards
-            gyroActions.initEncoderGyroDriveStateMachine(speed, 21);
-            //Because the driving uses feedback from the gyroscope, we constantly have to update the driving
-            while (gyroActions.encoderGyroDriveStateMachine(speed, 21)) ;
 
             //If statements, in case something could change in the program
             if (propPlace == "left") {
@@ -97,6 +85,18 @@ public class AutoRightSideRed extends HelperActions {
     }
 
     private void goToLeft(PlacerActions placer) {
+        gyroActions.initEncoderGyroStrafeStateMachine(speed, 1, false);
+        while (gyroActions.encoderGyroStrafeStateMachine(speed, 1, false));
+
+//            while (propPlace == "") {
+//                propPlace = detectPropActions.whereProp(10);
+//            }
+//            String propPlace = "right";
+
+        //Start the robot moving forwards
+        gyroActions.initEncoderGyroDriveStateMachine(speed, 21);
+        //Because the driving uses feedback from the gyroscope, we constantly have to update the driving
+        while (gyroActions.encoderGyroDriveStateMachine(speed, 21)) ;
         //Turn towards the prop
 
         gyroActions.initGyroSpin(45);
@@ -121,17 +121,18 @@ public class AutoRightSideRed extends HelperActions {
                 liftyUppyActions.setLiftyUppyPosition(-800, 2500);
             }
         }
-        gyroActions.initEncoderGyroStrafeStateMachine(speed,5,false);
-        while (gyroActions.encoderGyroStrafeStateMachine(speed,5,false));
+        gyroActions.initEncoderGyroStrafeStateMachine(speed,6,false);
+        while (gyroActions.encoderGyroStrafeStateMachine(speed,6,false));
         placeAndPark(placer);
-        gyroActions.initEncoderGyroStrafeStateMachine(speed,5,true);
-        while (gyroActions.encoderGyroStrafeStateMachine(speed,5,true));
+        gyroActions.initEncoderGyroStrafeStateMachine(speed,10,true);
+        while (gyroActions.encoderGyroStrafeStateMachine(speed,10,true));
     }
 
     private void goToMid(PlacerActions placer) {
+        gyroActions.initEncoderGyroDriveStateMachine(speed, 27);
+        //Because the driving uses feedback from the gyroscope, we constantly have to update the driving
+        while (gyroActions.encoderGyroDriveStateMachine(speed, 27)) ;
         int distance = 8;
-        gyroActions.initEncoderGyroDriveStateMachine(speed, distance);
-        while (gyroActions.encoderGyroDriveStateMachine(speed, distance));
         intake.outTake();
         sleep(1000);
         intake.intakeOff();
@@ -139,19 +140,33 @@ public class AutoRightSideRed extends HelperActions {
         while (gyroActions.encoderGyroDriveStateMachine(speed, -5));
         gyroActions.initGyroSpin(90);
         while (gyroActions.gyroSpin(speed));
-        gyroActions.initEncoderGyroDriveStateMachine(speed, -37);
+        gyroActions.initEncoderGyroDriveStateMachine(speed, -37.5);
         liftyUppyActions.flippyTurnyUp();
-        while(gyroActions.encoderGyroDriveStateMachine(speed, -37)) {
+        while(gyroActions.encoderGyroDriveStateMachine(speed, -37.5)) {
             if (liftyUppyActions.flippyTurny.getCurrentPosition() > 300) {
                 liftyUppyActions.setLiftyUppyPosition(-800, 2500);
             }
         }
+        gyroActions.initEncoderGyroStrafeStateMachine(speed, 4.5, false);
+        while (gyroActions.encoderGyroStrafeStateMachine(speed, 4.5, false));
         placeAndPark(placer);
-        gyroActions.initEncoderGyroStrafeStateMachine(speed, 4, true);
-        while (gyroActions.encoderGyroStrafeStateMachine(speed, 4, true));
+        gyroActions.initEncoderGyroStrafeStateMachine(speed, 8, true);
+        while (gyroActions.encoderGyroStrafeStateMachine(speed, 8, true));
     }
 
     private void goToRight(PlacerActions placer) {
+        gyroActions.initEncoderGyroStrafeStateMachine(speed, 2, false);
+        while (gyroActions.encoderGyroStrafeStateMachine(speed, 2, false));
+
+//            while (propPlace == "") {
+//                propPlace = detectPropActions.whereProp(10);
+//            }
+//            String propPlace = "right";
+
+        //Start the robot moving forwards
+        gyroActions.initEncoderGyroDriveStateMachine(speed, 21);
+        //Because the driving uses feedback from the gyroscope, we constantly have to update the driving
+        while (gyroActions.encoderGyroDriveStateMachine(speed, 21)) ;
         //Other situation, if the propPlace is on the right this triggers
         //Turn towards the prop
         int angle = -45;

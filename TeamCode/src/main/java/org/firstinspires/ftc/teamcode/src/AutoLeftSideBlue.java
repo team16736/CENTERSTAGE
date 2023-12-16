@@ -95,7 +95,7 @@ public class AutoLeftSideBlue extends HelperActions {
         //Other situation, if the propPlace is on the right this triggers
         //Turn towards the prop
         int angle = 45;
-        int distance = 3;
+        int distance = 2;
         gyroActions.initGyroSpin(angle);
         while (gyroActions.gyroSpin(speed)) ;
 
@@ -103,7 +103,7 @@ public class AutoLeftSideBlue extends HelperActions {
 
         gyroActions.initEncoderGyroDriveStateMachine(speed, distance);
         while (gyroActions.encoderGyroDriveStateMachine(speed, distance));
-        intake.outTake();
+        intake.setPower(.25);
         // drive backwards to get away from the pixel
         sleep(800);
         gyroActions.initEncoderGyroDriveStateMachine(speed, -4);
@@ -118,23 +118,25 @@ public class AutoLeftSideBlue extends HelperActions {
 //                // drive forward to get to the backboard
         liftyUppyActions.flippyTurnyUp();
 
-        gyroActions.initEncoderGyroDriveStateMachine(speed, -34);
-        while(gyroActions.encoderGyroDriveStateMachine(speed,-34)) {
+        gyroActions.initEncoderGyroDriveStateMachine(speed, -34.5);
+        while(gyroActions.encoderGyroDriveStateMachine(speed,-34.5)) {
             if (liftyUppyActions.flippyTurny.getCurrentPosition() > 300) {
                 liftyUppyActions.setLiftyUppyPosition(-800, 2500);
             }
         }
 
-        gyroActions.initEncoderGyroStrafeStateMachine(speed, 4, true);
-        while (gyroActions.encoderGyroStrafeStateMachine(speed, 4, true));
+        gyroActions.initEncoderGyroStrafeStateMachine(speed, 4.5, true);
+        while (gyroActions.encoderGyroStrafeStateMachine(speed, 4.5, true));
 
         placeAndPark();
     }
     private void goToMid() {
+        gyroActions.initEncoderGyroStrafeStateMachine(speed, 1, false);
+        while (gyroActions.encoderGyroStrafeStateMachine(speed, 1, false)) ;
         int distance = 8;
         gyroActions.initEncoderGyroDriveStateMachine(speed, distance);
         while (gyroActions.encoderGyroDriveStateMachine(speed, distance));
-        intake.outTake();
+        intake.setPower(0.2);
         sleep(1000);
         intake.intakeOff();
         gyroActions.initEncoderGyroDriveStateMachine(speed, -5);
@@ -161,7 +163,7 @@ public class AutoLeftSideBlue extends HelperActions {
         //Move to the prop. Because moving at an angle, must pass that in
         gyroActions.initEncoderGyroDriveStateMachine(speed, 7.5);
         while (gyroActions.encoderGyroDriveStateMachine(speed, 7.5)) ;
-        intake.outTake();
+        intake.setPower(0.3);
         sleep(1000);
         intake.intakeOff();
         int distance = -3;
@@ -171,8 +173,8 @@ public class AutoLeftSideBlue extends HelperActions {
         while (gyroActions.gyroSpin(speed));
         liftyUppyActions.flippyTurnyUp();
 
-        gyroActions.initEncoderGyroDriveStateMachine(speed, -41);
-        while (gyroActions.encoderGyroDriveStateMachine(speed,-41)){
+        gyroActions.initEncoderGyroDriveStateMachine(speed, -40);
+        while (gyroActions.encoderGyroDriveStateMachine(speed,-40)){
             if(liftyUppyActions.flippyTurny.getCurrentPosition()>300){
                 liftyUppyActions.setLiftyUppyPosition(-800, 2500);
                 liftyUppyActions.update();
@@ -190,7 +192,7 @@ public class AutoLeftSideBlue extends HelperActions {
         placer.closePlacer();
 
         liftyUppyActions.goToPreset(false, true, false, false);
-        sleep(300);
+        while (liftyUppyActions.liftyUppy.getCurrentPosition() > -1000)
         liftyUppyActions.flippyTurnyDown();
         sleep(200);
         liftyUppyActions.goToPreset(true, false, false, false);

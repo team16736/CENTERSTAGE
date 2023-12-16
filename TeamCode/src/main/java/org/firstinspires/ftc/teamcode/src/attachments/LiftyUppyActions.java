@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.src.constants.ConfigConstants;
 public class LiftyUppyActions {
 
     public DcMotorEx flippyTurny = null;
-    private DcMotorEx liftyUppy = null;
+    public DcMotorEx liftyUppy = null;
     private Telemetry telemetry;
     public StateManager stateManager;
 
