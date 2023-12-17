@@ -26,7 +26,7 @@ public class MainTeleOp extends HelperActions {
     boolean correctRotation = false;
     double rotationPosition = 0;
     double rotation = 0;
-    double liftSpdMult = 0.3;
+    double liftSpdMult = 0.5;
 
     @Override
     public void runOpMode() {
@@ -65,7 +65,7 @@ public class MainTeleOp extends HelperActions {
 
             changeSpeed(driveActions, gamepad1.dpad_up, gamepad1.dpad_down, false, false);
             toggleSpeed(gamepad1.a);
-            if(gamepad1.right_trigger > 0) {
+            if(gamepad1.x) {
                 launcherActions.launch();
             }
 
@@ -89,7 +89,7 @@ public class MainTeleOp extends HelperActions {
 
             double intakePower = (gamepad2.left_trigger - gamepad2.right_trigger);
             intakeClass.setPower(intakePower);
-            upTake.setPower(intakePower);
+            upTake.setPower(intakePower * 0.8);
 
             liftyUppyActions.teleOpLiftyUppy(gamepad2.left_stick_y * Math.abs(gamepad2.left_stick_y), liftSpdMult);
             liftyUppyActions.goToPreset(gamepad2.dpad_down, gamepad2.dpad_left, gamepad2.dpad_right, false);
@@ -107,7 +107,13 @@ public class MainTeleOp extends HelperActions {
 //                placer.closePlacer();
 //                placerBit = false;
 //            }
-            releasePixel(gamepad2.y);
+            if (gamepad2.y) {
+                pixelReleaseTime = 200;
+            }
+            if (gamepad2.dpad_up) {
+                pixelReleaseTime = 5000;
+            }
+            releasePixel(gamepad2.y || gamepad2.dpad_up);
 
             telemetry.update();
         }

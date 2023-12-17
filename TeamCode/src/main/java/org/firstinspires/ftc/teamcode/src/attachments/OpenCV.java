@@ -10,11 +10,15 @@ import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
 public class OpenCV {
+
     public Point templateMatchingHalfImg(Mat img, Mat templ) {
         Mat templRight = templ.submat(0, templ.rows(), templ.cols() / 2, templ.cols());
         Mat templLeft = templ.submat(0, templ.rows(), 0, templ.cols() / 2);
-        Point left = templateMatching(img, templLeft);
-        Point right = templateMatching(img, templRight);
+        return templateMatchingHalfImg(img, templLeft, templRight);
+    }
+    public Point templateMatchingHalfImg(Mat img, Mat templL, Mat templR) {
+        Point left = templateMatching(img, templL);
+        Point right = templateMatching(img, templR);
         if (left.y > right.y) {
             return left;
         } else {
@@ -27,23 +31,18 @@ public class OpenCV {
         int match_method = Imgproc.TM_SQDIFF;
         Boolean use_mask = false;
 
-        Mat mask = new Mat();
         Mat result = new Mat();
-        Mat img_display = new Mat();
-        img.copyTo(img_display);
         int result_cols = img.cols() - templ.cols() + 1;
         int result_rows = img.rows() - templ.rows() + 1;
         result.create(result_rows, result_cols, CvType.CV_32FC1);
         Boolean method_accepts_mask = (Imgproc.TM_SQDIFF == match_method || match_method == Imgproc.TM_CCORR_NORMED);
 //        RobotLog.dd("OpenCV", "img type %d", img.type());
-        if (use_mask && method_accepts_mask) {
-            Imgproc.matchTemplate(img, templ, result, match_method, mask);
-        } else {
-            Imgproc.matchTemplate(img, templ, result, match_method);
-        }
+        Imgproc.matchTemplate(img, templ, result, match_method);
+
         Core.normalize(result, result, 0, 1, Core.NORM_MINMAX, -1, new Mat());
         Point matchLoc;
         Core.MinMaxLocResult mmr = Core.minMaxLoc(result);
+        result.release();
         if (match_method == Imgproc.TM_SQDIFF || match_method == Imgproc.TM_SQDIFF_NORMED) {
             matchLoc = mmr.minLoc;
         } else {

@@ -64,7 +64,7 @@ public abstract class HelperActions extends LinearOpMode {
     double prevSpeed;
     boolean low = false;
     boolean prevToggle = false;
-    double lowSpeed = 0.2;
+    double lowSpeed = 0.4;
     public void toggleSpeed(boolean toggle) {
         if (toggle && !prevToggle) {
             low = !low;

@@ -112,8 +112,8 @@ public class LiftyUppyActions {
 
     boolean downTo0 = false;
     int preset1 = 0;
-    int preset2 = -1300;
-    int preset3 = -1900;
+    int preset2 = -1100;
+    int preset3 = -2100;
     int preset4 = -2900;
     public void goToPreset(boolean goTo1, boolean goTo2, boolean goTo3, boolean goTo4) {
         if ((goTo1 || goTo2 || goTo3) && liftyUppy.getMode() == DcMotor.RunMode.RUN_USING_ENCODER) {

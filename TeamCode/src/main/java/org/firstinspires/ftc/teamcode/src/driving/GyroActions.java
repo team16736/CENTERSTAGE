@@ -317,6 +317,24 @@ public class GyroActions {
         prevHeading = rawHeading;
         return motorFrontL.isBusy();
     }
+    public void gyroDiagonal(double speed, double inchesForward, double inchesLeft) {
+        gyroDiagonal(speed, inchesForward, inchesLeft, currentTargetAngle);
+    }
+    public void gyroDiagonal(double speed, double inchesForward, double inchesLeft, double heading) {
+        double ticksPerInchForward = 31;
+        int forwardTicks = (int) (inchesForward * ticksPerInchForward);
+        double ticksPerInchLeft = 33.6;
+        int leftTicks = (int) (inchesLeft * ticksPerInchLeft);
+        int totalTicksFL = forwardTicks - leftTicks;
+        int totalTicksFR = forwardTicks + leftTicks;
+        int totalTicksBL = forwardTicks + leftTicks;
+        int totalTicksBR = forwardTicks - leftTicks;
+        motorFrontL.setTargetPosition(totalTicksFL);
+        motorFrontR.setTargetPosition(totalTicksFR);
+        motorBackL.setTargetPosition(totalTicksBL);
+        motorBackR.setTargetPosition(totalTicksBR);
+
+    }
     public void setVelocity(double velocity) {
         motorFrontL.setVelocity(velocity);
         motorFrontR.setVelocity(velocity);

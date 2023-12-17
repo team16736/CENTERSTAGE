@@ -23,6 +23,8 @@ public class DetectPropActions {
     OpenCvWebcam webcam;
     Point result = new Point(0,0);
     Mat templ;
+    Mat templL;
+    Mat templR;
     OpenCV openCV;
     boolean isRed;
     public DetectPropActions(HardwareMap hardwareMap, String imageName, boolean isRed) {
@@ -64,6 +66,8 @@ public class DetectPropActions {
         this.openCV = new OpenCV();
 
         templ = Imgcodecs.imread(absolutePathTemplate, Imgcodecs.IMREAD_COLOR);
+        templR = templ.submat(0, templ.rows(), templ.cols() / 2, templ.cols());
+        templL = templ.submat(0, templ.rows(), 0, templ.cols() / 2);
         RobotLog.dd("OpenCV", "type %d", templ.type());
     }
 
@@ -102,9 +106,9 @@ public class DetectPropActions {
             if (detectionNumber != priorDetectionNumber) {
                 priorDetectionNumber = detectionNumber;
                 wherePropState ++;
-                if (result.x < 230) {
+                if (result.x < 157) {
                     leftCount++;
-                } else if (result.x < 480) {
+                } else if (result.x < 400) {
                     midCount++;
                 } else {
                     rightCount++;
@@ -147,19 +151,21 @@ public class DetectPropActions {
         @Override
         public Mat processFrame(Mat input) {
 
-            Imgproc.cvtColor(input, input, 32);
+            Imgproc.cvtColor(input, input, Imgproc.COLOR_BGR2XYZ);
             Imgproc.cvtColor(input, input, Imgproc.COLOR_BGR2RGB);
 
             Core.rotate(input, input, Core.ROTATE_180);
 
-            input.submat(100, input.rows(), 0, input.cols());
-            
-            result = openCV.templateMatchingHalfImg(input, templ);
+            input = input.submat(100, input.rows(), 0, input.cols());
 
-            RobotLog.dd("OpenCV", "Point X %f", result.x);
-            RobotLog.dd("OpenCV", "Point Y %f", result.y);
+            if (Core.mean(input).val[0] > 100) {
+                result = openCV.templateMatchingHalfImg(input, templL, templR);
 
-            detectionNumber ++;
+                RobotLog.dd("OpenCV", "Point X %f", result.x);
+                RobotLog.dd("OpenCV", "Point Y %f", result.y);
+
+                detectionNumber++;
+            }
 
             /**
              * NOTE: to see how to get data from your pipeline to your OpMode as well as how

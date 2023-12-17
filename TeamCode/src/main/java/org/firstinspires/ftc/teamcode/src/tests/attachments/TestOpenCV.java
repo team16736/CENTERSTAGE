@@ -21,12 +21,12 @@ public class TestOpenCV {
 //        OpenCVLoader.initDebug();
 
         int i = CvType.CV_16UC4;
-        String pathTemplate = "src/main/java/org/firstinspires/ftc/teamcode/src/attachments/data/BlueSphereTemplate.png";
+        String pathTemplate = "src/main/java/org/firstinspires/ftc/teamcode/src/attachments/data/RedSphereTemplate.png";
 
         File fileTemplate = new File(pathTemplate);
         String absolutePathTemplate = fileTemplate.getAbsolutePath();
 
-        String pathImg = "src/main/java/org/firstinspires/ftc/teamcode/src/attachments/data/BlueSphere2Inches0.png";
+        String pathImg = "src/main/java/org/firstinspires/ftc/teamcode/src/attachments/data/RedSphere2Inches4.png";
 
         File fileImg = new File(pathImg);
         String absolutePathImg = fileImg.getAbsolutePath();
@@ -47,8 +47,9 @@ public class TestOpenCV {
         Mat templ = Imgcodecs.imread(absolutePathTemplate, Imgcodecs.IMREAD_COLOR);
 
 
-        Point resultL = openCv.templateMatching(img, templ);
-        Assert.assertEquals(100, resultL.x, 0);
+        Point resultL = openCv.templateMatchingHalfImg(img, templ);
+        Assert.assertEquals(516, resultL.x, 0);
+        Assert.assertEquals(1000, Core.mean(img).val[0], 0);
 //        img = loadImage("imgR");
 //        Point resultR = openCv.templateMatching(img, templ);
 //        img = loadImage("imgM");
