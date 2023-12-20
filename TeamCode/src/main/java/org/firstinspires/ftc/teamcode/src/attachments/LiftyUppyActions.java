@@ -112,7 +112,7 @@ public class LiftyUppyActions {
 
     boolean downTo0 = false;
     int preset1 = 0;
-    int preset2 = -1100;
+    int preset2 = -800;
     int preset3 = -2100;
     int preset4 = -2900;
     public void goToPreset(boolean goTo1, boolean goTo2, boolean goTo3, boolean goTo4) {

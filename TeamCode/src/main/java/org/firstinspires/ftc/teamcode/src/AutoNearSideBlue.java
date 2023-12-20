@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.src;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.src.attachments.DetectPropActions;
 import org.firstinspires.ftc.teamcode.src.attachments.IntakeClass;
@@ -11,7 +12,7 @@ import org.firstinspires.ftc.teamcode.src.attachments.UpTake;
 import org.firstinspires.ftc.teamcode.src.driving.GyroActions;
 import org.firstinspires.ftc.teamcode.src.driving.HelperActions;
 
-
+@Disabled
 @Autonomous(name = "AutoNearSideBlue")
 /*
 This the far side red, Mel
@@ -33,7 +34,7 @@ public class AutoNearSideBlue extends HelperActions {
         //Before this, the actions we created are empty. Assigns the actions to stop being nothing
         stateManager = new StateManager();
         gyroActions = new GyroActions(this, telemetry, hardwareMap);
-        detectPropActions = new DetectPropActions(hardwareMap, "RedSphereTemplate", true);
+        detectPropActions = new DetectPropActions(hardwareMap, "BlueSphereTemplate", true);
         detectPropActions.setToTemplateMatching();
         intake = new IntakeClass(stateManager, hardwareMap);
         uptake = new UpTake(stateManager, hardwareMap);
@@ -47,36 +48,33 @@ public class AutoNearSideBlue extends HelperActions {
 
         if (opModeIsActive()) {
              // First, uses detectPropActions to find the prop. Assigns it to a variable so we can use it later.
-            String propPlace = detectPropActions.whereProp(3);
-            telemetry.addData("result", detectPropActions.getResult().x);
+            while (detectPropActions.getResult().x == 0);
+            telemetry.addData(">", "thingamajig captured");
             telemetry.update();
-            while (propPlace == "") {
-                propPlace = detectPropActions.whereProp(3);
-            }
-            telemetry.addData("prop place", propPlace);
-
-            ///sleep(10000);
-
-            //If statements, in case something could change in the program // returning middle for left
-            //propPlace = "left";
-
-            if (propPlace == "left") {
-                //places pixel on the line
+            detectPropActions.stopStreaming();
+            if (detectPropActions.getResult().x < 157) {
+                //left
                 placePixelLeft(placer);
                 driveToBoard(placer, -10, 5,-17, -90);
                 placeAndPark(placer, 20);
-            } else if (propPlace == "right") {
-                placePixelRight(placer);
-                driveToBoard(placer, -10, 3,-30, -90);
-                placeAndPark(placer, 32);
-            } else {
-                //Mid is the default position, if it is not on the left or the right, the only remaining option is the middle
+            } else if (detectPropActions.getResult().x < 400) {
+                //middle
                 placePixelMid(placer);
                 //driveToBoardMid(placer );
                 // drives to the board to place pixel
                 driveToBoard(placer, -10, 3,-30, -90);
                 placeAndPark(placer, 25);
+            } else {
+                //right
+                placePixelRight(placer);
+                driveToBoard(placer, -10, 3,-30, -90);
+                placeAndPark(placer, 32);
             }
+
+            ///sleep(10000);
+
+            //If statements, in case something could change in the program // returning middle for left
+            //propPlace = "left";
         }
     }
 

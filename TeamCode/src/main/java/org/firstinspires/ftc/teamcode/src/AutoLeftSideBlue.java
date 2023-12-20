@@ -48,7 +48,10 @@ public class AutoLeftSideBlue extends HelperActions {
         waitForStart();
 
         if (opModeIsActive()) {
+            gyroActions.resetHeading();
+
             while (detectPropActions.getResult().x == 0);
+            detectPropActions.stopStreaming();
             if (detectPropActions.getResult().x < 240) {
                 goToLeft();
             } else if (detectPropActions.getResult().x < 483) {
@@ -154,13 +157,13 @@ public class AutoLeftSideBlue extends HelperActions {
         placeAndPark();
     }
     private void goToMid() {
-       gyroActions.initEncoderGyroStrafeStateMachine(speed, 2, false);
-        while (gyroActions.encoderGyroStrafeStateMachine(speed, 2, false));
+       gyroActions.initEncoderGyroStrafeStateMachine(speed, 1, false);
+        while (gyroActions.encoderGyroStrafeStateMachine(speed, 1, false));
         gyroActions.initEncoderGyroDriveStateMachine(speed, 29);
         //Because the driving uses feedback from the gyroscope, we constantly have to update the driving
         while (gyroActions.encoderGyroDriveStateMachine(speed, 29));
         int distance = 8;
-        intake.outTake();
+        intake.setPower(0.4);
         sleep(1000);
         intake.intakeOff();
         gyroActions.initEncoderGyroDriveStateMachine(speed, -5);
@@ -183,13 +186,16 @@ public class AutoLeftSideBlue extends HelperActions {
     private void goToRight() {
         //Turn towards the prop
 
+        gyroActions.initEncoderGyroDriveStateMachine(speed, 24);
+        while (gyroActions.encoderGyroDriveStateMachine(speed, 24));
+
         gyroActions.initGyroSpin(-60);
         while (gyroActions.gyroSpin(speed)) ;
 
         //Move to the prop. Because moving at an angle, must pass that in
         gyroActions.initEncoderGyroDriveStateMachine(speed, 7.5);
         while (gyroActions.encoderGyroDriveStateMachine(speed, 7.5)) ;
-        intake.setPower(0.3);
+        intake.setPower(0.2);
         sleep(1000);
         intake.intakeOff();
         int distance = -3;
@@ -202,12 +208,12 @@ public class AutoLeftSideBlue extends HelperActions {
         gyroActions.initEncoderGyroDriveStateMachine(speed, -40);
         while (gyroActions.encoderGyroDriveStateMachine(speed,-40)){
             if(liftyUppyActions.flippyTurny.getCurrentPosition()>300){
-                liftyUppyActions.setLiftyUppyPosition(-1000, 2500);
+                liftyUppyActions.setLiftyUppyPosition(-800, 2500);
                 liftyUppyActions.update();
             }
         }
-        gyroActions.initEncoderGyroStrafeStateMachine(speed,8,true);
-        while (gyroActions.encoderGyroStrafeStateMachine(speed,8,true));
+        gyroActions.initEncoderGyroStrafeStateMachine(speed,7,true);
+        while (gyroActions.encoderGyroStrafeStateMachine(speed,7,true));
         placeAndPark();
         gyroActions.initEncoderGyroStrafeStateMachine(speed, 6, false);
         while (gyroActions.encoderGyroStrafeStateMachine(speed, 6, false));
@@ -217,8 +223,8 @@ public class AutoLeftSideBlue extends HelperActions {
         sleep(800);
         placer.closePlacer();
 
-        liftyUppyActions.goToPreset(false, true, false, false);
-        while (liftyUppyActions.liftyUppy.getCurrentPosition() > -1000)
+        liftyUppyActions.setLiftyUppyPosition(-1500, 2500);
+        while (liftyUppyActions.liftyUppy.getCurrentPosition() > -1000);
         liftyUppyActions.flippyTurnyDown();
         sleep(200);
         liftyUppyActions.goToPreset(true, false, false, false);

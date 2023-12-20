@@ -161,6 +161,7 @@ public class GyroActions {
 
             // Heading error is how far off we are from where we want to be, rotationally
             headingError = getSteeringCorrection(heading, adjSpeed * 0.05, adjSpeed);
+            RobotLog.dd("Gyro", "Heading %f", headingError / (adjSpeed * 0.05));
             if (distance < 0) {
                 headingError *= -1;
             }
@@ -349,7 +350,7 @@ public class GyroActions {
         targetHeading = desiredHeading;  // Save for telemetry
 
         // Get the robot heading by applying an offset to the IMU heading
-        robotHeading = getRawHeading() - headingOffset;
+        robotHeading = getRawHeading();
         RobotLog.dd("Gyro", "Heading %f", robotHeading);
 //        telemetry.addData("robotHeading", robotHeading);
 //        telemetry.update();

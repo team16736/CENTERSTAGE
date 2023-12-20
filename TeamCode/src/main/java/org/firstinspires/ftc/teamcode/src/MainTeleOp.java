@@ -26,7 +26,7 @@ public class MainTeleOp extends HelperActions {
     boolean correctRotation = false;
     double rotationPosition = 0;
     double rotation = 0;
-    double liftSpdMult = 0.5;
+    double liftSpdMult = 0.4 ;
 
     @Override
     public void runOpMode() {

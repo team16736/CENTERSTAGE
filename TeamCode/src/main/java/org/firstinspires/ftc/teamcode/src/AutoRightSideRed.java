@@ -49,6 +49,7 @@ public class AutoRightSideRed extends HelperActions {
         waitForStart();
 
         if (opModeIsActive()) {
+            gyroActions.resetHeading();
 
             while (detectPropActions.getResult().x == 0);
             telemetry.addData(">", "thingamajig captured");
@@ -225,7 +226,7 @@ public class AutoRightSideRed extends HelperActions {
         sleep(800);
         placer.closePlacer();
 
-        liftyUppyActions.goToPreset(false, true, false, false);
+        liftyUppyActions.setLiftyUppyPosition(-1500, 2500);
         sleep(300);
         liftyUppyActions.flippyTurnyDown();
         sleep(200);

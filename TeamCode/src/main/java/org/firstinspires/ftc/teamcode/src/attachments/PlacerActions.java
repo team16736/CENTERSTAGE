@@ -14,6 +14,7 @@ public class PlacerActions {
         placer = opModeHardware.get(Servo.class, ConfigConstants.PLACER);
 
         this.stateManager = stateManager;
+        placer.setPosition(0.4);
     }
 
     public void setPosition(double position) {
