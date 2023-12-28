@@ -63,6 +63,17 @@ Press the escape key, then type ":x" and hit enter.
 - git commit -m "description of commit"
 - git push
 
+## Taking a Picture
+
+- Use any program that uses the image recognition code, James Test works
+- Connect to robot with computer
+- If in Android Studio:
+  - Go into "Device File Explorer" at bottom left side of screen
+- Else:
+  - Connect using cable to USB-C port
+- Navigate to sdcard->FIRST->java->src->img
+- Copy image from file explorer to your computer
+
 
 ## TeamCode Module
 

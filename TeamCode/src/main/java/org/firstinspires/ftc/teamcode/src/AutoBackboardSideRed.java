@@ -12,8 +12,8 @@ import org.firstinspires.ftc.teamcode.src.attachments.UpTake;
 import org.firstinspires.ftc.teamcode.src.driving.GyroActions;
 import org.firstinspires.ftc.teamcode.src.driving.HelperActions;
 
-@Autonomous(name = "AutoRightSideRed")
-public class AutoRightSideRed extends HelperActions {
+@Autonomous(name = "Auto Backboard Side Red")
+public class AutoBackboardSideRed extends HelperActions {
 
     //Create the actions as objects. This is so we can use the methods inside of them
     private GyroActions gyroActions = null;

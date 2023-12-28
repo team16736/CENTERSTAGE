@@ -54,6 +54,20 @@ public class DetectPropActions {
         //Image MUST be png, to have same type as input
         //Use UtilityFrameCapture to grab frame, USB-C to robot, grab VisionPortal-CameraFrameCapture- latest one
         //Crop down to size
+
+    }
+
+    public void setToHoughCircles() {
+        webcam.setPipeline(new HoughCirclesPipeline());
+    }
+    public void setToTemplateMatching() {
+        webcam.setPipeline(new TemplateMatchingPipeline());
+        String imageName;
+        if (isRed) {
+            imageName = "RedThingTempl";
+        } else {
+            imageName = "BlueThingTempl";
+        }
         String pathTemplate = "/sdcard/FIRST/java/src/" + imageName + ".png";
         File fileTemplate = new File(pathTemplate);
         String absolutePathTemplate = fileTemplate.getAbsolutePath();
@@ -69,13 +83,6 @@ public class DetectPropActions {
         templR = templ.submat(0, templ.rows(), templ.cols() / 2, templ.cols());
         templL = templ.submat(0, templ.rows(), 0, templ.cols() / 2);
         RobotLog.dd("OpenCV", "type %d", templ.type());
-    }
-
-    public void setToHoughCircles() {
-        webcam.setPipeline(new HoughCirclesPipeline());
-    }
-    public void setToTemplateMatching() {
-        webcam.setPipeline(new TemplateMatchingPipeline());
     }
     public void setToROI() { webcam.setPipeline(new ROIPipeline()); }
 
