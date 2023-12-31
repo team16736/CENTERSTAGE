@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode.src.tests.attachments;
 
 import androidx.annotation.NonNull;
 
+import com.qualcomm.robotcore.util.RobotLog;
+
 import org.firstinspires.ftc.teamcode.src.attachments.OpenCV;
 import org.junit.Assert;
 import org.junit.Test;
@@ -21,12 +23,18 @@ public class TestOpenCV {
 //        OpenCVLoader.initDebug();
 
         int i = CvType.CV_16UC4;
-        String pathTemplate = "src/main/java/org/firstinspires/ftc/teamcode/src/attachments/data/RedSphereTemplate.png";
+        String pathTemplate = "src/main/java/org/firstinspires/ftc/teamcode/src/attachments/data/RedThingTempl.png";
 
         File fileTemplate = new File(pathTemplate);
         String absolutePathTemplate = fileTemplate.getAbsolutePath();
+        OpenCV openCV = new OpenCV();
 
-        String pathImg = "src/main/java/org/firstinspires/ftc/teamcode/src/attachments/data/RedSphere2Inches4.png";
+        Mat templ = Imgcodecs.imread(absolutePathTemplate, Imgcodecs.IMREAD_COLOR);
+        Mat templR = templ.submat(0, templ.rows(), templ.cols() / 2, templ.cols());
+        Mat templL = templ.submat(0, templ.rows(), 0, templ.cols() / 2);
+        RobotLog.dd("OpenCV", "type %d", templ.type());
+
+        String pathImg = "src/main/java/org/firstinspires/ftc/teamcode/src/attachments/data/RedThing0.png";
 
         File fileImg = new File(pathImg);
         String absolutePathImg = fileImg.getAbsolutePath();
@@ -44,10 +52,9 @@ public class TestOpenCV {
         OpenCV openCv = new OpenCV();
 
         Mat img = Imgcodecs.imread(absolutePathImg, Imgcodecs.IMREAD_COLOR);
-        Mat templ = Imgcodecs.imread(absolutePathTemplate, Imgcodecs.IMREAD_COLOR);
 
 
-        Point resultL = openCv.templateMatchingHalfImg(img, templ);
+        Point resultL = openCv.templateMatchingHalfImg(img, templL, templR);
         Assert.assertEquals(516, resultL.x, 0);
         Assert.assertEquals(1000, Core.mean(img).val[0], 0);
 //        img = loadImage("imgR");
@@ -81,7 +88,6 @@ public class TestOpenCV {
 
             Point result = openCv.houghCircles(img);
 
-//            Imgcodecs.imwrite("src/main/java/org/firstinspires/ftc/teamcode/src/attachments/data/threshold.jpg", )
 
             if (i == 0) {
                 Assert.assertEquals(33, result.x, 20);

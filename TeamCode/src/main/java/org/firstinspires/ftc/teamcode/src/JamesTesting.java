@@ -22,7 +22,7 @@ public class JamesTesting extends HelperActions {
     public void runOpMode() {
        // servo = hardwareMap.get(Servo.class, "intakeRight");
         servo = hardwareMap.get(Servo.class, ConfigConstants.LEFT_RELEASE);
-        DetectPropActions detectPropActions = new DetectPropActions(hardwareMap, "RedThingTempl", false);
+        DetectPropActions detectPropActions = new DetectPropActions(hardwareMap, "RedThingTempl", true);
         detectPropActions.setToTemplateMatching();
         telemetry.addData("Waiting for start", "");
         telemetry.update();

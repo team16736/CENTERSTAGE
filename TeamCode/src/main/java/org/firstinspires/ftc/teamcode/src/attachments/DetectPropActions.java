@@ -5,6 +5,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.ExposureControl;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.FocusControl;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
@@ -159,7 +161,7 @@ public class DetectPropActions {
         public Mat processFrame(Mat input) {
 
             Imgproc.cvtColor(input, input, Imgproc.COLOR_BGR2XYZ);
-            Imgproc.cvtColor(input, input, Imgproc.COLOR_BGR2RGB);
+            Imgproc.cvtColor(input, input, Imgproc.COLOR_BGR2RGB); //File type manipulation
 
             Core.rotate(input, input, Core.ROTATE_180);
 

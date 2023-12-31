@@ -26,7 +26,7 @@ public class OpenCV {
         }
     }
     public Point templateMatching(Mat img, Mat templ){
-        Imgcodecs.imwrite("/sdcard/FIRST/java/src/img.png", img);
+        Imgcodecs.imwrite("/sdcard/FIRST/java/src/RedThing0.png", img);
         //These should be able to vary
         int match_method = Imgproc.TM_SQDIFF;
         Boolean use_mask = false;
@@ -102,7 +102,7 @@ public class OpenCV {
         Imgproc.cvtColor(right, rightGray, Imgproc.COLOR_BGR2GRAY);
         Imgproc.cvtColor(mid, midGray, Imgproc.COLOR_BGR2GRAY);
         Imgproc.cvtColor(left, leftGray, Imgproc.COLOR_BGR2GRAY);
-        Imgcodecs.imwrite("/sdcard/FIRST/java/src/img.png", img);
+        Imgcodecs.imwrite("/sdcard/FIRST/java/src/RedThing0.png", img);
 
         double rightColour = Core.mean(right).val[colour] / Core.mean(rightGray).val[0];
         double midColour = Core.mean(mid).val[colour] / Core.mean(midGray).val[0];

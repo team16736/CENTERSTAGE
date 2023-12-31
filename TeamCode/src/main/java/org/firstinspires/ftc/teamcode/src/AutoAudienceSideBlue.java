@@ -45,16 +45,16 @@ public class AutoAudienceSideBlue extends HelperActions {
         waitForStart();
 
         if (opModeIsActive()) {
-            gyroActions.initEncoderGyroStrafeStateMachine(speed, 2, true);
-            while (gyroActions.encoderGyroStrafeStateMachine(speed, 2, true)) ;
-
-
             // First, uses detectPropActions to find the prop. Assigns it to a variable so we can use it later.
             String propPlace = detectPropActions.whereProp(3);
-            telemetry.addData("result", detectPropActions.getResult().x);
-            telemetry.update();
-            while (propPlace == "") {
-                propPlace = detectPropActions.whereProp(3);
+            while (detectPropActions.getResult().x == 0);
+            detectPropActions.stopStreaming();
+            if (detectPropActions.getResult().x < 157) {
+                propPlace = "left";
+            } else if (detectPropActions.getResult().x < 400) {
+                propPlace = "middle";
+            } else {
+                propPlace = "right";
             }
             detectPropActions.stopStreaming();
             telemetry.addData("prop place", propPlace);
