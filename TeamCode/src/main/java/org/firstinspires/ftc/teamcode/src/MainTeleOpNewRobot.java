@@ -16,7 +16,7 @@ import org.firstinspires.ftc.teamcode.src.driving.HelperActions;
 import org.firstinspires.ftc.teamcode.src.attachments.LiftyUppyActions;
 
 @TeleOp(name = "Tele Op", group = "Linear Opmode")
-public class MainTeleOp extends HelperActions {
+public class MainTeleOpNewRobot extends HelperActions {
 
     private GyroActions gyroActions = null;
     private DriveActions driveActions = null;
