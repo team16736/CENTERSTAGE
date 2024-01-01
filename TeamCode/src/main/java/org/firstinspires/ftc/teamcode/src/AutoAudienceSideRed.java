@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.src.driving.HelperActions;
 
 @Autonomous(name = "Auto Audience Side Red")
 /*
-This the far side red, Mel
+This the Audience (far) side red, Mel
  */
 public class AutoAudienceSideRed extends HelperActions {
     //Create the actions as objects. This is so we can use the methods inside of them
@@ -69,15 +69,15 @@ public class AutoAudienceSideRed extends HelperActions {
                 //places pixel on the line
                 placePixelLeft(placer);
                 // drives to the board to place pixel
-                driveToBoard(placer, -60, 30,-37, 90);
+                driveToBoard(placer, -60, 30,-38, 90);
                 // places pixel and parks
-                placeAndPark(placer, 23);
+                placeAndPark(placer, 20);
 
             } else if (propPlace == "right") {
                 // running out of time here
                 placePixelRight(placer);
                 // drives to the board to place pixel
-                driveToBoardLeft(placer, -52, 32,-37, 90);
+                driveToBoardLeft(placer, -55, 34,-38, 90);
                 // places pixel and parks
                 placeAndPark(placer, 30);
 
@@ -164,6 +164,8 @@ public class AutoAudienceSideRed extends HelperActions {
     private void placePixelRight(PlacerActions placer) {
         double distance = 29;
         int angle = -90;
+        // go faster for right
+        speed = 500;
 
         // Strafe away from the prop
         gyroActions.initEncoderGyroStrafeStateMachine(speed, 7, true);
@@ -190,8 +192,8 @@ public class AutoAudienceSideRed extends HelperActions {
         gyroActions.initGyroSpin(-180);
         while (gyroActions.gyroSpin(speed)) ;
 
-        gyroActions.initEncoderGyroStrafeStateMachine(speed, 26, false);
-        while (gyroActions.encoderGyroStrafeStateMachine(speed, 26, false)) ;
+        gyroActions.initEncoderGyroStrafeStateMachine(speed, 21, false);
+        while (gyroActions.encoderGyroStrafeStateMachine(speed, 21, false)) ;
     }
 
     /*
@@ -240,7 +242,7 @@ public class AutoAudienceSideRed extends HelperActions {
         }
     }
 
-    /*
+ /*
  This method is for original lane - both left and right
  distance1 = distance before Strafing
  strafeDistance = distance to line up with the board on any side

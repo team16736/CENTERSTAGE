@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.src.driving.HelperActions;
 
 @Autonomous(name = "Auto Audience Side Blue")
 /*
-This the far side blue, Mel
+This the Audience (far) side blue, Mel
  */
 public class AutoAudienceSideBlue extends HelperActions {
     //Create the actions as objects. This is so we can use the methods inside of them
@@ -72,28 +72,32 @@ public class AutoAudienceSideBlue extends HelperActions {
                 //Prop is at the left side
                 placePixelRight(placer);
                 // drives to the board to place pixel
-                //driveToBoard(placer, -60, 30,-37, 90);
+                driveToBoard(placer, -60, 32,-39, -90);
                 // places pixel and parks
-                placeAndPark(placer);
+                placeAndPark(placer, 25);
             } else if (propPlace == "left") {
+                // ** NEED TO WORK ON THIS ONE **//
                 placePixelLeft(placer);
                 // drives to the board to place pixel
                 //driveToBoard(placer, -52, 20,-37, 90);
                 // places pixel and parks
-                //placeAndPark(placer);
+                //placeAndPark(placer, 20);
             } else {
                 //Mid is the default position, if it is not on the left or the right, the only remaining option is the middle
                 placePixelMid(placer);
-                //driveToBoardMid(placer);
+                driveToBoardMid(placer);
                 // places pixel and parks
-                //placeAndPark(placer);
+                placeAndPark(placer, 20);
             }
         }
     }
 
     private void placePixelMid(PlacerActions placer) {
-        //Move to the prop 30 inches
-        double distance = 30;
+        gyroActions.initEncoderGyroStrafeStateMachine(speed, 2, true);
+        while (gyroActions.encoderGyroStrafeStateMachine(speed, 2, true)) ;
+
+        //Move to the prop 28 inches
+        double distance = 28;
         int angle = -90;
         gyroActions.encoderGyroDriveStateMachine(speed, distance, 0);
         while (gyroActions.encoderGyroDriveStateMachine(speed, distance, 0)) ;
@@ -112,12 +116,12 @@ public class AutoAudienceSideBlue extends HelperActions {
         while (gyroActions.gyroSpin(speed)) ;
 
         // move 1 inch to center the robot, to avoid hitting the right bar
-        gyroActions.initEncoderGyroStrafeStateMachine(speed, 1, true);
-        while (gyroActions.encoderGyroStrafeStateMachine(speed, 1, true)) ;
+        gyroActions.initEncoderGyroStrafeStateMachine(speed, 2, true);
+        while (gyroActions.encoderGyroStrafeStateMachine(speed, 2, true)) ;
     }
 
     private void driveToBoardMid(PlacerActions placer) {
-        int angle = 90;
+        int angle = -90;
         // go past the middle bar
         gyroActions.initEncoderGyroDriveStateMachine(speed, -44, angle);
         while (gyroActions.encoderGyroDriveStateMachine(speed, -44, angle)) ;
@@ -126,8 +130,8 @@ public class AutoAudienceSideBlue extends HelperActions {
         liftyUppyActions.flippyTurnyUp();
 
         // move to the board
-        gyroActions.initEncoderGyroDriveStateMachine(speed, -44, angle);
-        while (gyroActions.encoderGyroDriveStateMachine(speed, -44, angle)) {
+        gyroActions.initEncoderGyroDriveStateMachine(speed, -45, angle);
+        while (gyroActions.encoderGyroDriveStateMachine(speed, -45, angle)) {
             if (liftyUppyActions.flippyTurny.getCurrentPosition() > 300) {
                 liftyUppyActions.setLiftyUppyPosition(-800, 2500);
             }
@@ -139,8 +143,8 @@ public class AutoAudienceSideBlue extends HelperActions {
         int angle = -90;
 
         // Strafe to the left center line
-        gyroActions.initEncoderGyroStrafeStateMachine(speed, 11.5, false);
-        while (gyroActions.encoderGyroStrafeStateMachine(speed, 11.5, false)) ;
+        gyroActions.initEncoderGyroStrafeStateMachine(speed, 9, false);
+        while (gyroActions.encoderGyroStrafeStateMachine(speed, 9, false)) ;
 
         // move to the prop and push it forward
         gyroActions.encoderGyroDriveStateMachine(speed, distance, 0);
@@ -207,8 +211,8 @@ public class AutoAudienceSideBlue extends HelperActions {
         gyroActions.encoderGyroDriveStateMachine(speed, distance1, angle);
         while (gyroActions.encoderGyroDriveStateMachine(speed, distance1, angle)) ;
         // strafe to align with board
-        gyroActions.initEncoderGyroStrafeStateMachine(speed, strafeDistance, false);
-        while (gyroActions.encoderGyroStrafeStateMachine(speed, strafeDistance, false)) ;
+        gyroActions.initEncoderGyroStrafeStateMachine(speed, strafeDistance, true);
+        while (gyroActions.encoderGyroStrafeStateMachine(speed, strafeDistance, true)) ;
         //raise the arms
         liftyUppyActions.flippyTurnyUp();
         // keep going towards the back board
@@ -217,31 +221,29 @@ public class AutoAudienceSideBlue extends HelperActions {
         while (gyroActions.encoderGyroDriveStateMachine(speed, distance2, angle)) {
             if (liftyUppyActions.flippyTurny.getCurrentPosition() > 300) {
                 liftyUppyActions.setLiftyUppyPosition(-800, 2500);
-//              liftyUppyActions.setLiftyUppyPosition(-1200, 2500);
             }
         }
     }
 
-    private void placeAndPark(PlacerActions placer) {
-        // release pixel
+
+    /*
+      This method is for middle lane
+    */
+    private void placeAndPark(PlacerActions placer, int strafeDistance) {
         placer.releasePixel();
-        sleep(700);
+        sleep(800);
         placer.closePlacer();
 
-        //liftyUppyActions.goToPreset(false, true, false, false);
         liftyUppyActions.goToPreset(false, true, false, false);
         sleep(300);
         liftyUppyActions.flippyTurnyDown();
         sleep(200);
         liftyUppyActions.goToPreset(true, false, false, false);
-
-        // go 3 inches away from the board
-        gyroActions.encoderGyroDriveStateMachine(speed, 3);
-        while (gyroActions.encoderGyroDriveStateMachine(speed, 3)) ;
-
-        // move away from the board towards the wall
-        gyroActions.encoderGyroStrafeStateMachine(speed, 21, false);
-        while (gyroActions.encoderGyroStrafeStateMachine(speed, 21, false)) ;
+        while (liftyUppyActions.liftyUppy.getCurrentPosition() > -1000);
+        gyroActions.initEncoderGyroDriveStateMachine(speed, 2);
+        while (gyroActions.encoderGyroDriveStateMachine(speed,2));
+        //speed *= 2;
+        gyroActions.initEncoderGyroStrafeStateMachine(speed,1.2*strafeDistance,false);
+        while (gyroActions.encoderGyroStrafeStateMachine(speed,1.2*strafeDistance,false));
     }
-
 }
