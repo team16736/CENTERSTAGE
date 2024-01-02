@@ -126,19 +126,20 @@ public class MainTeleOp extends HelperActions {
 
     // Code to make it drive straight
     private double driveStraight(double rightStickX) {
-        if(Math.abs(rightStickX) > 0.01){ // Only correct position when not rotating
-            rotation = rightStickX * Math.abs(rightStickX); // Rotating voluntarily
-            correctRotation = false;
-        } else if (!correctRotation){ // If not rotating, get the position rotationally once when the turn is done
-            if (Math.abs(driveActions.leftFront.getVelocity()) < 3) {
-                correctRotation = true;
-                rotationPosition = gyroActions.getRawHeading() - gyroActions.headingOffset;
-            }
-            rotation = 0;
-        } else { // Correct rotation when not turning
-            rotation = -gyroActions.getSteeringCorrection(rotationPosition, 0.02);
-        }
-        return rotation;
+//        if(Math.abs(rightStickX) > 0.01){ // Only correct position when not rotating
+//            rotation = rightStickX * Math.abs(rightStickX); // Rotating voluntarily
+//            correctRotation = false;
+//        } else if (!correctRotation){ // If not rotating, get the position rotationally once when the turn is done
+//            if (Math.abs(driveActions.leftFront.getVelocity()) < 3) {
+//                correctRotation = true;
+//                rotationPosition = gyroActions.getRawHeading();
+//            }
+//            rotation = 0;
+//        } else { // Correct rotation when not turning
+//            rotation = -gyroActions.getSteeringCorrection(rotationPosition, 0.02);
+//        }
+//        return rotation;
+        return  rightStickX * Math.abs(rightStickX);
     }
 
     double pixelReleaseTime = 200; //Millis

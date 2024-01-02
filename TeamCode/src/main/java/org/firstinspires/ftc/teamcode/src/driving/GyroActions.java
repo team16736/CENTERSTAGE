@@ -374,7 +374,8 @@ public class GyroActions {
 
     public void resetHeading() {
         // Save a new heading offset equal to the current raw heading.
-        headingOffset = getRawHeading();
+        YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
+        headingOffset = orientation.getYaw(AngleUnit.DEGREES);
         robotHeading = 0;
     }
 

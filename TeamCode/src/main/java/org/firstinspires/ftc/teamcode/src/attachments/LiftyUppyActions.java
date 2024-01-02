@@ -75,14 +75,14 @@ public class LiftyUppyActions {
                 flippyTurny.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 flippyTurny.setPower(1.0);
                 //Change the speed so that it's slow at
-                double velocity = 400 * (1.4 - ((liftyUppy.getCurrentPosition() + 300) / 3000));
+                double velocity = 600 * (1.4 - ((liftyUppy.getCurrentPosition() + 300) / 3000));
                 flippyTurny.setVelocity(velocity);
                 flippyTurnyDown = true;
             } else {
                 flippyTurny.setTargetPosition(0);
                 flippyTurny.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 flippyTurny.setPower(1.0);
-                flippyTurny.setVelocity(600.0);
+                flippyTurny.setVelocity(1000.0);
                 flippyTurnyDown = false;
             }
             stateManager.flippyTurnyState = stateManager.FLIPPYTURNY_DOWNING;
@@ -121,7 +121,7 @@ public class LiftyUppyActions {
             liftyUppy.setPower(1.0);
         }
         if (goTo1) {
-            setLiftyUppyPosition(preset1, 1200);
+            setLiftyUppyPosition(preset1, 1800);
             downTo0 = true;
         } else if (flippyTurny.getCurrentPosition() > 300) {
             if (goTo2) {
