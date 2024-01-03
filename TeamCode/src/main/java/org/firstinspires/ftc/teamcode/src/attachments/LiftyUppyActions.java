@@ -55,7 +55,7 @@ public class LiftyUppyActions {
             flippyTurny.setTargetPosition(1250); //originally 800 ticks
             flippyTurny.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             flippyTurny.setPower(1.0);
-            flippyTurny.setVelocity(600.0);
+            flippyTurny.setVelocity(1000.0);
             stateManager.flippyTurnyState = stateManager.FLIPPYTURNY_UPPING;
         }
     }
