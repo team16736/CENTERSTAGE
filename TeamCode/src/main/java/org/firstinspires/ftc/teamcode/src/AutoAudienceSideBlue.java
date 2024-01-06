@@ -111,7 +111,7 @@ public class AutoAudienceSideBlue extends HelperActions {
     }
 
     private void placePixelRight(PlacerActions placer) {
-        double distance = 22;
+        double distance = 23;
         int angle = -90;
 
         // Strafe to the left center line
