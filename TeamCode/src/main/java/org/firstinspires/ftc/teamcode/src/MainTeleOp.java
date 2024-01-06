@@ -82,6 +82,7 @@ public class MainTeleOp extends HelperActions {
 
             liftyUppyActions.update();
             if(gamepad2.b) {
+                liftyUppyActions.goToPreset(true, false, false, false);
                 liftyUppyActions.flippyTurnyDown();
             } else if (gamepad2.x){
                 liftyUppyActions.flippyTurnyUp();
@@ -92,7 +93,7 @@ public class MainTeleOp extends HelperActions {
             upTake.setPower(intakePower * 0.8);
 
             liftyUppyActions.teleOpLiftyUppy(gamepad2.left_stick_y * Math.abs(gamepad2.left_stick_y), liftSpdMult);
-            liftyUppyActions.goToPreset(gamepad2.dpad_down, gamepad2.dpad_left, gamepad2.dpad_right, false);
+            liftyUppyActions.goToPreset(gamepad2.dpad_down, gamepad2.dpad_left, gamepad2.dpad_right, gamepad2.dpad_up);
             if (gamepad2.a) {
                 liftyUppyActions.resetLiftyUppy();
             }
@@ -110,9 +111,9 @@ public class MainTeleOp extends HelperActions {
             if (gamepad2.y) {
                 pixelReleaseTime = 200;
             }
-            if (gamepad2.dpad_up) {
-                pixelReleaseTime = 5000;
-            }
+//            if (gamepad2.dpad_up) {
+//                pixelReleaseTime = 5000;
+//            }
             releasePixel(gamepad2.y || gamepad2.dpad_up);
 
             telemetry.update();

@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.src;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 // Import Statements. Important if you want to use anything from a file
 import org.firstinspires.ftc.teamcode.src.attachments.IntakeClass;
@@ -11,8 +12,8 @@ import org.firstinspires.ftc.teamcode.src.attachments.StateManager;
 import org.firstinspires.ftc.teamcode.src.attachments.UpTake;
 import org.firstinspires.ftc.teamcode.src.driving.GyroActions;
 import org.firstinspires.ftc.teamcode.src.driving.HelperActions;
-
-@Autonomous(name = "Auto Backboard Side Red")
+@Disabled
+@Autonomous(name = "Auto Backboard Side Red V1")
 public class AutoBackboardSideRed extends HelperActions {
 
     //Create the actions as objects. This is so we can use the methods inside of them

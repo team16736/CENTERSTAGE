@@ -55,11 +55,6 @@ public class AutoAudienceSideRed extends HelperActions {
             }
             telemetry.addData("prop place", propPlace);
 
-            //Start the robot moving forwards - 20 inches irrespective of the placer location
-            //gyroActions.initEncoderGyroDriveStateMachine(speed, 20, 0);
-            //Because the driving uses feedback from the gyroscope, we constantly have to update the driving
-            //while (gyroActions.encoderGyroDriveStateMachine(speed, 20, 0)) ;
-
             ///// remove the hardcoded value /////
             //String propPlace = "right";
 
@@ -69,7 +64,7 @@ public class AutoAudienceSideRed extends HelperActions {
                 //places pixel on the line
                 placePixelLeft(placer);
                 // drives to the board to place pixel
-                driveToBoard(placer, -60, 30,-38, 90);
+                driveToBoard(placer, -62, 30,-36, 90);
                 // places pixel and parks
                 placeAndPark(placer, 20);
 
@@ -85,7 +80,7 @@ public class AutoAudienceSideRed extends HelperActions {
                 //Mid is the default position, if it is not on the left or the right, the only remaining option is the middle
                 placePixelMid(placer);
                 // drives to the board to place pixel
-                driveToBoardMid(placer);
+                driveToBoard(placer, -44, 0, -44, 90);
                 // places pixel and parks
                 placeAndPark(placer, 25);
             }
@@ -97,14 +92,11 @@ public class AutoAudienceSideRed extends HelperActions {
      */
     private void placePixelMid(PlacerActions placer) {
 
-        //gyroActions.initEncoderGyroStrafeStateMachine(speed, 2, false);
-        //while (gyroActions.encoderGyroStrafeStateMachine(speed, 2, false)) ;
-
         //Move to the prop 27 inches
-        double distance = 27;
+        double distance = 28;
         int angle = 90;
         gyroActions.encoderGyroDriveStateMachine(speed, distance, 0);
-        while (gyroActions.encoderGyroDriveStateMachine(speed, distance, 0)) ;
+        while (gyroActions.encoderGyroDriveStateMachine(speed, distance, 0));
 
         // place pixel on the line
         intake.outTake();
@@ -112,8 +104,8 @@ public class AutoAudienceSideRed extends HelperActions {
         intake.intakeOff();
 
         // move back 5 inches to avoid hitting the pixel/prop
-        gyroActions.initEncoderGyroDriveStateMachine(speed, -5, 0);
-        while (gyroActions.encoderGyroDriveStateMachine(speed, -5, 0)) ;
+        gyroActions.initEncoderGyroDriveStateMachine(speed, -6, 0);
+        while (gyroActions.encoderGyroDriveStateMachine(speed, -6, 0)) ;
 
         // turn 45, prep to move backward
         gyroActions.initGyroSpin(angle);
@@ -132,8 +124,8 @@ public class AutoAudienceSideRed extends HelperActions {
         int angle = 90;
 
         // Strafe to the left center line
-        gyroActions.initEncoderGyroStrafeStateMachine(speed, 9, true);
-        while (gyroActions.encoderGyroStrafeStateMachine(speed, 9, true)) ;
+        gyroActions.initEncoderGyroStrafeStateMachine(speed, 8, true);
+        while (gyroActions.encoderGyroStrafeStateMachine(speed, 8, true)) ;
 
         // move to the prop and push it forward
         gyroActions.encoderGyroDriveStateMachine(speed, distance, 0);
@@ -167,10 +159,6 @@ public class AutoAudienceSideRed extends HelperActions {
         // go faster for right
         speed = 500;
 
-        // Strafe away from the prop // 7
-        //gyroActions.initEncoderGyroStrafeStateMachine(speed, 0, true);
-        //while (gyroActions.encoderGyroStrafeStateMachine(speed, 0, true)) ;
-
         // go forward 28  inches
         gyroActions.encoderGyroDriveStateMachine(speed, distance, 0);
         while (gyroActions.encoderGyroDriveStateMachine(speed, distance, 0)) ;
@@ -198,27 +186,6 @@ public class AutoAudienceSideRed extends HelperActions {
     }
 
     /*
-        This method is for middle lane
-     */
-    private void driveToBoardMid(PlacerActions placer) {
-        int angle = 90;
-        // go past the middle bar
-        gyroActions.initEncoderGyroDriveStateMachine(speed, -44, angle);
-        while (gyroActions.encoderGyroDriveStateMachine(speed, -44, angle)) ;
-
-        // lift the pixel arm
-        liftyUppyActions.flippyTurnyUp();
-
-        // move to the board
-        gyroActions.initEncoderGyroDriveStateMachine(speed, -44, angle);
-        while (gyroActions.encoderGyroDriveStateMachine(speed, -44, angle)) {
-            if (liftyUppyActions.flippyTurny.getCurrentPosition() > 300) {
-                liftyUppyActions.setLiftyUppyPosition(-1000, 2500);
-            }
-        }
-    }
-
-    /*
     This method is for original lane - both left and right
     distance1 = distance before Strafing
     strafeDistance = distance to line up with the board on any side
@@ -226,11 +193,15 @@ public class AutoAudienceSideRed extends HelperActions {
      */
     private void driveToBoard(PlacerActions placer, int distance1, int strafeDistance, int distance2, int angle) {
         // go towards the back board
-        gyroActions.encoderGyroDriveStateMachine(speed, distance1, angle);
-        while (gyroActions.encoderGyroDriveStateMachine(speed, distance1, angle)) ;
+        if(distance1 != 0) {
+            gyroActions.encoderGyroDriveStateMachine(speed, distance1, angle);
+            while (gyroActions.encoderGyroDriveStateMachine(speed, distance1, angle)) ;
+        }
         // strafe to align with board
-        gyroActions.initEncoderGyroStrafeStateMachine(speed, strafeDistance, false);
-        while (gyroActions.encoderGyroStrafeStateMachine(speed, strafeDistance, false)) ;
+        if (strafeDistance != 0) {
+            gyroActions.initEncoderGyroStrafeStateMachine(speed, strafeDistance, false);
+            while (gyroActions.encoderGyroStrafeStateMachine(speed, strafeDistance, false)) ;
+        }
         //raise the arms
         liftyUppyActions.flippyTurnyUp();
         // keep going towards the back board in slow speed
@@ -244,7 +215,7 @@ public class AutoAudienceSideRed extends HelperActions {
     }
 
    /*
-       This method is for middle lane
+       This method is for placing the first pixel
    */
     private void placeAndPark(PlacerActions placer, int strafeDistance) {
         placer.releasePixel();

@@ -59,12 +59,6 @@ public class AutoAudienceSideBlue extends HelperActions {
             detectPropActions.stopStreaming();
             telemetry.addData("prop place", propPlace);
 
-
-            //Start the robot moving forwards - 20 inches irrespective of the placer location
-            //gyroActions.initEncoderGyroDriveStateMachine(speed, 20, 0);
-            //Because the driving uses feedback from the gyroscope, we constantly have to update the driving
-            //while (gyroActions.encoderGyroDriveStateMachine(speed, 20, 0)) ;
-
             ///// remove the hardcoded value /////
             //propPlace = "left";
             //If statements, in case something could change in the program
@@ -78,13 +72,13 @@ public class AutoAudienceSideBlue extends HelperActions {
             } else if (propPlace == "left") {
                 placePixelLeft(placer);
                 // drives to the board to place pixel
-                driveToBoard(placer, -55, 18,-37, -90);
+                driveToBoard(placer, -55, 18,-38, -90);
                 // places pixel and parks
-                placeAndPark(placer, 14);
+                placeAndPark(placer, 16);
             } else {
                 //Mid is the default position, if it is not on the left or the right, the only remaining option is the middle
                 placePixelMid(placer);
-                driveToBoardMid(placer);
+                driveToBoard(placer,-45,0,-45,-90);
                 // places pixel and parks
                 placeAndPark(placer, 20);
             }
@@ -92,11 +86,8 @@ public class AutoAudienceSideBlue extends HelperActions {
     }
 
     private void placePixelMid(PlacerActions placer) {
-        gyroActions.initEncoderGyroStrafeStateMachine(speed, 2, true);
-        while (gyroActions.encoderGyroStrafeStateMachine(speed, 2, true)) ;
-
-        //Move to the prop 28 inches
-        double distance = 28;
+         //Move to the prop 28 inches
+        double distance = 29;
         int angle = -90;
         gyroActions.encoderGyroDriveStateMachine(speed, distance, 0);
         while (gyroActions.encoderGyroDriveStateMachine(speed, distance, 0)) ;
@@ -115,26 +106,8 @@ public class AutoAudienceSideBlue extends HelperActions {
         while (gyroActions.gyroSpin(speed)) ;
 
         // move 1 inch to center the robot, to avoid hitting the right bar
-        gyroActions.initEncoderGyroStrafeStateMachine(speed, 2, true);
-        while (gyroActions.encoderGyroStrafeStateMachine(speed, 2, true)) ;
-    }
-
-    private void driveToBoardMid(PlacerActions placer) {
-        int angle = -90;
-        // go past the middle bar
-        gyroActions.initEncoderGyroDriveStateMachine(speed, -44, angle);
-        while (gyroActions.encoderGyroDriveStateMachine(speed, -44, angle)) ;
-
-        // lift the pixel arm
-        liftyUppyActions.flippyTurnyUp();
-
-        // move to the board
-        gyroActions.initEncoderGyroDriveStateMachine(speed, -45, angle);
-        while (gyroActions.encoderGyroDriveStateMachine(speed, -45, angle)) {
-            if (liftyUppyActions.flippyTurny.getCurrentPosition() > 300) {
-                liftyUppyActions.setLiftyUppyPosition(-1000, 2500);
-            }
-        }
+        gyroActions.initEncoderGyroStrafeStateMachine(speed, 3, true);
+        while (gyroActions.encoderGyroStrafeStateMachine(speed, 3, true)) ;
     }
 
     private void placePixelRight(PlacerActions placer) {
@@ -163,8 +136,8 @@ public class AutoAudienceSideBlue extends HelperActions {
         while (gyroActions.gyroSpin(speed)) ;
 
         // Strafe to the original lane
-        gyroActions.initEncoderGyroStrafeStateMachine(speed, 4, false);
-        while (gyroActions.encoderGyroStrafeStateMachine(speed, 4, false)) ;
+        gyroActions.initEncoderGyroStrafeStateMachine(speed, 3, false);
+        while (gyroActions.encoderGyroStrafeStateMachine(speed, 3, false)) ;
 
     }
 
@@ -175,10 +148,6 @@ public class AutoAudienceSideBlue extends HelperActions {
         // go faster for left
         speed = 500;
 
-        // Strafe away from the prop
-        gyroActions.initEncoderGyroStrafeStateMachine(speed, 5, false);
-        while (gyroActions.encoderGyroStrafeStateMachine(speed, 5, false)) ;
-
         // go forward 30  inches
         gyroActions.encoderGyroDriveStateMachine(speed, distance, 0);
         while (gyroActions.encoderGyroDriveStateMachine(speed, distance, 0)) ;
@@ -188,8 +157,8 @@ public class AutoAudienceSideBlue extends HelperActions {
         while (gyroActions.gyroSpin(speed)) ;
 
         // go bit slower after placing the pixel
-        gyroActions.initEncoderGyroDriveStateMachine(400, 8, angle);
-        while (gyroActions.encoderGyroDriveStateMachine(400, 8, angle)) ;
+        gyroActions.initEncoderGyroDriveStateMachine(400, 3, angle);
+        while (gyroActions.encoderGyroDriveStateMachine(400, 3, angle)) ;
 
         intake.outTake();
         sleep(1000);
@@ -214,11 +183,15 @@ public class AutoAudienceSideBlue extends HelperActions {
     */
     private void driveToBoard(PlacerActions placer, int distance1, int strafeDistance, int distance2, int angle) {
         // go towards the back board
-        gyroActions.encoderGyroDriveStateMachine(speed, distance1, angle);
-        while (gyroActions.encoderGyroDriveStateMachine(speed, distance1, angle)) ;
+        if(distance1 != 0) {
+            gyroActions.encoderGyroDriveStateMachine(speed, distance1, angle);
+            while (gyroActions.encoderGyroDriveStateMachine(speed, distance1, angle)) ;
+        }
         // strafe to align with board
-        gyroActions.initEncoderGyroStrafeStateMachine(speed, strafeDistance, true);
-        while (gyroActions.encoderGyroStrafeStateMachine(speed, strafeDistance, true)) ;
+        if(strafeDistance != 0) {
+            gyroActions.initEncoderGyroStrafeStateMachine(speed, strafeDistance, true);
+            while (gyroActions.encoderGyroStrafeStateMachine(speed, strafeDistance, true));
+        }
         //raise the arms
         liftyUppyActions.flippyTurnyUp();
         // keep going towards the back board //** do not move as fast
