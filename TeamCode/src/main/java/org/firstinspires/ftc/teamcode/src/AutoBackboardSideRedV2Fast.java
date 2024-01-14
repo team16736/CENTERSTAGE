@@ -225,9 +225,8 @@ public class AutoBackboardSideRedV2Fast extends HelperActions {
         sleep(800);
         placer.closePlacer();
 
-        liftyUppyActions.goToPreset(false, true, false, false);
-        sleep(300);
-//        sleep(200);
+        liftyUppyActions.goToPreset(false, false, true, false);
+        sleep(500);
         liftyUppyActions.goToPreset(true, false, false, false);
         liftyUppyActions.flippyTurnyDown();
 
@@ -235,16 +234,27 @@ public class AutoBackboardSideRedV2Fast extends HelperActions {
         gyroActions.initEncoderGyroDriveStateMachine(speed, 2);
         while (gyroActions.encoderGyroDriveStateMachine(speed,2));
         //speed *= 2;
-        gyroActions.initEncoderGyroStrafeStateMachine(speed,27,false);
-        while (gyroActions.encoderGyroStrafeStateMachine(speed,27,false));
+        //strafe left, towards the truss closest to the wall
+        gyroActions.initEncoderGyroStrafeStateMachine(speed,27,true);
+        while (gyroActions.encoderGyroStrafeStateMachine(speed,27,true));
         sleep(200);
-        gyroActions.initEncoderGyroDriveStateMachine(speed, 112);
-        while (gyroActions.encoderGyroDriveStateMachine(speed,112));
+        liftyUppyActions.turnFlippyTurnyOff();
+        gyroActions.initEncoderGyroDriveStateMachine(speed, 85);
+        while (gyroActions.encoderGyroDriveStateMachine(speed,85));
+        sleep(200);
+        gyroActions.initEncoderGyroStrafeStateMachine(speed,21,false);
+        while (gyroActions.encoderGyroStrafeStateMachine(speed,21,false));
+        sleep(200);
+        gyroActions.initEncoderGyroDriveStateMachine(speed, 21);
+        while (gyroActions.encoderGyroDriveStateMachine(speed,21));
         sleep(200);
         //Pick up the two white pixels. There is a momentary pause while uptaking to avoid jamming.
-        sleep(200);
+
+        sleep(500);
         intake.setPower(-1.0);
         uptake.setPower(-0.6);
+        gyroActions.initEncoderGyroDriveStateMachine(speed, 2);
+        while (gyroActions.encoderGyroDriveStateMachine(speed,2));
         sleep(2000);
         intake.setPower(0.0);
         uptake.setPower(0.0);

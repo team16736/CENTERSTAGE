@@ -134,6 +134,9 @@ public class LiftyUppyActions {
         }
     }
 
+    public void turnFlippyTurnyOff() {
+        flippyTurny.setPower(0);
+    }
     double liftyUppyPosition = 0;
     public void setLiftyUppyPosition(int position, double velocity) {
         liftyUppy.setTargetPosition(position);
