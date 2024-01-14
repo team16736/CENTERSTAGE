@@ -80,12 +80,12 @@ import java.util.concurrent.TimeUnit;
  *
  */
 
-@Disabled
+//@Disabled
 @TeleOp(name="Omni Drive To AprilTag James", group = "Concept")
 public class RobotAutoDriveToAprilTagOmniEncoder extends LinearOpMode
 {
     // Adjust these numbers to suit your robot.
-    double DESIRED_Y = 4.0; //  this is how close the camera should get to the target (inches)
+    double DESIRED_Y = 40.0; //  this is how close the camera should get to the target (inches)
     double DESIRED_X = 0.0;
     double DESIRED_BEARING = 0.0;
     boolean elapsedTimeBit = true;
@@ -110,7 +110,7 @@ public class RobotAutoDriveToAprilTagOmniEncoder extends LinearOpMode
     private DcMotorEx motorBackR = null;  //  Used to control the right back drive wheel
 
     private static final boolean USE_WEBCAM = true;  // Set true to use a webcam, or false for a phone camera
-    private static final int DESIRED_TAG_ID = 5;     // Choose the tag you want to approach or set to -1 for ANY tag.
+    private static final int DESIRED_TAG_ID = 1;     // Choose the tag you want to approach or set to -1 for ANY tag.
     private VisionPortal visionPortal;               // Used to manage the video source.
     private AprilTagProcessor aprilTag;              // Used for managing the AprilTag detection process.
     private AprilTagDetection desiredTag = null;     // Used to hold the data for a detected AprilTag
@@ -209,8 +209,8 @@ public class RobotAutoDriveToAprilTagOmniEncoder extends LinearOpMode
                 telemetry.update();
                 sleep(5000);
                 encoderSpin(300, headingError, true);
-                encoderStrafe(150, xError, false);
-                encoderDrive(200, yError);
+                encoderStrafe(150, yError, false);
+                encoderDrive(200, xError);
 
                 // Use the speed and turn "gains" to calculate how we want the robot to move.
 //                drive  = Range.clip(rangeError * SPEED_GAIN, -MAX_AUTO_SPEED, MAX_AUTO_SPEED);
