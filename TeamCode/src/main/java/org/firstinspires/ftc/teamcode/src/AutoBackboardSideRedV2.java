@@ -160,7 +160,7 @@ public class AutoBackboardSideRedV2 extends HelperActions {
         double distance = 27;
         int angle = 90;
 
-        // go forward 28  inches
+        // go forward 27  inches
         gyroActions.encoderGyroDriveStateMachine(speed, distance, 0);
         while (gyroActions.encoderGyroDriveStateMachine(speed, distance, 0)) ;
 
