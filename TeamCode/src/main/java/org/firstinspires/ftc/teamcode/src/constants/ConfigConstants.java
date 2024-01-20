@@ -38,4 +38,7 @@ public class ConfigConstants {
     public static final String UPTAKE = "uptake"; //Expansion Hub 0
 
     public static final String PLACER = "placer"; //Expansion Hub 2
+
+    public static final String FINGER_CR = "rotatingFinger";
+    public static final String TRANSLATE_FINGER = "translateFinger";
 }
