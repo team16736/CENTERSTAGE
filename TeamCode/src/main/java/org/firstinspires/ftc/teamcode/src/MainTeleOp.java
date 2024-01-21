@@ -3,9 +3,11 @@ package org.firstinspires.ftc.teamcode.src;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.src.attachments.HangerActions;
 import org.firstinspires.ftc.teamcode.src.attachments.IntakeClass;
+import org.firstinspires.ftc.teamcode.src.attachments.IntakeFinger;
 import org.firstinspires.ftc.teamcode.src.attachments.LauncherActions;
 import org.firstinspires.ftc.teamcode.src.attachments.PlacerActions;
 import org.firstinspires.ftc.teamcode.src.attachments.StateManager;
@@ -23,6 +25,7 @@ public class MainTeleOp extends HelperActions {
     private LiftyUppyActions liftyUppyActions = null;
     private HangerActions hanger = null;
     private PlacerActions placer = null;
+    private IntakeFinger finger = null;
     boolean correctRotation = false;
     double rotationPosition = 0;
     double rotation = 0;
@@ -40,6 +43,8 @@ public class MainTeleOp extends HelperActions {
         UpTake upTake = new UpTake(stateManager, hardwareMap);
         placer = new PlacerActions(stateManager, hardwareMap);
         LauncherActions launcherActions = new LauncherActions(telemetry, hardwareMap);
+        finger = new IntakeFinger(telemetry,hardwareMap);
+
 
         boolean placerBit = false;
         double prevTime = 0;
@@ -117,6 +122,22 @@ public class MainTeleOp extends HelperActions {
             releasePixel(gamepad2.y || gamepad2.dpad_up);
 
             telemetry.update();
+
+//            if (gamepad1.left_trigger > 0.3) {
+//
+//            } else if (gamepad1.left_trigger == 0.0) {
+//                finger.StopRotatingFinger();
+//            }
+
+            if (gamepad1.right_trigger > 0.3) {
+                finger.TranslateFingerDown();
+                finger.RotateFinger();
+            } else if (gamepad1.right_trigger == 0.0) {
+                finger.StopRotatingFinger();
+                finger.TranslateFingerUp();
+            }
+
+
         }
 
         telemetry.addData("[ROBOTNAME] ", "Going");
@@ -162,4 +183,5 @@ public class MainTeleOp extends HelperActions {
         }
         prevInput = input;
     }
+
 }

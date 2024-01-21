@@ -58,11 +58,26 @@ public class DriveActions {
         rightFront = hardwareMap.get(DcMotorEx.class, ConfigConstants.FRONT_RIGHT);
         rightRear = hardwareMap.get(DcMotorEx.class, ConfigConstants.BACK_RIGHT);
 
-        leftFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        leftRear.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        // old code
+//        leftFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+//        leftRear.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+//        rightFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+//        rightRear.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        rightFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        rightRear.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        leftRear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightRear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        rightFront.setPower(1.0);
+        leftFront.setPower(1.0);
+        rightRear.setPower(1.0);
+        leftRear.setPower(1.0);
+
+        rightFront.setVelocity(0.0);
+        leftFront.setVelocity(0.0);
+        rightRear.setVelocity(0.0);
+        leftRear.setVelocity(0.0);
 
         // 2. Set direction
         setMotorDirection_Forward();
@@ -114,11 +129,22 @@ public class DriveActions {
             backLeft = backLeft / max;
             backRight = backRight / max;
         }
+        // old code
+//        rightFront.setPower(frontRight);
+//        leftFront.setPower(frontLeft);
+//        rightRear.setPower(backRight);
+//        leftRear.setPower(backLeft);
 
-        rightFront.setPower(frontRight);
-        leftFront.setPower(frontLeft);
-        rightRear.setPower(backRight);
-        leftRear.setPower(backLeft);
+//        rightFront.setPower(1.0);
+//        leftFront.setPower(1.0);
+//        rightRear.setPower(1.0);
+//        leftRear.setPower(1.0);
+
+        rightFront.setVelocity((frontRight*2800));
+        leftFront.setVelocity((frontLeft*2800));
+        rightRear.setVelocity((backRight*2800));
+        leftRear.setVelocity((backLeft*2800));
+
     }
 
     private double getMaxPower(double frontLeftValue, double frontRightValue, double backLeftValue, double backRightValue) {

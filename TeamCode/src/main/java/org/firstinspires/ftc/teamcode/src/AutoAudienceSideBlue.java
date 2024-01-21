@@ -27,6 +27,9 @@ public class AutoAudienceSideBlue extends HelperActions {
     //Initial variable declarations
     private double speed = 400;
 
+    //has pixel variable must be updated if the our alliance partner cannot place pixel or else it will miss
+    private boolean hasPixel = true;
+
     public void runOpMode() {
         //Done during initialization
         //Before this, the actions we created are empty. Assigns the actions to stop being nothing
@@ -47,6 +50,7 @@ public class AutoAudienceSideBlue extends HelperActions {
         waitForStart();
 
         if (opModeIsActive()) {
+
             // First, uses detectPropActions to find the prop. Assigns it to a variable so we can use it later.
             String propPlace = detectPropActions.whereProp(3);
             while (detectPropActions.getResult().x == 0);
@@ -70,20 +74,10 @@ public class AutoAudienceSideBlue extends HelperActions {
                 driveToBoard(placer, -55, 18, -32, -90, false);
                 // places pixel and parks
                 placeAndPark(placer, 25);
-
-                /*
-                // Old Right Side Code
-                //Prop is at the left side
-                placePixelRightOld(placer);
-                // drives to the board to place pixel
-                driveToBoard(placer, -60, 30,-39, -90);
-                // places pixel and parks
-                placeAndPark(placer, 25);
-                 */
             } else if (propPlace == "left") {
                 placePixelLeft(placer);
                 // drives to the board to place pixel
-                driveToBoard(placer, -55, 17, -38, -90, true);
+                driveToBoard(placer, -55, 19, -38, -90, true);
                 // places pixel and parks
                 placeAndPark(placer, 16);
             } else {
@@ -183,8 +177,8 @@ public class AutoAudienceSideBlue extends HelperActions {
         intake.intakeOff();
 
         // Strafe to the original lane
-        gyroActions.initEncoderGyroStrafeStateMachine(speed, 22, true);
-        while (gyroActions.encoderGyroStrafeStateMachine(speed, 22, true)) ;
+        gyroActions.initEncoderGyroStrafeStateMachine(speed, 23, true);
+        while (gyroActions.encoderGyroStrafeStateMachine(speed, 23, true)) ;
     }
 
     /*
@@ -208,6 +202,12 @@ public class AutoAudienceSideBlue extends HelperActions {
         liftyUppyActions.flippyTurnyUp();
         // keep going towards the back board //** do not move as fast
         gyroActions.encoderGyroDriveStateMachine(400, distance2, angle);
+        int position = -1000;
+        if(hasPixel){
+            position = -1000;
+        }else{
+            position = -800;
+        }
         // raise the viper slides
         while (gyroActions.encoderGyroDriveStateMachine(400, distance2, angle)) {
             if (liftyUppyActions.flippyTurny.getCurrentPosition() > 300) {
@@ -225,11 +225,17 @@ public class AutoAudienceSideBlue extends HelperActions {
         sleep(800);
         placer.closePlacer();
 
-        liftyUppyActions.goToPreset(false, false, true, false);
+        if (hasPixel) {
+            liftyUppyActions.goToPreset(false, false, true, false);
+        } else {
+            liftyUppyActions.goToPreset(false, true, false, false);
+        }
+
         sleep(500);
         liftyUppyActions.flippyTurnyDown();
         sleep(300);
         liftyUppyActions.goToPreset(true, false, false, false);
+
         while (liftyUppyActions.liftyUppy.getCurrentPosition() > -1000) ;
         gyroActions.initEncoderGyroDriveStateMachine(speed, 2);
         while (gyroActions.encoderGyroDriveStateMachine(speed, 2)) ;
@@ -238,37 +244,4 @@ public class AutoAudienceSideBlue extends HelperActions {
         while (gyroActions.encoderGyroStrafeStateMachine(speed, 1.2 * strafeDistance, false)) ;
     }
 
-
-    /*
-    private void placePixelRightOld(PlacerActions placer) {
-        double distance = 23;
-        int angle = -90;
-
-        // Strafe to the left center line
-        gyroActions.initEncoderGyroStrafeStateMachine(speed, 9, false);
-        while (gyroActions.encoderGyroStrafeStateMachine(speed, 9, false)) ;
-
-        // move to the prop and push it forward
-        gyroActions.encoderGyroDriveStateMachine(speed, distance, 0);
-        while (gyroActions.encoderGyroDriveStateMachine(speed, distance, 0)) ;
-
-        // place the pixel
-        intake.outTake();
-        sleep(1000);
-        intake.intakeOff();
-
-        // come back 5 inches to avoid the pixel/prop
-        gyroActions.initEncoderGyroDriveStateMachine(speed, -12, 0);
-        while (gyroActions.encoderGyroDriveStateMachine(speed, -12, 0)) ;
-
-        // turn backward
-        gyroActions.initGyroSpin(angle);
-        while (gyroActions.gyroSpin(speed)) ;
-
-        // Strafe to the original lane
-        gyroActions.initEncoderGyroStrafeStateMachine(speed, 6, false);
-        while (gyroActions.encoderGyroStrafeStateMachine(speed, 6, false)) ;
-
-    }
-    */
 }
