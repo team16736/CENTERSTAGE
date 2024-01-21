@@ -9,8 +9,8 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.src.constants.ConfigConstants;
 
 public class IntakeFinger {
-    public Servo Translation;
-    public CRServo Rotation;
+    public Servo translation;
+    public CRServo rotation;
 
     private Telemetry telemetry;
     private HardwareMap hardwareMap;
@@ -19,26 +19,26 @@ public class IntakeFinger {
     public IntakeFinger(Telemetry opModeTelemetry, HardwareMap opModeHardware) {
         this.telemetry = opModeTelemetry;
         this.hardwareMap = opModeHardware;
-        Rotation = hardwareMap.get(CRServo.class, ConfigConstants.FINGER_CR);
-        Translation = hardwareMap.get(Servo.class, ConfigConstants.TRANSLATE_FINGER);
+        rotation = hardwareMap.get(CRServo.class, ConfigConstants.FINGER_CR);
+        translation = hardwareMap.get(Servo.class, ConfigConstants.TRANSLATE_FINGER);
 
-        Translation.setPosition(-0.3);
+        translation.setPosition(0.0);
     }
 
     public void RotateFinger() {
-        Rotation.setPower(1.0);
+        rotation.setPower(-1.0);
     }
 
     public void StopRotatingFinger() {
-        Rotation.setPower(0.0);
+        rotation.setPower(0.0);
     }
 
     public void TranslateFingerDown() {
-        Translation.setPosition(0.7);
+        translation.setPosition(0.4);
     }
 
     public void TranslateFingerUp() {
-        Translation.setPosition(-0.3);
+        translation.setPosition(0.0);
     }
 }
 
