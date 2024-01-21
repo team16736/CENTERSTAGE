@@ -96,9 +96,9 @@ public class AutoAudienceSideRedExtraPixel extends HelperActions {
      */
     private void placePixelMid(PlacerActions placer) {
 
-        //Move to the prop 27 inches
+        //Move to the prop 28 inches
         double distance = 28;
-        int angle = 90;
+        int angle = -90;
         gyroActions.encoderGyroDriveStateMachine(speed, distance, 0);
         while (gyroActions.encoderGyroDriveStateMachine(speed, distance, 0)) ;
 

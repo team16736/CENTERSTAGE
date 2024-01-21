@@ -22,7 +22,7 @@ public class IntakeFinger {
         rotation = hardwareMap.get(CRServo.class, ConfigConstants.FINGER_CR);
         translation = hardwareMap.get(Servo.class, ConfigConstants.TRANSLATE_FINGER);
 
-        translation.setPosition(0.0);
+        translation.setPosition(0.45);
     }
 
     public void RotateFinger() {
@@ -34,11 +34,11 @@ public class IntakeFinger {
     }
 
     public void TranslateFingerDown() {
-        translation.setPosition(0.4);
+        translation.setPosition(1.0);
     }
 
     public void TranslateFingerUp() {
-        translation.setPosition(0.0);
+        translation.setPosition(0.45);
     }
 }
 
