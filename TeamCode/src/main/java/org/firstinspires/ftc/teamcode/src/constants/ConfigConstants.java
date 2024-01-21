@@ -39,6 +39,6 @@ public class ConfigConstants {
 
     public static final String PLACER = "placer"; //Expansion Hub 2
 
-    public static final String FINGER_CR = "stackSpinner";
-    public static final String TRANSLATE_FINGER = "stackExtender";
+    public static final String FINGER_CR = "rotatingFinger";
+    public static final String TRANSLATE_FINGER = "translateFinger";
 }

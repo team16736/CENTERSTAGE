@@ -34,11 +34,11 @@ public class IntakeFinger {
     }
 
     public void TranslateFingerDown() {
-        translation.setPosition(1.0);
+        translation.setPosition(0.85);
     }
 
     public void TranslateFingerUp() {
-        translation.setPosition(0.45);
+        translation.setPosition(0.5);
     }
 }
 
