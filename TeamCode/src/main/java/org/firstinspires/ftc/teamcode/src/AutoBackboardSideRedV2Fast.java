@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.src.attachments.DetectPropActions;
 import org.firstinspires.ftc.teamcode.src.attachments.IntakeClass;
+import org.firstinspires.ftc.teamcode.src.attachments.IntakeFinger;
 import org.firstinspires.ftc.teamcode.src.attachments.LiftyUppyActions;
 import org.firstinspires.ftc.teamcode.src.attachments.PlacerActions;
 import org.firstinspires.ftc.teamcode.src.attachments.StateManager;
@@ -24,6 +25,7 @@ public class AutoBackboardSideRedV2Fast extends HelperActions {
     private UpTake uptake = null;
     private LiftyUppyActions liftyUppyActions = null;
     private StateManager stateManager = null;
+    private IntakeFinger intakeFinger = null;
 
     //Initial variable declarations
     private double speed = 600;
@@ -217,7 +219,7 @@ public class AutoBackboardSideRedV2Fast extends HelperActions {
    */
     private void placeAndPark(PlacerActions placer, int strafeDistance) {
 
-        // lifty Uppy doesn't fully go down, therefore it's not possible to go through the middle
+
         // Currently we're messing with code to make lifty Uppy go fully down
         // The code below is taken from TeleOp where Lifty Uppy works correctly
 
@@ -242,17 +244,18 @@ public class AutoBackboardSideRedV2Fast extends HelperActions {
         gyroActions.initEncoderGyroDriveStateMachine(speed, 85);
         while (gyroActions.encoderGyroDriveStateMachine(speed,85));
         sleep(200);
-        gyroActions.initEncoderGyroStrafeStateMachine(speed,21,false);
-        while (gyroActions.encoderGyroStrafeStateMachine(speed,21,false));
+        gyroActions.initEncoderGyroStrafeStateMachine(speed,23,false);
+        while (gyroActions.encoderGyroStrafeStateMachine(speed,23,false));
         sleep(200);
-        gyroActions.initEncoderGyroDriveStateMachine(speed, 21);
-        while (gyroActions.encoderGyroDriveStateMachine(speed,21));
+        gyroActions.initEncoderGyroDriveStateMachine(speed, 15);
+        while (gyroActions.encoderGyroDriveStateMachine(speed,15));
         sleep(200);
         //Pick up the two white pixels. There is a momentary pause while uptaking to avoid jamming.
 
         sleep(500);
         intake.setPower(-1.0);
         uptake.setPower(-0.6);
+        intakeFinger.RotateFinger();
         gyroActions.initEncoderGyroDriveStateMachine(speed, 2);
         while (gyroActions.encoderGyroDriveStateMachine(speed,2));
         sleep(2000);
@@ -264,5 +267,10 @@ public class AutoBackboardSideRedV2Fast extends HelperActions {
         sleep(800);
         intake.setPower(0.0);
         uptake.setPower(0.0);
+        intakeFinger.StopRotatingFinger();
+        //journey back to parking spot
+        //17 back
+        //23 left
+        //85 back
     }
 }
