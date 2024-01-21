@@ -34,7 +34,7 @@ public class JamesTesting extends HelperActions {
 //            while (detectPropActions.whereProp(3) == "") ;
 //            telemetry.addData("prop place", detectPropActions.propPlace);
             telemetry.update();
-            gyroActions.gyroAprilDrive(4.5, 5, 500);
+//            gyroActions.gyroAprilDrive(4.5, 5, 500);
         }
     }
 }

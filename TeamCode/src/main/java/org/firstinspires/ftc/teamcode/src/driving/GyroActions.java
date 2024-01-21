@@ -121,8 +121,8 @@ public class GyroActions {
         motorBackR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         resetHeading();
-        initAprilTag();
-        setManualExposure(6, 250);  // Use low exposure time to reduce motion blur
+//        initAprilTag();
+//        setManualExposure(6, 250);  // Use low exposure time to reduce motion blur
     }
 
     public void initEncoderGyroDriveStateMachine(double speed, double distance) {
@@ -337,47 +337,47 @@ public class GyroActions {
         return motorFrontL.isBusy();
     }
 
-    public void gyroAprilDrive(double xOffset, double yOffset, double speed) {
-
-        Point distance = getTag();
-
-        double yError = distance.y - yOffset;
-        double xError = distance.x - xOffset;
-        telemetry.addData("y", yError);
-        telemetry.update();
-
-        initEncoderGyroDriveStateMachine(speed, yError);
-
-        while (motorFrontL.isBusy()) { // If it's running
-            distance = getTag();
-
-             yError = distance.y - yOffset;
-             xError = distance.x - xOffset;
-            if (Math.abs(motorFrontL.getCurrentPosition()) > Math.abs(totalTicks * 0.9)) { // For the last 10%, slow it down
-                adjSpeed = speed * 0.5;
-            }
-
-            // Heading error is how far off we are from where we want to be, rotationally
-            headingError = getSteeringCorrection(currentTargetAngle, adjSpeed * 0.05, adjSpeed);
-            RobotLog.dd("Gyro", "Heading %f", headingError / (adjSpeed * 0.05));
-            if (yError < 0) {
-                headingError *= -1;
-            }
-            // Adjust the speed of the motors to correct the heading
-            motorFrontL.setVelocity(adjSpeed - headingError + xError);
-            motorFrontR.setVelocity(adjSpeed + headingError - xError);
-            motorBackL.setVelocity(adjSpeed - headingError - xError);
-            motorBackR.setVelocity(adjSpeed + headingError + xError);
-
-            distanceError = (int) (yError * ticksPerInch);
-            motorFrontL.setTargetPosition(motorFrontL.getCurrentPosition() + distanceError);
-            motorFrontR.setTargetPosition(motorFrontR.getCurrentPosition() + distanceError);
-            motorBackL.setTargetPosition(motorBackL.getCurrentPosition() + distanceError);
-            motorBackR.setTargetPosition(motorBackR.getCurrentPosition() + distanceError);
-
-        }
-        driveState = 0;
-    }
+//    public void gyroAprilDrive(double xOffset, double yOffset, double speed) {
+//
+//        Point distance = getTag();
+//
+//        double yError = distance.y - yOffset;
+//        double xError = distance.x - xOffset;
+//        telemetry.addData("y", yError);
+//        telemetry.update();
+//
+//        initEncoderGyroDriveStateMachine(speed, yError);
+//
+//        while (motorFrontL.isBusy()) { // If it's running
+//            distance = getTag();
+//
+//             yError = distance.y - yOffset;
+//             xError = distance.x - xOffset;
+//            if (Math.abs(motorFrontL.getCurrentPosition()) > Math.abs(totalTicks * 0.9)) { // For the last 10%, slow it down
+//                adjSpeed = speed * 0.5;
+//            }
+//
+//            // Heading error is how far off we are from where we want to be, rotationally
+//            headingError = getSteeringCorrection(currentTargetAngle, adjSpeed * 0.05, adjSpeed);
+//            RobotLog.dd("Gyro", "Heading %f", headingError / (adjSpeed * 0.05));
+//            if (yError < 0) {
+//                headingError *= -1;
+//            }
+//            // Adjust the speed of the motors to correct the heading
+//            motorFrontL.setVelocity(adjSpeed - headingError + xError);
+//            motorFrontR.setVelocity(adjSpeed + headingError - xError);
+//            motorBackL.setVelocity(adjSpeed - headingError - xError);
+//            motorBackR.setVelocity(adjSpeed + headingError + xError);
+//
+//            distanceError = (int) (yError * ticksPerInch);
+//            motorFrontL.setTargetPosition(motorFrontL.getCurrentPosition() + distanceError);
+//            motorFrontR.setTargetPosition(motorFrontR.getCurrentPosition() + distanceError);
+//            motorBackL.setTargetPosition(motorBackL.getCurrentPosition() + distanceError);
+//            motorBackR.setTargetPosition(motorBackR.getCurrentPosition() + distanceError);
+//
+//        }
+//        driveState = 0;
+//    }
 
     public void gyroDiagonal(double speed, double inchesForward, double inchesLeft) {
         gyroDiagonal(speed, inchesForward, inchesLeft, currentTargetAngle);
@@ -462,85 +462,85 @@ public class GyroActions {
         telemetry.addData("Wheel Speeds L:R.", "%5.2f : %5.2f", leftSpeed, rightSpeed);
         telemetry.update();
     }
-
-    private void initAprilTag() {
-        // Create the AprilTag processor by using a builder.
-        aprilTag = new AprilTagProcessor.Builder().build();
-
-        // Create the vision portal by using a builder.
-        visionPortal = new VisionPortal.Builder()
-                .setCamera(hardwareMap.get(WebcamName.class, "Webcam 1"))
-                .addProcessor(aprilTag)
-                .build();
-
-    }
-
-    private void    setManualExposure(int exposureMS, int gain) {
-        // Wait for the camera to be open, then use the controls
-
-        if (visionPortal == null) {
-            return;
-        }
-
-        // Make sure camera is streaming before we try to set the exposure controls
-        if (visionPortal.getCameraState() != VisionPortal.CameraState.STREAMING) {
-            telemetry.addData("Camera", "Waiting");
-            telemetry.update();
-            while (!opModeObj.isStopRequested() && (visionPortal.getCameraState() != VisionPortal.CameraState.STREAMING)) {
-                sleep(20);
-            }
-            telemetry.addData("Camera", "Ready");
-            telemetry.update();
-        }
-
-        // Set camera controls unless we are stopping.
-        if (!opModeObj.isStopRequested())
-        {
-            ExposureControl exposureControl = visionPortal.getCameraControl(ExposureControl.class);
-            if (exposureControl.getMode() != ExposureControl.Mode.Manual) {
-                exposureControl.setMode(ExposureControl.Mode.Manual);
-                sleep(50);
-            }
-            exposureControl.setExposure((long)exposureMS, TimeUnit.MILLISECONDS);
-            sleep(20);
-            GainControl gainControl = visionPortal.getCameraControl(GainControl.class);
-            gainControl.setGain(gain);
-            sleep(20);
-        }
-    }
-    public Point getTag() {
-        telemetry.addData("Checkpoint", 1);
-        telemetry.update();
-        boolean targetFound = false;
-        while (!targetFound) {
-            desiredTag = null;
-            telemetry.addData("Checkpoint", 2);
-            telemetry.update();
-            // Step through the list of detected tags and look for a matching tag
-            List<AprilTagDetection> currentDetections = aprilTag.getDetections();
-            for (AprilTagDetection detection : currentDetections) {
-                if ((detection.metadata != null)) {
-                    targetFound = true;
-                    desiredTag = detection;
-                    break;  // don't look any further.
-                }
-            }
-
-            telemetry.addData("Checkpoint", 3);
-            telemetry.update();
-            // Tell the driver what we see, and what to do.
-        }
-        double y = desiredTag.ftcPose.y;
-        double x = desiredTag.ftcPose.x;
-        telemetry.addData("Checkpoint", 4);
-        telemetry.update();
-        if (desiredTag.id == 1 || desiredTag.id == 4) {
-            x += 6;
-        } else if (desiredTag.id == 3 || desiredTag.id == 6) {
-            x -= 6;
-        }
-        telemetry.addData("Checkpoint", 5);
-        telemetry.update();
-        return new Point(x, y);
-    }
+//
+//    private void initAprilTag() {
+//        // Create the AprilTag processor by using a builder.
+//        aprilTag = new AprilTagProcessor.Builder().build();
+//
+//        // Create the vision portal by using a builder.
+//        visionPortal = new VisionPortal.Builder()
+//                .setCamera(hardwareMap.get(WebcamName.class, "Webcam 1"))
+//                .addProcessor(aprilTag)
+//                .build();
+//
+//    }
+//
+//    private void    setManualExposure(int exposureMS, int gain) {
+//        // Wait for the camera to be open, then use the controls
+//
+//        if (visionPortal == null) {
+//            return;
+//        }
+//
+//        // Make sure camera is streaming before we try to set the exposure controls
+//        if (visionPortal.getCameraState() != VisionPortal.CameraState.STREAMING) {
+//            telemetry.addData("Camera", "Waiting");
+//            telemetry.update();
+//            while (!opModeObj.isStopRequested() && (visionPortal.getCameraState() != VisionPortal.CameraState.STREAMING)) {
+//                sleep(20);
+//            }
+//            telemetry.addData("Camera", "Ready");
+//            telemetry.update();
+//        }
+//
+//        // Set camera controls unless we are stopping.
+//        if (!opModeObj.isStopRequested())
+//        {
+//            ExposureControl exposureControl = visionPortal.getCameraControl(ExposureControl.class);
+//            if (exposureControl.getMode() != ExposureControl.Mode.Manual) {
+//                exposureControl.setMode(ExposureControl.Mode.Manual);
+//                sleep(50);
+//            }
+//            exposureControl.setExposure((long)exposureMS, TimeUnit.MILLISECONDS);
+//            sleep(20);
+//            GainControl gainControl = visionPortal.getCameraControl(GainControl.class);
+//            gainControl.setGain(gain);
+//            sleep(20);
+//        }
+//    }
+//    public Point getTag() {
+//        telemetry.addData("Checkpoint", 1);
+//        telemetry.update();
+//        boolean targetFound = false;
+//        while (!targetFound) {
+//            desiredTag = null;
+//            telemetry.addData("Checkpoint", 2);
+//            telemetry.update();
+//            // Step through the list of detected tags and look for a matching tag
+//            List<AprilTagDetection> currentDetections = aprilTag.getDetections();
+//            for (AprilTagDetection detection : currentDetections) {
+//                if ((detection.metadata != null)) {
+//                    targetFound = true;
+//                    desiredTag = detection;
+//                    break;  // don't look any further.
+//                }
+//            }
+//
+//            telemetry.addData("Checkpoint", 3);
+//            telemetry.update();
+//            // Tell the driver what we see, and what to do.
+//        }
+//        double y = desiredTag.ftcPose.y;
+//        double x = desiredTag.ftcPose.x;
+//        telemetry.addData("Checkpoint", 4);
+//        telemetry.update();
+//        if (desiredTag.id == 1 || desiredTag.id == 4) {
+//            x += 6;
+//        } else if (desiredTag.id == 3 || desiredTag.id == 6) {
+//            x -= 6;
+//        }
+//        telemetry.addData("Checkpoint", 5);
+//        telemetry.update();
+//        return new Point(x, y);
+//    }
 }
