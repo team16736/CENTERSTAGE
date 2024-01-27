@@ -69,10 +69,16 @@ public class DriveActions {
         rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightRear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        rightFront.setPower(1.0);
-        leftFront.setPower(1.0);
-        rightRear.setPower(1.0);
-        leftRear.setPower(1.0);
+//        rightFront.setVelocity(0.0);
+//        leftFront.setVelocity(0.0);
+//        rightRear.setVelocity(0.0);
+//        leftRear.setVelocity(0.0);
+
+
+        rightFront.setPower(0.0);
+        leftFront.setPower(0.0);
+        rightRear.setPower(0.0);
+        leftRear.setPower(0.0);
 
         rightFront.setVelocity(0.0);
         leftFront.setVelocity(0.0);
@@ -135,10 +141,8 @@ public class DriveActions {
 //        rightRear.setPower(backRight);
 //        leftRear.setPower(backLeft);
 
-//        rightFront.setPower(1.0);
-//        leftFront.setPower(1.0);
-//        rightRear.setPower(1.0);
-//        leftRear.setPower(1.0);
+
+
 
         rightFront.setVelocity((frontRight*2800));
         leftFront.setVelocity((frontLeft*2800));
@@ -155,6 +159,13 @@ public class DriveActions {
         valueList.add(backRightValue);
 
         return Collections.max(valueList);
+    }
+
+    public void setPowerMax() {
+        rightFront.setPower(1.0);
+        leftFront.setPower(1.0);
+        rightRear.setPower(1.0);
+        leftRear.setPower(1.0);
     }
 
     //This methods is meant for AUTONOMOUS

@@ -54,6 +54,9 @@ public class MainTeleOp extends HelperActions {
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
+        driveActions.setPowerMax();
+        driveActions.drive(0,0,0);
+        sleep(500);
         while (opModeIsActive()) {
 
             /** Gamepad 1 **/
