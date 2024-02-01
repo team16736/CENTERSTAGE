@@ -242,6 +242,7 @@ public class AutoAudienceSideBlue extends HelperActions {
         //speed *= 2;
         gyroActions.initEncoderGyroStrafeStateMachine(speed, 1.2 * strafeDistance, false);
         while (gyroActions.encoderGyroStrafeStateMachine(speed, 1.2 * strafeDistance, false)) ;
+        while(liftyUppyActions.flippyTurny.isBusy());
     }
 
 }

@@ -75,6 +75,10 @@ Press the escape key, then type ":x" and hit enter.
 - Copy image from file explorer to your computer
 
 
+## Open CV Problem Fixes
+- template files are stored in the control hub at /sdcard/FIRST/java/src
+- make sure you have all the templates you need on the control hub
+
 ## TeamCode Module
 
 Welcome!

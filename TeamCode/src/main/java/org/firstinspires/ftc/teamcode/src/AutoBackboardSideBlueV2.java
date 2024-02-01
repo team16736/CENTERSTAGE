@@ -70,7 +70,7 @@ public class AutoBackboardSideBlueV2 extends HelperActions {
                 // drives to the board to place pixel
                 driveToBoard(placer, -0, 0,-29, -90);
                 // places pixel and parks
-                placeAndPark(placer, 15);
+                placeAndPark(placer, 19);
 
             } else if (propPlace == "right") {
                 // NEED TO WORK HERE
@@ -232,5 +232,6 @@ public class AutoBackboardSideBlueV2 extends HelperActions {
         //speed *= 2;
         gyroActions.initEncoderGyroStrafeStateMachine(speed,strafeDistance,false);
         while (gyroActions.encoderGyroStrafeStateMachine(speed,strafeDistance,false));
+        while(liftyUppyActions.flippyTurny.isBusy());
     }
 }

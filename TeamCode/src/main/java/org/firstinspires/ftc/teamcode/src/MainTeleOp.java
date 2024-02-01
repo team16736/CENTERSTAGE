@@ -117,7 +117,7 @@ public class MainTeleOp extends HelperActions {
 //                placerBit = false;
 //            }
             if (gamepad2.y) {
-                pixelReleaseTime = 150;
+                pixelReleaseTime = 168;
             }
 //            if (gamepad2.dpad_up) {
 //                pixelReleaseTime = 5000;

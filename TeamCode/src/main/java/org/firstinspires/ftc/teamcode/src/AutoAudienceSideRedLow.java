@@ -12,11 +12,11 @@ import org.firstinspires.ftc.teamcode.src.driving.GyroActions;
 import org.firstinspires.ftc.teamcode.src.driving.HelperActions;
 
 
-@Autonomous(name = "Auto Audience Side Red")
+@Autonomous(name = "Auto Audience Side Red Low")
 /*
 This the Audience (far) side red, Mel
  */
-public class AutoAudienceSideRed extends HelperActions {
+public class AutoAudienceSideRedLow extends HelperActions {
     //Create the actions as objects. This is so we can use the methods inside of them
     private GyroActions gyroActions = null;
     private DetectPropActions detectPropActions = null;
@@ -28,7 +28,7 @@ public class AutoAudienceSideRed extends HelperActions {
     //Initial variable declarations
     private double speed = 400;
     //has pixel variable must be updated if the our alliance partner cannot place pixel or else it will miss
-    private boolean hasPixel = true;
+    private boolean hasPixel = false;
 
     public void runOpMode() {
         //Done during initialization

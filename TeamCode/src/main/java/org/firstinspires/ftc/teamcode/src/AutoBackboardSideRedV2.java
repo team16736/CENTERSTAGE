@@ -228,5 +228,6 @@ public class AutoBackboardSideRedV2 extends HelperActions {
         //speed *= 2;
         gyroActions.initEncoderGyroStrafeStateMachine(speed,strafeDistance,true);
         while (gyroActions.encoderGyroStrafeStateMachine(speed,strafeDistance,true));
+        while(liftyUppyActions.flippyTurny.isBusy());
     }
 }
