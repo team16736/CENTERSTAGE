@@ -4,6 +4,7 @@ package org.firstinspires.ftc.teamcode.src;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Gamepad;
+//import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.src.attachments.HangerActions;
 import org.firstinspires.ftc.teamcode.src.attachments.IntakeClass;
@@ -44,6 +45,8 @@ public class MainTeleOp extends HelperActions {
         placer = new PlacerActions(stateManager, hardwareMap);
         LauncherActions launcherActions = new LauncherActions(telemetry, hardwareMap);
         finger = new IntakeFinger(telemetry,hardwareMap);
+        //ElapsedTime myStopwatch = new ElapsedTime();
+
 
 
         boolean placerBit = false;
@@ -117,7 +120,7 @@ public class MainTeleOp extends HelperActions {
 //                placerBit = false;
 //            }
             if (gamepad2.y) {
-                pixelReleaseTime = 168;
+                pixelReleaseTime = 174;
             }
 //            if (gamepad2.dpad_up) {
 //                pixelReleaseTime = 5000;
@@ -135,9 +138,11 @@ public class MainTeleOp extends HelperActions {
             if (gamepad1.right_trigger > 0.3) {
                 finger.TranslateFingerDown();
                 finger.RotateFinger();
+               // myStopwatch.startTime();
             } else if (gamepad1.right_trigger == 0.0) {
                 finger.StopRotatingFinger();
                 finger.TranslateFingerUp();
+                //myStopwatch.reset();
             }
 
 
@@ -145,8 +150,8 @@ public class MainTeleOp extends HelperActions {
 
         telemetry.addData("[ROBOTNAME] ", "Going");
         telemetry.update();
-
         idle();
+
     }
 
     // Code to make it drive straight
