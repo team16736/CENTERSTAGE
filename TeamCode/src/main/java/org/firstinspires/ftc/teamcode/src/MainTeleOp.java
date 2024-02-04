@@ -120,12 +120,12 @@ public class MainTeleOp extends HelperActions {
 //                placerBit = false;
 //            }
             if (gamepad2.y) {
-                pixelReleaseTime = 174;
+                pixelReleaseTime = 87;
             }
 //            if (gamepad2.dpad_up) {
 //                pixelReleaseTime = 5000;
 //            }
-            releasePixel(gamepad2.y || gamepad2.dpad_up);
+            releasePixel(gamepad2.y);
 
             telemetry.update();
 
@@ -172,12 +172,12 @@ public class MainTeleOp extends HelperActions {
         return  rightStickX * Math.abs(rightStickX);
     }
 
-    double pixelReleaseTime = 200; //Millis
+    double pixelReleaseTime = 87; //Millis
     boolean prevInput = false;
     int releaseState = 0;
     double prevTime = System.currentTimeMillis();
     private void releasePixel(boolean input) {
-        if (!prevInput && input) {
+        if (!prevInput && input) { //formerly "if (!prevInput && input) {", !prevInput removed on 2/4/2024 to allow holding y. -WE
             releaseState = 1;
         }
         if (releaseState == 1) {
@@ -185,11 +185,11 @@ public class MainTeleOp extends HelperActions {
             prevTime = System.currentTimeMillis();
             releaseState = 2;
         }
-        if (releaseState == 2 && System.currentTimeMillis() > prevTime + pixelReleaseTime) {
+        if (releaseState == 2 && System.currentTimeMillis() > prevTime + pixelReleaseTime && !input) {
             placer.closePlacer();
             releaseState = 0;
         }
-        prevInput = input;
+        prevInput = input; //commented out on 2/4/2024 to correspond with ln 180 -WE
     }
 
 }
