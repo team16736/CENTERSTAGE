@@ -26,9 +26,7 @@ public class AutoAudienceSideRed extends HelperActions {
     private StateManager stateManager = null;
 
     //Initial variable declarations
-    private double speed = 400;
-    //has pixel variable must be updated if the our alliance partner cannot place pixel or else it will miss
-    private boolean hasPixel = true;
+    private double speed = AutoParameters.AUDIENCE_RED_SPEED;
 
     public void runOpMode() {
         //Done during initialization
@@ -60,6 +58,9 @@ public class AutoAudienceSideRed extends HelperActions {
             ///// remove the hardcoded value /////
             //String propPlace = "left";
 
+            // Initial delay
+            sleep(AutoParameters.AUDIENCE_RED_INITIAL_DELAY);
+
             //If statements, in case something could change in the program
             if (propPlace == "left") {
                 //Prop is at the left side
@@ -67,16 +68,16 @@ public class AutoAudienceSideRed extends HelperActions {
                 placePixelLeftNew(placer);
                 // drives to the board to place pixel
                 driveToBoard(placer, -55, true, 17, -32, 90);
-                //                // places pixel and parks
-                placeAndPark(placer, 20);
+                // places pixel and parks
+                placeAndPark(placer, -6);
 
             } else if (propPlace == "right") {
                 // NEED TO WORK HERE
                 placePixelRight(placer);
                 // drives to the board to place pixel
-                driveToBoard(placer, -55, false, 17, -37, 90);
-                // places pixel and parks
-                placeAndPark(placer, 30);
+                driveToBoard(placer, -65, false, 17, -25, 90);
+                 // places pixel and parks
+                placeAndPark(placer, 8);
 
             } else {
                 //Mid is the default position, if it is not on the left or the right, the only remaining option is the middle
@@ -84,7 +85,7 @@ public class AutoAudienceSideRed extends HelperActions {
                 // drives to the board to place pixel
                 driveToBoard(placer, -44, false, 0, -44, 90);
                 // places pixel and parks
-                placeAndPark(placer, 25);
+                placeAndPark(placer, 0);
             }
         }
     }
@@ -191,7 +192,7 @@ public class AutoAudienceSideRed extends HelperActions {
      method under is for placing pixels on the right line
      */
     private void placePixelRight(PlacerActions placer) {
-        double distance = 26;
+        double distance = 27;
         int angle = -90;
         // go faster for right
         speed = 500;
@@ -218,8 +219,8 @@ public class AutoAudienceSideRed extends HelperActions {
         gyroActions.initGyroSpin(-180);
         while (gyroActions.gyroSpin(speed)) ;
 
-        gyroActions.initEncoderGyroStrafeStateMachine(speed, 24, true);
-        while (gyroActions.encoderGyroStrafeStateMachine(speed, 24, true)) ;
+        gyroActions.initEncoderGyroStrafeStateMachine(speed, 25, true);
+        while (gyroActions.encoderGyroStrafeStateMachine(speed, 25, true)) ;
     }
 
     /*
@@ -237,16 +238,16 @@ public class AutoAudienceSideRed extends HelperActions {
         // strafe to align with board
         if (strafeDistance != 0) {
             gyroActions.initEncoderGyroStrafeStateMachine(speed, strafeDistance, strafeLeft);
-            while (gyroActions.encoderGyroStrafeStateMachine(speed, strafeDistance, strafeLeft)) ;
+            while (gyroActions.encoderGyroStrafeStateMachine(speed, strafeDistance, strafeLeft));
         }
         //raise the arms
         liftyUppyActions.flippyTurnyUp();
         // keep going towards the back board in slow speed
         gyroActions.encoderGyroDriveStateMachine(400, distance2, angle);
 
-        int position = -1000;
-        if (hasPixel) {
-            position = -1000;
+        int position = -1100;
+        if (AutoParameters.AUDIENCE_RED_HAS_PIXEL) {
+            position = -1100;
         } else {
             position = -800;
         }
@@ -262,12 +263,12 @@ public class AutoAudienceSideRed extends HelperActions {
     /*
         This method is for placing the first pixel
     */
-    private void placeAndPark(PlacerActions placer, int strafeDistance) {
+    private void placeAndPark(PlacerActions placer, int strafeOffset) {
         placer.releasePixel();
         sleep(800);
         placer.closePlacer();
 
-        if (hasPixel) {
+        if (AutoParameters.AUDIENCE_RED_HAS_PIXEL) {
             liftyUppyActions.goToPreset(false, false, true, false);
         } else {
             liftyUppyActions.goToPreset(false, true, false, false);
@@ -281,8 +282,18 @@ public class AutoAudienceSideRed extends HelperActions {
         gyroActions.initEncoderGyroDriveStateMachine(speed, 2);
         while (gyroActions.encoderGyroDriveStateMachine(speed, 2)) ;
         //speed *= 2;
-        gyroActions.initEncoderGyroStrafeStateMachine(speed, strafeDistance, false);
-        while (gyroActions.encoderGyroStrafeStateMachine(speed, strafeDistance, false)) ;
+
+        boolean strafeLeft = true;
+        int strafeDistance = 0;
+
+        if(AutoParameters.AUDIENCE_RED_PARK_MIDDLE){
+            strafeLeft = false;
+            strafeDistance = AutoParameters.AUDIENCE_RED_PARK_STRAFE_DISTANCE + strafeOffset;
+        }else {
+            strafeDistance = AutoParameters.AUDIENCE_RED_PARK_STRAFE_DISTANCE - strafeOffset;
+        }
+        gyroActions.initEncoderGyroStrafeStateMachine(speed, strafeDistance, strafeLeft);
+        while (gyroActions.encoderGyroStrafeStateMachine(speed, strafeDistance, strafeLeft)) ;
         while(liftyUppyActions.flippyTurny.isBusy());
     }
 }

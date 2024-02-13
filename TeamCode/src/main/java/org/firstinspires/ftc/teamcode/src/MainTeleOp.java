@@ -105,9 +105,24 @@ public class MainTeleOp extends HelperActions {
 
             liftyUppyActions.teleOpLiftyUppy(gamepad2.left_stick_y * Math.abs(gamepad2.left_stick_y), liftSpdMult);
             liftyUppyActions.goToPreset(gamepad2.dpad_down, gamepad2.dpad_left, gamepad2.dpad_right, gamepad2.dpad_up);
-            if (gamepad2.a) {
-                liftyUppyActions.resetLiftyUppy();
-            }
+//            if (gamepad2.a) {
+//                liftyUppyActions.resetLiftyUppy();
+//            }
+//           boolean ButtonPressMemory;
+//            if (gamepad2.a && gamepad2.right_trigger > 0.5) {
+//                if (ButtonPressMemory == false) {
+//                    ButtonPressMemory = true;
+//                    liftyUppyActions.resetFlippyTurny(gamepad2.right_stick_y, false);
+//                    ButtonPressMemory = true;
+//                }
+
+//                if(gamepad2.a && gamepad2.right_trigger == 0) {
+//
+//               }
+//            } else {
+//
+//            }
+
 
 //
 //            if (gamepad2.y) {

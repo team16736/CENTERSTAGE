@@ -25,8 +25,9 @@ public class AutoBackboardSideRedV2 extends HelperActions {
     private LiftyUppyActions liftyUppyActions = null;
     private StateManager stateManager = null;
 
+
     //Initial variable declarations
-    private double speed = 400;
+    private double speed = AutoParameters.BOARDSIDE_RED_SPEED;
 
     public void runOpMode() {
         //Done during initialization
@@ -58,15 +59,18 @@ public class AutoBackboardSideRedV2 extends HelperActions {
             ///// remove the hardcoded value /////
             //String propPlace = "right";
 
+            // Initial delay
+            sleep(AutoParameters.BOARDSIDE_RED_INITIAL_DELAY);
+
             //If statements, in case something could change in the program
             if (propPlace == "right") {
                 //Prop is at the left side
                 //places pixel on the line
                 placePixelRight(placer);
                 // drives to the board to place pixel
-                driveToBoard(placer, -0, 0,-28, 90);
+                driveToBoard(placer, -0, 0,-30, 90);
                 // places pixel and parks
-                placeAndPark(placer, 17);
+                placeAndPark(placer, -6);
 
             } else if (propPlace == "left") {
                 // NEED TO WORK HERE
@@ -74,7 +78,7 @@ public class AutoBackboardSideRedV2 extends HelperActions {
                 // drives to the board to place pixel
                 driveToBoard(placer, -0, 3,-31, 90);
                 // places pixel and parks
-                placeAndPark(placer, 28);
+                placeAndPark(placer, 6);
 
             } else {
                 //Mid is the default position, if it is not on the left or the right, the only remaining option is the middle
@@ -82,7 +86,7 @@ public class AutoBackboardSideRedV2 extends HelperActions {
                 // drives to the board to place pixel
                 driveToBoard(placer, 0, 0, -36, 90);
                 // places pixel and parks
-               placeAndPark(placer, 22);
+               placeAndPark(placer, 0);
             }
         }
     }
@@ -197,6 +201,14 @@ public class AutoBackboardSideRedV2 extends HelperActions {
             gyroActions.initEncoderGyroStrafeStateMachine(speed, strafeDistance, false);
             while (gyroActions.encoderGyroStrafeStateMachine(speed, strafeDistance, false)) ;
         }
+
+        int position = -1100;
+        if(AutoParameters.BOARDSIDE_RED_HAS_PIXEL){
+            position = -1100;
+        }else{
+            position = -800;
+        }
+
         //raise the arms
         liftyUppyActions.flippyTurnyUp();
         // keep going towards the back board in slow speed
@@ -204,7 +216,7 @@ public class AutoBackboardSideRedV2 extends HelperActions {
         // raise the viper slides
         while (gyroActions.encoderGyroDriveStateMachine(speed, distance2, angle)) {
             if (liftyUppyActions.flippyTurny.getCurrentPosition() > 300) {
-                liftyUppyActions.setLiftyUppyPosition(-800, 2500);
+                liftyUppyActions.setLiftyUppyPosition(position, 2500);
             }
         }
     }
@@ -212,12 +224,17 @@ public class AutoBackboardSideRedV2 extends HelperActions {
    /*
        This method is for placing the first pixel
    */
-    private void placeAndPark(PlacerActions placer, int strafeDistance) {
+    private void placeAndPark(PlacerActions placer, int strafeOffset) {
         placer.releasePixel();
         sleep(800);
         placer.closePlacer();
 
-        liftyUppyActions.goToPreset(false, true, false, false);
+        if (AutoParameters.BOARDSIDE_RED_HAS_PIXEL) {
+            liftyUppyActions.goToPreset(false, false, true, false);
+        } else {
+            liftyUppyActions.goToPreset(false, true, false, false);
+        }
+
         sleep(300);
         liftyUppyActions.flippyTurnyDown();
         sleep(200);
@@ -225,9 +242,18 @@ public class AutoBackboardSideRedV2 extends HelperActions {
         while (liftyUppyActions.liftyUppy.getCurrentPosition() > -1000);
         gyroActions.initEncoderGyroDriveStateMachine(speed, 2);
         while (gyroActions.encoderGyroDriveStateMachine(speed,2));
-        //speed *= 2;
-        gyroActions.initEncoderGyroStrafeStateMachine(speed,strafeDistance,true);
-        while (gyroActions.encoderGyroStrafeStateMachine(speed,strafeDistance,true));
+
+        boolean strafeLeft = true;
+        int strafeDistance = 0;
+
+        if(AutoParameters.BOARDSIDE_RED_PARK_MIDDLE){
+            strafeLeft = false;
+            strafeDistance = AutoParameters.BOARDSIDE_RED_PARK_STRAFE_DISTANCE - strafeOffset;
+        }else {
+            strafeDistance = AutoParameters.BOARDSIDE_RED_PARK_STRAFE_DISTANCE + strafeOffset;
+        }
+        gyroActions.initEncoderGyroStrafeStateMachine(speed,strafeDistance,strafeLeft);
+        while (gyroActions.encoderGyroStrafeStateMachine(speed,strafeDistance,strafeLeft));
         while(liftyUppyActions.flippyTurny.isBusy());
     }
 }

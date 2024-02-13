@@ -25,12 +25,9 @@ public class AutoAudienceSideBlue extends HelperActions {
     private StateManager stateManager = null;
 
     //Initial variable declarations
-    private double speed = 400;
+    private double speed = AutoParameters.AUDIENCE_BLUE_SPEED;
 
-    //has pixel variable must be updated if the our alliance partner cannot place pixel or else it will miss
-    private boolean hasPixel = true;
-
-    public void runOpMode() {
+     public void runOpMode() {
         //Done during initialization
         //Before this, the actions we created are empty. Assigns the actions to stop being nothing
         stateManager = new StateManager();
@@ -67,25 +64,29 @@ public class AutoAudienceSideBlue extends HelperActions {
 
             ///// remove the hardcoded value /////
             //String propPlace = "left";
+
+            // Initial delay
+            sleep(AutoParameters.AUDIENCE_BLUE_INITIAL_DELAY);
+
             //If statements, in case something could change in the program
             if (propPlace == "right") {
                 placePixelRight(placer);
                 // drives to the board to place pixel
                 driveToBoard(placer, -55, 18, -32, -90, false);
                 // places pixel and parks
-                placeAndPark(placer, 25);
+                placeAndPark(placer, -6);
             } else if (propPlace == "left") {
                 placePixelLeft(placer);
                 // drives to the board to place pixel
-                driveToBoard(placer, -55, 19, -38, -90, true);
+                driveToBoard(placer, -65, 19, -28, -90, true);
                 // places pixel and parks
-                placeAndPark(placer, 16);
+                placeAndPark(placer, 6);
             } else {
                 //Mid is the default position, if it is not on the left or the right, the only remaining option is the middle
                 placePixelMid(placer);
                 driveToBoard(placer, -55, 0, -36, -90, true);
                 // places pixel and parks
-                placeAndPark(placer, 20);
+                placeAndPark(placer, 0);
             }
         }
     }
@@ -202,9 +203,9 @@ public class AutoAudienceSideBlue extends HelperActions {
         liftyUppyActions.flippyTurnyUp();
         // keep going towards the back board //** do not move as fast
         gyroActions.encoderGyroDriveStateMachine(400, distance2, angle);
-        int position = -1000;
-        if(hasPixel){
-            position = -1000;
+        int position = -1200;
+        if(AutoParameters.AUDIENCE_BLUE_HAS_PIXEL){
+            position = -1200;
         }else{
             position = -800;
         }
@@ -220,12 +221,12 @@ public class AutoAudienceSideBlue extends HelperActions {
     /*
       This method is for middle lane
     */
-    private void placeAndPark(PlacerActions placer, int strafeDistance) {
+    private void placeAndPark(PlacerActions placer, int strafeOffset) {
         placer.releasePixel();
         sleep(800);
         placer.closePlacer();
 
-        if (hasPixel) {
+        if (AutoParameters.AUDIENCE_BLUE_HAS_PIXEL) {
             liftyUppyActions.goToPreset(false, false, true, false);
         } else {
             liftyUppyActions.goToPreset(false, true, false, false);
@@ -239,9 +240,20 @@ public class AutoAudienceSideBlue extends HelperActions {
         while (liftyUppyActions.liftyUppy.getCurrentPosition() > -1000) ;
         gyroActions.initEncoderGyroDriveStateMachine(speed, 2);
         while (gyroActions.encoderGyroDriveStateMachine(speed, 2)) ;
+
+        boolean strafeLeft = false;
+        int strafeDistance = 0;
+
+        if(AutoParameters.AUDIENCE_BLUE_PARK_MIDDLE){
+            strafeLeft = true;
+            strafeDistance = AutoParameters.AUDIENCE_BLUE_PARK_STRAFE_DISTANCE + strafeOffset;
+        }else {
+            strafeDistance = AutoParameters.AUDIENCE_BLUE_PARK_STRAFE_DISTANCE - strafeOffset;
+        }
+
         //speed *= 2;
-        gyroActions.initEncoderGyroStrafeStateMachine(speed, 1.2 * strafeDistance, false);
-        while (gyroActions.encoderGyroStrafeStateMachine(speed, 1.2 * strafeDistance, false)) ;
+        gyroActions.initEncoderGyroStrafeStateMachine(speed, strafeDistance, strafeLeft);
+        while (gyroActions.encoderGyroStrafeStateMachine(speed, strafeDistance, strafeLeft)) ;
         while(liftyUppyActions.flippyTurny.isBusy());
     }
 

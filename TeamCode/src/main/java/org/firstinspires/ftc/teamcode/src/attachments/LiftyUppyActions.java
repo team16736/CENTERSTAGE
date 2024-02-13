@@ -68,6 +68,7 @@ public class LiftyUppyActions {
 
     boolean flippyTurnyDown = false;
     static int ARM_DOWN_TICKS = -120;
+
     public void flippyTurnyDown() {
         if ((stateManager.flippyTurnyState != stateManager.FLIPPYTURNY_DOWN && stateManager.flippyTurnyState != stateManager.FLIPPYTURNY_DOWNING) || flippyTurnyDown) {
             if (liftyUppy.getCurrentPosition() < ARM_DOWN_TICKS) {
@@ -89,8 +90,25 @@ public class LiftyUppyActions {
         }
     }
 
+//       public void resetFlippyTurny(double power, boolean buttonPress) {
+//            flippyTurny.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+//            flippyTurny.setPower(power*0.25);
+//            telemetry.addData("Position", flippyTurny.getCurrentPosition());
+//            //flippyTurny.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        if (buttonPress) {
+ //            flippyTurny.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        }
+//    }
+
+//    public void newResetLiftyUp(double power) {
+//        flippyTurny.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+//        flippyTurny.setPower(power);
+//        flippyTurny.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//    }
+
     double prevTime = System.currentTimeMillis();
-    public void teleOpLiftyUppy(double power, double liftSpeedMultiplier) {
+
+    public void teleOpLiftyUppy(double power, double liftSpeedMultiplier) { //  controls the lifty uppy (viper slides) which is being extended and retracted
         double time = System.currentTimeMillis();
         if (power != 0 && flippyTurny.getCurrentPosition() > 300) {
             if (liftyUppy.getMode() == DcMotor.RunMode.RUN_USING_ENCODER) {
@@ -98,6 +116,7 @@ public class LiftyUppyActions {
                 liftyUppy.setPower(1.0);
             }
 //            double time = System.currentTimeMillis();
+
             liftyUppyPosition = Range.clip(liftyUppyPosition + power * (time - prevTime) * liftSpeedMultiplier, -3000, 100);
             setLiftyUppyPosition((int) liftyUppyPosition, 3000 * liftSpeedMultiplier);
 //            prevTime = time;
@@ -115,6 +134,7 @@ public class LiftyUppyActions {
     int preset2 = -1100;
     int preset3 = -1500;
     int preset4 = -2900;
+
     public void goToPreset(boolean goTo1, boolean goTo2, boolean goTo3, boolean goTo4) {
         if ((goTo1 || goTo2 || goTo3) && liftyUppy.getMode() == DcMotor.RunMode.RUN_USING_ENCODER) {
             liftyUppy.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -137,7 +157,9 @@ public class LiftyUppyActions {
     public void turnFlippyTurnyOff() {
         flippyTurny.setPower(0);
     }
+
     double liftyUppyPosition = 0;
+
     public void setLiftyUppyPosition(int position, double velocity) {
         liftyUppy.setTargetPosition(position);
         liftyUppy.setVelocity(velocity);
