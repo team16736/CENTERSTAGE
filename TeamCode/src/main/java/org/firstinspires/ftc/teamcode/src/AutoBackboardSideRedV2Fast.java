@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.src;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.src.attachments.DetectPropActions;
 import org.firstinspires.ftc.teamcode.src.attachments.IntakeClass;
@@ -12,7 +13,7 @@ import org.firstinspires.ftc.teamcode.src.attachments.UpTake;
 import org.firstinspires.ftc.teamcode.src.driving.GyroActions;
 import org.firstinspires.ftc.teamcode.src.driving.HelperActions;
 
-
+@Disabled
 @Autonomous(name = "Auto Backboard Side Fast Red V2")
 /*
 This the Audience (far) side red, Mel

@@ -12,11 +12,11 @@ import org.firstinspires.ftc.teamcode.src.driving.GyroActions;
 import org.firstinspires.ftc.teamcode.src.driving.HelperActions;
 
 
-@Autonomous(name = "Auto Backboard Side Blue V2")
+@Autonomous(name = "Auto Backboard Side Blue")
 /*
 This the Audience (far) side blue, Mel
  */
-public class AutoBackboardSideBlueV2 extends HelperActions {
+public class AutoBackboardSideBlue extends HelperActions {
     //Create the actions as objects. This is so we can use the methods inside of them
     private GyroActions gyroActions = null;
     private DetectPropActions detectPropActions = null;
@@ -67,8 +67,6 @@ public class AutoBackboardSideBlueV2 extends HelperActions {
 
             //If statements, in case something could change in the program
             if (propPlace == "left") {
-                //Prop is at the left side
-                //places pixel on the line
                 placePixelLeft(placer);
                 // drives to the board to place pixel
                 driveToBoard(placer, -0, 0,-29, -90);
@@ -76,7 +74,6 @@ public class AutoBackboardSideBlueV2 extends HelperActions {
                 placeAndPark(placer, -6);
 
             } else if (propPlace == "right") {
-                // NEED TO WORK HERE
                 placePixelRight(placer);
                 // drives to the board to place pixel
                 driveToBoard(placer, -0, 4,-32, -90);
@@ -205,11 +202,11 @@ public class AutoBackboardSideBlueV2 extends HelperActions {
             while (gyroActions.encoderGyroStrafeStateMachine(speed, strafeDistance, true)) ;
         }
 
-        int position = -1100;
+        int position = -1000;
         if(AutoParameters.BOARDSIDE_BLUE_HAS_PIXEL){
-            position = -1100;
+            position = AutoParameters.PIXEL_DROP_HEIGHT_HIGH;
         }else{
-            position = -800;
+            position = AutoParameters.PIXEL_DROP_HEIGHT_LOW;
         }
 
         //raise the arms
@@ -229,7 +226,7 @@ public class AutoBackboardSideBlueV2 extends HelperActions {
    */
     private void placeAndPark(PlacerActions placer, int strafeOffset) {
         placer.releasePixel();
-        sleep(800);
+        sleep(1000);
         placer.closePlacer();
 
         if (AutoParameters.BOARDSIDE_BLUE_HAS_PIXEL) {
@@ -257,8 +254,8 @@ public class AutoBackboardSideBlueV2 extends HelperActions {
             strafeDistance = AutoParameters.BOARDSIDE_BLUE_PARK_STRAFE_DISTANCE + strafeOffset;
         }
 
-        gyroActions.initEncoderGyroStrafeStateMachine(speed,strafeDistance,strafeLeft);
-        while (gyroActions.encoderGyroStrafeStateMachine(speed,strafeDistance,strafeLeft));
+        gyroActions.initEncoderGyroStrafeStateMachine(2*speed,strafeDistance,strafeLeft);
+        while (gyroActions.encoderGyroStrafeStateMachine(2*speed,strafeDistance,strafeLeft));
         while(liftyUppyActions.flippyTurny.isBusy());
     }
 }

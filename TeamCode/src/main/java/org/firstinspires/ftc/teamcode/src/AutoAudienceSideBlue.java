@@ -78,13 +78,13 @@ public class AutoAudienceSideBlue extends HelperActions {
             } else if (propPlace == "left") {
                 placePixelLeft(placer);
                 // drives to the board to place pixel
-                driveToBoard(placer, -65, 19, -28, -90, true);
+                driveToBoard(placer, -65, 18, -26, -90, true);
                 // places pixel and parks
                 placeAndPark(placer, 6);
             } else {
                 //Mid is the default position, if it is not on the left or the right, the only remaining option is the middle
                 placePixelMid(placer);
-                driveToBoard(placer, -55, 0, -36, -90, true);
+                driveToBoard(placer, -60, 25, -30, -90, true);
                 // places pixel and parks
                 placeAndPark(placer, 0);
             }
@@ -112,8 +112,8 @@ public class AutoAudienceSideBlue extends HelperActions {
         while (gyroActions.gyroSpin(speed)) ;
 
         // move 1 inch to center the robot, to avoid hitting the right bar
-        gyroActions.initEncoderGyroStrafeStateMachine(speed, 3, true);
-        while (gyroActions.encoderGyroStrafeStateMachine(speed, 3, true)) ;
+        gyroActions.initEncoderGyroStrafeStateMachine(speed, 21, false);
+        while (gyroActions.encoderGyroStrafeStateMachine(speed, 21, false)) ;
     }
 
 
@@ -203,11 +203,11 @@ public class AutoAudienceSideBlue extends HelperActions {
         liftyUppyActions.flippyTurnyUp();
         // keep going towards the back board //** do not move as fast
         gyroActions.encoderGyroDriveStateMachine(400, distance2, angle);
-        int position = -1200;
+        int position = -1100;
         if(AutoParameters.AUDIENCE_BLUE_HAS_PIXEL){
-            position = -1200;
+            position = AutoParameters.PIXEL_DROP_HEIGHT_HIGH;
         }else{
-            position = -800;
+            position = AutoParameters.PIXEL_DROP_HEIGHT_LOW;
         }
         // raise the viper slides
         while (gyroActions.encoderGyroDriveStateMachine(400, distance2, angle)) {
@@ -223,7 +223,7 @@ public class AutoAudienceSideBlue extends HelperActions {
     */
     private void placeAndPark(PlacerActions placer, int strafeOffset) {
         placer.releasePixel();
-        sleep(800);
+        sleep(1000);
         placer.closePlacer();
 
         if (AutoParameters.AUDIENCE_BLUE_HAS_PIXEL) {
@@ -252,8 +252,8 @@ public class AutoAudienceSideBlue extends HelperActions {
         }
 
         //speed *= 2;
-        gyroActions.initEncoderGyroStrafeStateMachine(speed, strafeDistance, strafeLeft);
-        while (gyroActions.encoderGyroStrafeStateMachine(speed, strafeDistance, strafeLeft)) ;
+        gyroActions.initEncoderGyroStrafeStateMachine(2*speed, strafeDistance, strafeLeft);
+        while (gyroActions.encoderGyroStrafeStateMachine(2*speed, strafeDistance, strafeLeft)) ;
         while(liftyUppyActions.flippyTurny.isBusy());
     }
 

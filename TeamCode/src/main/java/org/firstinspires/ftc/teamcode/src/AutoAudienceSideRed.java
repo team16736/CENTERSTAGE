@@ -63,16 +63,13 @@ public class AutoAudienceSideRed extends HelperActions {
 
             //If statements, in case something could change in the program
             if (propPlace == "left") {
-                //Prop is at the left side
-                //places pixel on the line
-                placePixelLeftNew(placer);
+                placePixelLeft(placer);
                 // drives to the board to place pixel
                 driveToBoard(placer, -55, true, 17, -32, 90);
                 // places pixel and parks
                 placeAndPark(placer, -6);
 
             } else if (propPlace == "right") {
-                // NEED TO WORK HERE
                 placePixelRight(placer);
                 // drives to the board to place pixel
                 driveToBoard(placer, -65, false, 17, -25, 90);
@@ -83,7 +80,7 @@ public class AutoAudienceSideRed extends HelperActions {
                 //Mid is the default position, if it is not on the left or the right, the only remaining option is the middle
                 placePixelMid(placer);
                 // drives to the board to place pixel
-                driveToBoard(placer, -44, false, 0, -44, 90);
+                driveToBoard(placer, -55, false, 24, -33, 90);
                 // places pixel and parks
                 placeAndPark(placer, 0);
             }
@@ -95,7 +92,7 @@ public class AutoAudienceSideRed extends HelperActions {
      */
     private void placePixelMid(PlacerActions placer) {
 
-        //Move to the prop 27 inches
+        //Move to the prop 28 inches
         double distance = 28;
         int angle = 90;
         gyroActions.encoderGyroDriveStateMachine(speed, distance, 0);
@@ -115,11 +112,11 @@ public class AutoAudienceSideRed extends HelperActions {
         while (gyroActions.gyroSpin(speed)) ;
 
         // move 3 inch to center the robot, to avoid hitting the right bar
-        gyroActions.initEncoderGyroStrafeStateMachine(speed, 4, false);
-        while (gyroActions.encoderGyroStrafeStateMachine(speed, 4, false)) ;
+        gyroActions.initEncoderGyroStrafeStateMachine(speed, 19, true);
+        while (gyroActions.encoderGyroStrafeStateMachine(speed, 19, true)) ;
     }
 
-    private void placePixelLeftNew(PlacerActions placer) {
+    private void placePixelLeft(PlacerActions placer) {
         double distance = 22;
         int angle = 90;
 
@@ -154,39 +151,7 @@ public class AutoAudienceSideRed extends HelperActions {
         while (gyroActions.encoderGyroStrafeStateMachine(speed, 22, false)) ;
     }
 
-    /*
-    This method under is for placing pixels on the left line
-    */
-    private void placePixelLeft(PlacerActions placer) {
-        double distance = 22;
-        int angle = 90;
-
-        // Strafe to the left center line
-        gyroActions.initEncoderGyroStrafeStateMachine(speed, 8, true);
-        while (gyroActions.encoderGyroStrafeStateMachine(speed, 8, true)) ;
-
-        // move to the prop and push it forward
-        gyroActions.encoderGyroDriveStateMachine(speed, distance, 0);
-        while (gyroActions.encoderGyroDriveStateMachine(speed, distance, 0)) ;
-
-        // place the pixel
-        intake.outTake();
-        sleep(1000);
-        intake.intakeOff();
-
-        // come back 15 inches to avoid the pixel/prop
-        gyroActions.initEncoderGyroDriveStateMachine(speed, -15, 0);
-        while (gyroActions.encoderGyroDriveStateMachine(speed, -15, 0)) ;
-
-        // turn backward
-        gyroActions.initGyroSpin(angle);
-        while (gyroActions.gyroSpin(speed)) ;
-
-        // Strafe to the original lane
-        gyroActions.initEncoderGyroStrafeStateMachine(speed, 5, true);
-        while (gyroActions.encoderGyroStrafeStateMachine(speed, 5, true)) ;
-
-    }
+   
 
     /*
      method under is for placing pixels on the right line
@@ -245,11 +210,11 @@ public class AutoAudienceSideRed extends HelperActions {
         // keep going towards the back board in slow speed
         gyroActions.encoderGyroDriveStateMachine(400, distance2, angle);
 
-        int position = -1100;
+        int position = -1000;
         if (AutoParameters.AUDIENCE_RED_HAS_PIXEL) {
-            position = -1100;
+            position = AutoParameters.PIXEL_DROP_HEIGHT_HIGH;
         } else {
-            position = -800;
+            position = AutoParameters.PIXEL_DROP_HEIGHT_LOW;
         }
 
         // raise the viper slides
@@ -265,7 +230,7 @@ public class AutoAudienceSideRed extends HelperActions {
     */
     private void placeAndPark(PlacerActions placer, int strafeOffset) {
         placer.releasePixel();
-        sleep(800);
+        sleep(1000);
         placer.closePlacer();
 
         if (AutoParameters.AUDIENCE_RED_HAS_PIXEL) {
@@ -292,8 +257,8 @@ public class AutoAudienceSideRed extends HelperActions {
         }else {
             strafeDistance = AutoParameters.AUDIENCE_RED_PARK_STRAFE_DISTANCE - strafeOffset;
         }
-        gyroActions.initEncoderGyroStrafeStateMachine(speed, strafeDistance, strafeLeft);
-        while (gyroActions.encoderGyroStrafeStateMachine(speed, strafeDistance, strafeLeft)) ;
+        gyroActions.initEncoderGyroStrafeStateMachine(2*speed, strafeDistance, strafeLeft);
+        while (gyroActions.encoderGyroStrafeStateMachine(2*speed, strafeDistance, strafeLeft)) ;
         while(liftyUppyActions.flippyTurny.isBusy());
     }
 }
