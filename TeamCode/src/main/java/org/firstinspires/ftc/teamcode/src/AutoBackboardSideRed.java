@@ -67,6 +67,8 @@ public class AutoBackboardSideRed extends HelperActions {
                 //Prop is at the left side
                 //places pixel on the line
                 placePixelRight(placer);
+                //changed for thor in 2/14/24 for thor : sleep 5000
+                sleep(5000);
                 // drives to the board to place pixel // 30
                 driveToBoard(placer, 0, 0,-28, 90);
                 // places pixel and parks
@@ -75,6 +77,8 @@ public class AutoBackboardSideRed extends HelperActions {
             } else if (propPlace == "left") {
                 // NEED TO WORK HERE
                 placePixelLeft(placer);
+                //changed for thor in 2/14/24 for thor : sleep 5000
+                sleep(5000);
                 // drives to the board to place pixel
                 driveToBoard(placer, 0, 3,-31, 90);
                 // places pixel and parks
@@ -83,6 +87,8 @@ public class AutoBackboardSideRed extends HelperActions {
             } else {
                 //Mid is the default position, if it is not on the left or the right, the only remaining option is the middle
                 placePixelMid(placer);
+                //changed for thor in 2/14/24 for thor : sleep 5000
+                sleep(5000);
                 // drives to the board to place pixel
                 driveToBoard(placer, 0, 0, -36, 90);
                 // places pixel and parks
@@ -95,7 +101,7 @@ public class AutoBackboardSideRed extends HelperActions {
     This method is for placing pixel on the middle line
      */
     private void placePixelMid(PlacerActions placer) {
-        //Move to the prop 27.5 inches
+        //Move to the prop 28 inches
         double distance = 28;
         int angle = 90;
         gyroActions.encoderGyroDriveStateMachine(speed, distance, 0);

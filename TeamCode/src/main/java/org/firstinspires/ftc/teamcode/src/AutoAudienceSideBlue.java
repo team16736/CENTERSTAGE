@@ -70,6 +70,7 @@ public class AutoAudienceSideBlue extends HelperActions {
 
             //If statements, in case something could change in the program
             if (propPlace == "right") {
+                // NEED TO WORK ON THIS ONE //
                 placePixelRight(placer);
                 // drives to the board to place pixel
                 driveToBoard(placer, -55, 18, -32, -90, false);
@@ -152,7 +153,7 @@ public class AutoAudienceSideBlue extends HelperActions {
     }
 
     private void placePixelRight(PlacerActions placer) {
-        double distance = 22;
+        double distance = 23;
         int angle = -90;
 
         // Strafe to the left center line

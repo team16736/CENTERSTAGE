@@ -68,13 +68,18 @@ public class AutoBackboardSideBlue extends HelperActions {
             //If statements, in case something could change in the program
             if (propPlace == "left") {
                 placePixelLeft(placer);
+                //changed for thor in 2/14/24
+                sleep(5000);
                 // drives to the board to place pixel
-                driveToBoard(placer, -0, 0,-29, -90);
+                //changed for thor in 2/14/24 for thor : sleep 5000
+                driveToBoard(placer, -0, 4,-29, -90);
                 // places pixel and parks
                 placeAndPark(placer, -6);
 
             } else if (propPlace == "right") {
                 placePixelRight(placer);
+                //changed for thor in 2/14/24 for thor : sleep 5000
+                sleep(5000);
                 // drives to the board to place pixel
                 driveToBoard(placer, -0, 4,-32, -90);
                 // places pixel and parks
@@ -83,6 +88,8 @@ public class AutoBackboardSideBlue extends HelperActions {
             } else {
                 //Mid is the default position, if it is not on the left or the right, the only remaining option is the middle
                 placePixelMid(placer);
+                //changed for thor in 2/14/24 for thor : sleep 5000
+                sleep(5000);
                 // drives to the board to place pixel
                 driveToBoard(placer, 0, 0, -36, -90);
                 // places pixel and parks
@@ -123,7 +130,8 @@ public class AutoBackboardSideBlue extends HelperActions {
     This method under is for placing pixels on the left line
     */
     private void placePixelLeft(PlacerActions placer) {
-        double distance = 22;
+        //default = 22 changed for thor in 2/14/24 for thor: 18
+        double distance = 18;
         int angle = -90;
 
         // move 2 inches to avoid the catch
