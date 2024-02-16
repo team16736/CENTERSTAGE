@@ -63,7 +63,7 @@ public class AutoAudienceSideBlue extends HelperActions {
             telemetry.addData("prop place", propPlace);
 
             ///// remove the hardcoded value /////
-            //String propPlace = "left";
+            // String propPlace = "left";
 
             // Initial delay
             sleep(AutoParameters.AUDIENCE_BLUE_INITIAL_DELAY);
@@ -72,20 +72,23 @@ public class AutoAudienceSideBlue extends HelperActions {
             if (propPlace == "right") {
                 // NEED TO WORK ON THIS ONE //
                 placePixelRight(placer);
+                sleep(AutoParameters.AUDIENCE_BLUE_INTERMEDIATE_DELAY);
                 // drives to the board to place pixel
                 driveToBoard(placer, -55, 18, -32, -90, false);
                 // places pixel and parks
                 placeAndPark(placer, -6);
             } else if (propPlace == "left") {
                 placePixelLeft(placer);
+                sleep(AutoParameters.AUDIENCE_BLUE_INTERMEDIATE_DELAY);
                 // drives to the board to place pixel
-                driveToBoard(placer, -65, 18, -26, -90, true);
+                driveToBoard(placer, -65, 18, -25, -90, true);
                 // places pixel and parks
                 placeAndPark(placer, 6);
             } else {
                 //Mid is the default position, if it is not on the left or the right, the only remaining option is the middle
                 placePixelMid(placer);
-                driveToBoard(placer, -60, 25, -30, -90, true);
+                sleep(AutoParameters.AUDIENCE_BLUE_INTERMEDIATE_DELAY);
+                driveToBoard(placer, -65, 24, -24, -90, true);
                 // places pixel and parks
                 placeAndPark(placer, 0);
             }
@@ -225,7 +228,6 @@ public class AutoAudienceSideBlue extends HelperActions {
     private void placeAndPark(PlacerActions placer, int strafeOffset) {
         placer.releasePixel();
         sleep(1000);
-        placer.closePlacer();
 
         if (AutoParameters.AUDIENCE_BLUE_HAS_PIXEL) {
             liftyUppyActions.goToPreset(false, false, true, false);
@@ -237,6 +239,7 @@ public class AutoAudienceSideBlue extends HelperActions {
         liftyUppyActions.flippyTurnyDown();
         sleep(300);
         liftyUppyActions.goToPreset(true, false, false, false);
+        placer.closePlacer();
 
         while (liftyUppyActions.liftyUppy.getCurrentPosition() > -1000) ;
         gyroActions.initEncoderGyroDriveStateMachine(speed, 2);

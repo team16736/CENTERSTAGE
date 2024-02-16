@@ -64,6 +64,7 @@ public class AutoAudienceSideRed extends HelperActions {
             //If statements, in case something could change in the program
             if (propPlace == "left") {
                 placePixelLeft(placer);
+                sleep(AutoParameters.AUDIENCE_RED_INTERMEDIATE_DELAY);
                 // drives to the board to place pixel
                 driveToBoard(placer, -55, true, 17, -32, 90);
                 // places pixel and parks
@@ -71,16 +72,18 @@ public class AutoAudienceSideRed extends HelperActions {
 
             } else if (propPlace == "right") {
                 placePixelRight(placer);
+                sleep(AutoParameters.AUDIENCE_RED_INTERMEDIATE_DELAY);
                 // drives to the board to place pixel
                 driveToBoard(placer, -65, false, 17, -25, 90);
                  // places pixel and parks
-                placeAndPark(placer, 8);
+                placeAndPark(placer, 6);
 
             } else {
                 //Mid is the default position, if it is not on the left or the right, the only remaining option is the middle
                 placePixelMid(placer);
+                sleep(AutoParameters.AUDIENCE_RED_INTERMEDIATE_DELAY);
                 // drives to the board to place pixel
-                driveToBoard(placer, -55, false, 24, -33, 90);
+                driveToBoard(placer, -55, false, 24, -32, 90);
                 // places pixel and parks
                 placeAndPark(placer, 0);
             }
@@ -91,7 +94,6 @@ public class AutoAudienceSideRed extends HelperActions {
     This method is for placing pixel on the middle line
      */
     private void placePixelMid(PlacerActions placer) {
-
         //Move to the prop 28 inches
         double distance = 28;
         int angle = 90;
@@ -117,7 +119,7 @@ public class AutoAudienceSideRed extends HelperActions {
     }
 
     private void placePixelLeft(PlacerActions placer) {
-        double distance = 22;
+        double distance = 23;
         int angle = 90;
 
         // Strafe to the left center line
@@ -138,8 +140,8 @@ public class AutoAudienceSideRed extends HelperActions {
         while (gyroActions.encoderGyroStrafeStateMachine(speed, 6, false)) ;
 
         // move an inch close to the line
-        gyroActions.encoderGyroDriveStateMachine(speed, 1, 90);
-        while (gyroActions.encoderGyroDriveStateMachine(speed, 1, 90)) ;
+        gyroActions.encoderGyroDriveStateMachine(speed, 2, 90);
+        while (gyroActions.encoderGyroDriveStateMachine(speed, 2, 90)) ;
 
             // place the pixel
         intake.outTake();
@@ -171,8 +173,8 @@ public class AutoAudienceSideRed extends HelperActions {
         while (gyroActions.gyroSpin(speed)) ;
 
         // go slow
-        gyroActions.initEncoderGyroDriveStateMachine(400, 3, angle);
-        while (gyroActions.encoderGyroDriveStateMachine(400, 3, angle)) ;
+        gyroActions.initEncoderGyroDriveStateMachine(400, 4, angle);
+        while (gyroActions.encoderGyroDriveStateMachine(400, 4 , angle)) ;
 
         intake.outTake();
         sleep(1000);
@@ -231,7 +233,6 @@ public class AutoAudienceSideRed extends HelperActions {
     private void placeAndPark(PlacerActions placer, int strafeOffset) {
         placer.releasePixel();
         sleep(1000);
-        placer.closePlacer();
 
         if (AutoParameters.AUDIENCE_RED_HAS_PIXEL) {
             liftyUppyActions.goToPreset(false, false, true, false);
@@ -242,11 +243,13 @@ public class AutoAudienceSideRed extends HelperActions {
         sleep(300);
         liftyUppyActions.flippyTurnyDown();
         sleep(200);
+
+        placer.closePlacer();
+
         liftyUppyActions.goToPreset(true, false, false, false);
         while (liftyUppyActions.liftyUppy.getCurrentPosition() > -1000) ;
         gyroActions.initEncoderGyroDriveStateMachine(speed, 2);
         while (gyroActions.encoderGyroDriveStateMachine(speed, 2)) ;
-        //speed *= 2;
 
         boolean strafeLeft = true;
         int strafeDistance = 0;
