@@ -90,6 +90,23 @@ public class LiftyUppyActions {
         }
     }
 
+    boolean wasResetFlippyTurnyBit = false;
+    public void unmessFlippyTurny(boolean override, double power) {
+        boolean resetFlippyTurnyBit = (power < 0 && override);
+        if (resetFlippyTurnyBit) {
+            if (!wasResetFlippyTurnyBit) {
+                flippyTurny.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            }
+            flippyTurny.setPower(power);
+        }  else if (!resetFlippyTurnyBit && wasResetFlippyTurnyBit) {
+            flippyTurny.setTargetPosition(0);
+            flippyTurny.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            flippyTurny.setPower(1.0);
+            flippyTurny.setVelocity(1000.0);
+            stateManager.flippyTurnyState = stateManager.FLIPPYTURNY_DOWN;
+        }
+        wasResetFlippyTurnyBit = resetFlippyTurnyBit;
+    }
 //       public void resetFlippyTurny(double power, boolean buttonPress) {
 //            flippyTurny.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 //            flippyTurny.setPower(power*0.25);
@@ -108,17 +125,20 @@ public class LiftyUppyActions {
 
     double prevTime = System.currentTimeMillis();
 
-    public void teleOpLiftyUppy(double power, double liftSpeedMultiplier) { //  controls the lifty uppy (viper slides) which is being extended and retracted
+    public void teleOpLiftyUppy(double power, double liftSpeedMultiplier, boolean cancel) { //  controls the lifty uppy (viper slides) which is being extended and retracted
         double time = System.currentTimeMillis();
-        if (power != 0 && flippyTurny.getCurrentPosition() > 300) {
+        if (power != 0 && (flippyTurny.getCurrentPosition() > 300 || cancel)) {
             if (liftyUppy.getMode() == DcMotor.RunMode.RUN_USING_ENCODER) {
                 liftyUppy.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 liftyUppy.setPower(1.0);
             }
 //            double time = System.currentTimeMillis();
 
-            liftyUppyPosition = Range.clip(liftyUppyPosition + power * (time - prevTime) * liftSpeedMultiplier, -3000, 100);
-            setLiftyUppyPosition((int) liftyUppyPosition, 3000 * liftSpeedMultiplier);
+            double total = liftyUppyPosition + power * (time - prevTime) * liftSpeedMultiplier;
+            if (!cancel) {
+                total = Range.clip(total, -3000, 100);
+            }
+            setLiftyUppyPosition((int) total, 3000 * liftSpeedMultiplier);
 //            prevTime = time;
             RobotLog.dd("LiftyUppy", "Target Position %f, time %f", liftyUppyPosition, time);
         }

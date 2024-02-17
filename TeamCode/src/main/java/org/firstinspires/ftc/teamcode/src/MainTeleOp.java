@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.src;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 //import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -50,6 +51,9 @@ public class MainTeleOp extends HelperActions {
 
 
         boolean placerBit = false;
+        boolean wasA = false;
+        boolean resetFlippyTurnyBit = false;
+        boolean wasResetFlippyTurnyBit = false;
         double prevTime = 0;
 
         //Set Speed for teleOp. Mecannum wheel speed.
@@ -103,11 +107,19 @@ public class MainTeleOp extends HelperActions {
             intakeClass.setPower(intakePower);
             upTake.setPower(intakePower * 0.8);
 
-            liftyUppyActions.teleOpLiftyUppy(gamepad2.left_stick_y * Math.abs(gamepad2.left_stick_y), liftSpdMult);
+            liftyUppyActions.teleOpLiftyUppy(gamepad2.left_stick_y * Math.abs(gamepad2.left_stick_y), liftSpdMult, gamepad2.a && gamepad2.left_bumper);
             liftyUppyActions.goToPreset(gamepad2.dpad_down, gamepad2.dpad_left, gamepad2.dpad_right, gamepad2.dpad_up);
-//            if (gamepad2.a) {
+            if (gamepad2.a && gamepad2.left_bumper) {
 //                liftyUppyActions.resetLiftyUppy();
-//            }
+                wasA = true;
+            } else {
+                if (wasA) {
+                    liftyUppyActions.resetLiftyUppy();
+                }
+                wasA = false;
+            }
+            liftyUppyActions.unmessFlippyTurny(gamepad2.left_bumper, gamepad2.right_stick_y);
+
 //           boolean ButtonPressMemory;
 //            if (gamepad2.a && gamepad2.right_trigger > 0.5) {
 //                if (ButtonPressMemory == false) {
