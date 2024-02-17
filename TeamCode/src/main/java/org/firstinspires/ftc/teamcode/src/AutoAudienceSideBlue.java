@@ -74,14 +74,14 @@ public class AutoAudienceSideBlue extends HelperActions {
                 placePixelRight(placer);
                 sleep(AutoParameters.AUDIENCE_BLUE_INTERMEDIATE_DELAY);
                 // drives to the board to place pixel
-                driveToBoard(placer, -55, 18, -32, -90, false);
+                driveToBoard(placer, -55, 19, -32, -90, false);
                 // places pixel and parks
                 placeAndPark(placer, -6);
             } else if (propPlace == "left") {
                 placePixelLeft(placer);
                 sleep(AutoParameters.AUDIENCE_BLUE_INTERMEDIATE_DELAY);
                 // drives to the board to place pixel
-                driveToBoard(placer, -65, 18, -25, -90, true);
+                driveToBoard(placer, -65, 16, -25, -90, true);
                 // places pixel and parks
                 placeAndPark(placer, 6);
             } else {
