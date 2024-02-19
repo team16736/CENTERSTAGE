@@ -99,6 +99,7 @@ public class LiftyUppyActions {
             }
             flippyTurny.setPower(power);
         }  else if (!resetFlippyTurnyBit && wasResetFlippyTurnyBit) {
+            flippyTurny.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             flippyTurny.setTargetPosition(0);
             flippyTurny.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             flippyTurny.setPower(1.0);

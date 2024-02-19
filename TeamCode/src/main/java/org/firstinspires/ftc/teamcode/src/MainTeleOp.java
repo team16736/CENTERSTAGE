@@ -199,7 +199,7 @@ public class MainTeleOp extends HelperActions {
         return  rightStickX * Math.abs(rightStickX);
     }
 
-    double pixelReleaseTime = 87; //Millis
+    double pixelReleaseTime = 95; //Millis
     boolean prevInput = false;
     int releaseState = 0;
     double prevTime = System.currentTimeMillis();
