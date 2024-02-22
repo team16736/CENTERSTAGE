@@ -18,7 +18,7 @@ public class LauncherActions {
 
         bandHoldy = hardwareMap.get(Servo.class, ConfigConstants.LIFTOFF);
 
-        bandHoldy.setPosition(0.6);
+        bandHoldy.setPosition(0.55);
     }
 
     public void launch() {
