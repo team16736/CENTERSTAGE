@@ -58,7 +58,7 @@ public class AutoBackboardSideBlue extends HelperActions {
             telemetry.addData("prop place", propPlace);
 
             ///// remove the hardcoded value /////
-           //propPlace = "middle";
+           // propPlace = "left";
 
             // Initial delay
             sleep(AutoParameters.BOARDSIDE_BLUE_INITIAL_DELAY);

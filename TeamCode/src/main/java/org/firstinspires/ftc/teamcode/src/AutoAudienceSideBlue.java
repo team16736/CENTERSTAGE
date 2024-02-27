@@ -63,7 +63,7 @@ public class AutoAudienceSideBlue extends HelperActions {
             telemetry.addData("prop place", propPlace);
 
             ///// remove the hardcoded value /////
-            // String propPlace = "left";
+            // String propPlace = "right";
 
             // Initial delay
             sleep(AutoParameters.AUDIENCE_BLUE_INITIAL_DELAY);
@@ -81,7 +81,7 @@ public class AutoAudienceSideBlue extends HelperActions {
                 placePixelLeft(placer);
                 sleep(AutoParameters.AUDIENCE_BLUE_INTERMEDIATE_DELAY);
                 // drives to the board to place pixel
-                driveToBoard(placer, -65, 16, -25, -90, true);
+                driveToBoard(placer, -65, 16, -26, -90, true);
                 // places pixel and parks
                 placeAndPark(placer, 6);
             } else {
@@ -137,8 +137,8 @@ public class AutoAudienceSideBlue extends HelperActions {
         while (gyroActions.gyroSpin(speed)) ;
 
         // go bit slower after placing the pixel
-        gyroActions.initEncoderGyroDriveStateMachine(400, 3, angle);
-        while (gyroActions.encoderGyroDriveStateMachine(400, 3, angle)) ;
+        gyroActions.initEncoderGyroDriveStateMachine(400, 3.5, angle);
+        while (gyroActions.encoderGyroDriveStateMachine(400, 3.5, angle)) ;
 
         intake.outTake();
         sleep(1000);
@@ -175,15 +175,14 @@ public class AutoAudienceSideBlue extends HelperActions {
         gyroActions.initEncoderGyroStrafeStateMachine(speed, 6, true);
         while (gyroActions.encoderGyroStrafeStateMachine(speed, 6, true)) ;
 
-
         // place the pixel
         intake.outTake();
         sleep(1000);
         intake.intakeOff();
 
-        // Strafe to the original lane
+       // Strafe to the original lane
         gyroActions.initEncoderGyroStrafeStateMachine(speed, 23, true);
-        while (gyroActions.encoderGyroStrafeStateMachine(speed, 23, true)) ;
+        while (gyroActions.encoderGyroStrafeStateMachine(speed, 23, true));
     }
 
     /*

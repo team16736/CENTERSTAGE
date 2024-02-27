@@ -83,7 +83,7 @@ public class AutoAudienceSideRed extends HelperActions {
                 placePixelMid(placer);
                 sleep(AutoParameters.AUDIENCE_RED_INTERMEDIATE_DELAY);
                 // drives to the board to place pixel
-                driveToBoard(placer, -55, false, 24, -32, 90);
+                driveToBoard(placer, -55, false, 23, -34, 90);
                 // places pixel and parks
                 placeAndPark(placer, 0);
             }
