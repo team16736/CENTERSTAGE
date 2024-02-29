@@ -66,9 +66,9 @@ public class AutoAudienceSideRed extends HelperActions {
                 placePixelLeft(placer);
                 sleep(AutoParameters.AUDIENCE_RED_INTERMEDIATE_DELAY);
                 // drives to the board to place pixel
-                driveToBoard(placer, -55, true, 17, -32, 90);
+                driveToBoard(placer, -55, true, 19, -32, 90);
                 // places pixel and parks
-                placeAndPark(placer, -6);
+                placeAndPark(placer, -8);
 
             } else if (propPlace == "right") {
                 placePixelRight(placer);
@@ -241,15 +241,21 @@ public class AutoAudienceSideRed extends HelperActions {
         }
 
         sleep(300);
-        liftyUppyActions.flippyTurnyDown();
-        sleep(200);
+//        liftyUppyActions.flippyTurnyDown();
+//        sleep(200);
 
         placer.closePlacer();
 
+//        liftyUppyActions.goToPreset(true, false, false, false);
+//        while (liftyUppyActions.liftyUppy.getCurrentPosition() > -1000) ;
+        gyroActions.initEncoderGyroDriveStateMachine(speed, 3);
+        while (gyroActions.encoderGyroDriveStateMachine(speed, 3)) ;
+
         liftyUppyActions.goToPreset(true, false, false, false);
-        while (liftyUppyActions.liftyUppy.getCurrentPosition() > -1000) ;
-        gyroActions.initEncoderGyroDriveStateMachine(speed, 2);
-        while (gyroActions.encoderGyroDriveStateMachine(speed, 2)) ;
+        while (liftyUppyActions.liftyUppy.getCurrentPosition() < -700);
+
+        liftyUppyActions.flippyTurnyDown();
+        sleep(200);
 
         boolean strafeLeft = true;
         int strafeDistance = 0;

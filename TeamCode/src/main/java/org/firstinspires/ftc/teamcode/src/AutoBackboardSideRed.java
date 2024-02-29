@@ -238,16 +238,35 @@ public class AutoBackboardSideRed extends HelperActions {
             liftyUppyActions.goToPreset(false, true, false, false);
         }
 
+//        sleep(300);
+//        liftyUppyActions.flippyTurnyDown();
+//        sleep(200);
+//
+//        placer.closePlacer();
+//
+//        liftyUppyActions.goToPreset(true, false, false, false);
+//        while (liftyUppyActions.liftyUppy.getCurrentPosition() > -1000) ;
+//        gyroActions.initEncoderGyroDriveStateMachine(speed, 2);
+//        while (gyroActions.encoderGyroDriveStateMachine(speed, 2)) ;
+
+        //BEGIN WYATT CODE CHANGE
         sleep(300);
-        liftyUppyActions.flippyTurnyDown();
-        sleep(200);
+//        liftyUppyActions.flippyTurnyDown();
+//        sleep(200);
 
         placer.closePlacer();
 
+//        liftyUppyActions.goToPreset(true, false, false, false);
+//        while (liftyUppyActions.liftyUppy.getCurrentPosition() > -1000) ;
+        gyroActions.initEncoderGyroDriveStateMachine(speed, 3);
+        while (gyroActions.encoderGyroDriveStateMachine(speed, 3)) ;
+
         liftyUppyActions.goToPreset(true, false, false, false);
-        while (liftyUppyActions.liftyUppy.getCurrentPosition() > -1000) ;
-        gyroActions.initEncoderGyroDriveStateMachine(speed, 2);
-        while (gyroActions.encoderGyroDriveStateMachine(speed, 2)) ;
+        while (liftyUppyActions.liftyUppy.getCurrentPosition() < -700);
+
+        liftyUppyActions.flippyTurnyDown();
+        sleep(200);
+        //END WYATT CODE CHANGE
 
         boolean strafeLeft = true;
         int strafeDistance = 0;

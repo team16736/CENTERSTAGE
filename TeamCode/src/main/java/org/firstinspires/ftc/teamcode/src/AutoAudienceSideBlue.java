@@ -74,7 +74,7 @@ public class AutoAudienceSideBlue extends HelperActions {
                 placePixelRight(placer);
                 sleep(AutoParameters.AUDIENCE_BLUE_INTERMEDIATE_DELAY);
                 // drives to the board to place pixel
-                driveToBoard(placer, -55, 19, -32, -90, false);
+                driveToBoard(placer, -56, 19, -32, -90, false);
                 // places pixel and parks
                 placeAndPark(placer, -6);
             } else if (propPlace == "left") {
@@ -160,8 +160,8 @@ public class AutoAudienceSideBlue extends HelperActions {
         int angle = -90;
 
         // Strafe to the left center line
-        gyroActions.initEncoderGyroStrafeStateMachine(speed, 2, true);
-        while (gyroActions.encoderGyroStrafeStateMachine(speed, 2, true)) ;
+        gyroActions.initEncoderGyroStrafeStateMachine(speed, 1, true);
+        while (gyroActions.encoderGyroStrafeStateMachine(speed, 1, true)) ;
 
         // drive 22 inches
         gyroActions.encoderGyroDriveStateMachine(speed, distance, 0);
@@ -234,15 +234,34 @@ public class AutoAudienceSideBlue extends HelperActions {
             liftyUppyActions.goToPreset(false, true, false, false);
         }
 
-        sleep(500);
-        liftyUppyActions.flippyTurnyDown();
+//        sleep(500);
+//        liftyUppyActions.flippyTurnyDown();
+//        sleep(300);
+//        liftyUppyActions.goToPreset(true, false, false, false);
+//        placer.closePlacer();
+//
+//        while (liftyUppyActions.liftyUppy.getCurrentPosition() > -1000) ;
+//        gyroActions.initEncoderGyroDriveStateMachine(speed, 2);
+//        while (gyroActions.encoderGyroDriveStateMachine(speed, 2)) ;
+
+        //BEGIN WYATT CHANGE
         sleep(300);
-        liftyUppyActions.goToPreset(true, false, false, false);
+//        liftyUppyActions.flippyTurnyDown();
+//        sleep(200);
+
         placer.closePlacer();
 
-        while (liftyUppyActions.liftyUppy.getCurrentPosition() > -1000) ;
-        gyroActions.initEncoderGyroDriveStateMachine(speed, 2);
-        while (gyroActions.encoderGyroDriveStateMachine(speed, 2)) ;
+//        liftyUppyActions.goToPreset(true, false, false, false);
+//        while (liftyUppyActions.liftyUppy.getCurrentPosition() > -1000) ;
+        gyroActions.initEncoderGyroDriveStateMachine(speed, 5);
+        while (gyroActions.encoderGyroDriveStateMachine(speed, 5)) ;
+
+        liftyUppyActions.goToPreset(true, false, false, false);
+        while (liftyUppyActions.liftyUppy.getCurrentPosition() < -700);
+
+        liftyUppyActions.flippyTurnyDown();
+        sleep(200);
+        //END WYATT CHANGE
 
         boolean strafeLeft = false;
         int strafeDistance = 0;
