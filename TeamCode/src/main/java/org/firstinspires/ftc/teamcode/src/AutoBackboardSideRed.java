@@ -55,6 +55,7 @@ public class AutoBackboardSideRed extends HelperActions {
                 propPlace = detectPropActions.whereProp(3);
             }
             telemetry.addData("prop place", propPlace);
+            detectPropActions.stopStreaming();
 
             ///// remove the hardcoded value /////
             //String propPlace = "right";

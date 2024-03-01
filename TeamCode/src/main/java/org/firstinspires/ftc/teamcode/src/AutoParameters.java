@@ -4,7 +4,7 @@ public class AutoParameters {
     //** GLOBAL PARAM - START **//
     //default = -1200
     //changed for thor in 2/14/24 perfect height : -1225 for thor
-    public static int PIXEL_DROP_HEIGHT_HIGH = -1300;
+    public static int PIXEL_DROP_HEIGHT_HIGH = -1200;
     public static int PIXEL_DROP_HEIGHT_LOW = -800;
     //default -800
     //** GLOBAL PARAM - END **//
