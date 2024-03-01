@@ -74,14 +74,14 @@ public class AutoAudienceSideBlue extends HelperActions {
                 placePixelRight(placer);
                 sleep(AutoParameters.AUDIENCE_BLUE_INTERMEDIATE_DELAY);
                 // drives to the board to place pixel
-                driveToBoard(placer, -56, 19, -32, -90, false);
+                driveToBoard(placer, -55, 21, -32, -90, false);
                 // places pixel and parks
                 placeAndPark(placer, -6);
             } else if (propPlace == "left") {
                 placePixelLeft(placer);
                 sleep(AutoParameters.AUDIENCE_BLUE_INTERMEDIATE_DELAY);
                 // drives to the board to place pixel
-                driveToBoard(placer, -65, 16, -26, -90, true);
+                driveToBoard(placer, -65, 16.5, -26, -90, true);
                 // places pixel and parks
                 placeAndPark(placer, 6);
             } else {
@@ -160,8 +160,8 @@ public class AutoAudienceSideBlue extends HelperActions {
         int angle = -90;
 
         // Strafe to the left center line
-        gyroActions.initEncoderGyroStrafeStateMachine(speed, 1, true);
-        while (gyroActions.encoderGyroStrafeStateMachine(speed, 1, true)) ;
+        gyroActions.initEncoderGyroStrafeStateMachine(speed, 2, true);
+        while (gyroActions.encoderGyroStrafeStateMachine(speed, 2, true)) ;
 
         // drive 22 inches
         gyroActions.encoderGyroDriveStateMachine(speed, distance, 0);
@@ -191,7 +191,7 @@ public class AutoAudienceSideBlue extends HelperActions {
      strafeDistance = distance to line up with the board on any side
      distance2 = distance to board after strafing
      */
-    private void driveToBoard(PlacerActions placer, int distance1, int strafeDistance, int distance2, int angle, boolean strafeLeft) {
+    private void driveToBoard(PlacerActions placer, double distance1, double strafeDistance, double distance2, int angle, boolean strafeLeft) {
         // go towards the back board
         if (distance1 != 0) {
             gyroActions.encoderGyroDriveStateMachine(speed, distance1, angle);
@@ -204,6 +204,9 @@ public class AutoAudienceSideBlue extends HelperActions {
         }
         //raise the arms
         liftyUppyActions.flippyTurnyUp();
+        if (distance1 != 0) {
+            sleep(500);
+        }
         // keep going towards the back board //** do not move as fast
         gyroActions.encoderGyroDriveStateMachine(400, distance2, angle);
         int position = -1100;
@@ -222,8 +225,8 @@ public class AutoAudienceSideBlue extends HelperActions {
 
 
     /*
-      This method is for middle lane
-    */
+         This method is for middle lane - this is test at the test field, Iowa City
+       */
     private void placeAndPark(PlacerActions placer, int strafeOffset) {
         placer.releasePixel();
         sleep(1000);
@@ -234,34 +237,15 @@ public class AutoAudienceSideBlue extends HelperActions {
             liftyUppyActions.goToPreset(false, true, false, false);
         }
 
-//        sleep(500);
-//        liftyUppyActions.flippyTurnyDown();
-//        sleep(300);
-//        liftyUppyActions.goToPreset(true, false, false, false);
-//        placer.closePlacer();
-//
-//        while (liftyUppyActions.liftyUppy.getCurrentPosition() > -1000) ;
-//        gyroActions.initEncoderGyroDriveStateMachine(speed, 2);
-//        while (gyroActions.encoderGyroDriveStateMachine(speed, 2)) ;
-
-        //BEGIN WYATT CHANGE
+        sleep(500);
+        liftyUppyActions.flippyTurnyDown();
         sleep(300);
-//        liftyUppyActions.flippyTurnyDown();
-//        sleep(200);
-
+        liftyUppyActions.goToPreset(true, false, false, false);
         placer.closePlacer();
 
-//        liftyUppyActions.goToPreset(true, false, false, false);
-//        while (liftyUppyActions.liftyUppy.getCurrentPosition() > -1000) ;
-        gyroActions.initEncoderGyroDriveStateMachine(speed, 5);
-        while (gyroActions.encoderGyroDriveStateMachine(speed, 5)) ;
-
-        liftyUppyActions.goToPreset(true, false, false, false);
-        while (liftyUppyActions.liftyUppy.getCurrentPosition() < -700);
-
-        liftyUppyActions.flippyTurnyDown();
-        sleep(200);
-        //END WYATT CHANGE
+        while (liftyUppyActions.liftyUppy.getCurrentPosition() > -1000) ;
+        gyroActions.initEncoderGyroDriveStateMachine(speed, 2);
+        while (gyroActions.encoderGyroDriveStateMachine(speed, 2)) ;
 
         boolean strafeLeft = false;
         int strafeDistance = 0;
@@ -278,5 +262,4 @@ public class AutoAudienceSideBlue extends HelperActions {
         while (gyroActions.encoderGyroStrafeStateMachine(2*speed, strafeDistance, strafeLeft)) ;
         while(liftyUppyActions.flippyTurny.isBusy());
     }
-
 }
