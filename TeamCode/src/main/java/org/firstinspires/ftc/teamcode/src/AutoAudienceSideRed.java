@@ -67,9 +67,9 @@ public class AutoAudienceSideRed extends HelperActions {
                 placePixelLeft(placer);
                 sleep(AutoParameters.AUDIENCE_RED_INTERMEDIATE_DELAY);
                 // drives to the board to place pixel
-                driveToBoard(placer, -55, true, 18, -32, 90);
+                driveToBoard(placer, -55, true, 19, -32, 90);
                 // places pixel and parks
-                placeAndPark(placer, -8);
+                placeAndPark(placer, -6);
 
             } else if (propPlace == "right") {
                 placePixelRight(placer);
@@ -141,8 +141,8 @@ public class AutoAudienceSideRed extends HelperActions {
         while (gyroActions.encoderGyroStrafeStateMachine(speed, 6, false)) ;
 
         // move an inch close to the line
-//        gyroActions.encoderGyroDriveStateMachine(speed, 2, 90);
-//        while (gyroActions.encoderGyroDriveStateMachine(speed, 2, 90)) ;
+        gyroActions.encoderGyroDriveStateMachine(speed, 1, 90);
+        while (gyroActions.encoderGyroDriveStateMachine(speed, 1, 90)) ;
 
             // place the pixel
         intake.outTake();
