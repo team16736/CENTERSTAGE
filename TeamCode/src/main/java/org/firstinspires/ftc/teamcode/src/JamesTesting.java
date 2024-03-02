@@ -22,17 +22,15 @@ public class JamesTesting extends HelperActions {
     public void runOpMode() {
        // servo = hardwareMap.get(Servo.class, "intakeRight");
 //        servo = hardwareMap.get(Servo.class, ConfigConstants.LEFT_RELEASE);
-//        DetectPropActions detectPropActions = new DetectPropActions(hardwareMap, "RedThingTempl", true, true);
-//        detectPropActions.setToTemplateMatching();
+        DetectPropActions detectPropActions = new DetectPropActions(hardwareMap, "BlueThingTempl", false);
+        detectPropActions.setToTemplateMatching();
         GyroActions gyroActions = new GyroActions(this, telemetry, hardwareMap);
         telemetry.addData("Waiting for start", "");
         telemetry.update();
         waitForStart();
 
-        if (opModeIsActive()) {
-//            detectPropActions.whereProp(3);
-//            while (detectPropActions.whereProp(3) == "") ;
-//            telemetry.addData("prop place", detectPropActions.propPlace);
+        while (opModeIsActive()) {
+            telemetry.addData("prop place", detectPropActions.getResult().x);
             telemetry.update();
 //            gyroActions.gyroAprilDrive(4.5, 5, 500);
         }
