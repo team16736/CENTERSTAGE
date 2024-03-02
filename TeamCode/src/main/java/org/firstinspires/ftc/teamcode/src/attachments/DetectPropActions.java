@@ -165,7 +165,7 @@ public class DetectPropActions {
 
             Core.rotate(input, input, Core.ROTATE_180);
 
-            input = input.submat(100, input.rows(), 0, input.cols());
+            input = input.submat(200, input.rows(), 0, input.cols());
 
             if (Core.mean(input).val[0] > 100) {
                 result = openCV.templateMatchingHalfImg(input, templL, templR);

@@ -23,18 +23,18 @@ public class TestOpenCV {
 //        OpenCVLoader.initDebug();
 
         int i = CvType.CV_16UC4;
-        String pathTemplate = "src/main/java/org/firstinspires/ftc/teamcode/src/attachments/data/RedThingTempl.png";
-
+        String pathTemplate = "src/main/java/org/firstinspires/ftc/teamcode/src/attachments/data/BlueThingTempl.png";
         File fileTemplate = new File(pathTemplate);
         String absolutePathTemplate = fileTemplate.getAbsolutePath();
         OpenCV openCV = new OpenCV();
 
+        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
         Mat templ = Imgcodecs.imread(absolutePathTemplate, Imgcodecs.IMREAD_COLOR);
         Mat templR = templ.submat(0, templ.rows(), templ.cols() / 2, templ.cols());
         Mat templL = templ.submat(0, templ.rows(), 0, templ.cols() / 2);
-        RobotLog.dd("OpenCV", "type %d", templ.type());
+//        RobotLog.dd("OpenCV", "type %d", templ.type());
 
-        String pathImg = "src/main/java/org/firstinspires/ftc/teamcode/src/attachments/data/RedThing0.png";
+        String pathImg = "src/main/java/org/firstinspires/ftc/teamcode/src/attachments/data/RedThing2.png";
 
         File fileImg = new File(pathImg);
         String absolutePathImg = fileImg.getAbsolutePath();
@@ -52,6 +52,7 @@ public class TestOpenCV {
         OpenCV openCv = new OpenCV();
 
         Mat img = Imgcodecs.imread(absolutePathImg, Imgcodecs.IMREAD_COLOR);
+        img = img.submat(100, img.rows(), 0, img.cols());
 
 
         Point resultL = openCv.templateMatchingHalfImg(img, templL, templR);
