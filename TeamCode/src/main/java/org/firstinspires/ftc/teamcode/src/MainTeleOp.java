@@ -31,7 +31,7 @@ public class MainTeleOp extends HelperActions {
     boolean correctRotation = false;
     double rotationPosition = 0;
     double rotation = 0;
-    double liftSpdMult = 0.4 ;
+    double liftSpdMult = 0.8 ;
 
     @Override
     public void runOpMode() {
@@ -88,7 +88,7 @@ public class MainTeleOp extends HelperActions {
                 hanger.releaseHanger();
                 hanger.hangerUp();
             }
-            hanger.hangerDown(gamepad2.left_bumper);
+            hanger.hangerDown(gamepad2.left_bumper &! gamepad2.a && (gamepad2.right_stick_y == 0));
 
             hanger.hangerDirect(gamepad1.right_bumper, gamepad1.left_bumper);
             hanger.resetHanger(gamepad1.b);
@@ -149,9 +149,7 @@ public class MainTeleOp extends HelperActions {
             if (gamepad2.y) {
                 pixelReleaseTime = 87;
             }
-//            if (gamepad2.dpad_up) {
-//                pixelReleaseTime = 5000;
-//            }
+
             releasePixel(gamepad2.y);
 
             telemetry.update();

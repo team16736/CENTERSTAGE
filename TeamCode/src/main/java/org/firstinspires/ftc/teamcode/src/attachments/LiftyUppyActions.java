@@ -76,7 +76,7 @@ public class LiftyUppyActions {
                 flippyTurny.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 flippyTurny.setPower(1.0);
                 //Change the speed so that it's slow at
-                double velocity = 600 * (1.4 - ((liftyUppy.getCurrentPosition() + 300) / 3000));
+                double velocity = 900 * (1.4 - ((liftyUppy.getCurrentPosition() + 300) / 3000));
                 flippyTurny.setVelocity(velocity);
                 flippyTurnyDown = true;
             } else {
@@ -147,6 +147,14 @@ public class LiftyUppyActions {
         telemetry.addData("target position", liftyUppyPosition);
         telemetry.addData("liftyPower", liftyUppy.getPower());
         telemetry.addData("liftyCurrent mA", liftyUppy.getCurrent(CurrentUnit.MILLIAMPS));
+
+        double maxCurrent = 0;
+
+        if (liftyUppy.getCurrent(CurrentUnit.MILLIAMPS) > maxCurrent) {
+            maxCurrent = liftyUppy.getCurrent(CurrentUnit.MILLIAMPS);
+        }
+
+        telemetry.addData("liftyMax mA", maxCurrent);
         telemetry.addData("current position", liftyUppy.getCurrentPosition());
     }
 
@@ -154,7 +162,7 @@ public class LiftyUppyActions {
     int preset1 = 0;
     int preset2 = -1100;
     int preset3 = -1500;
-    int preset4 = -2900;
+    int preset4 = -2500;
 
     public void goToPreset(boolean goTo1, boolean goTo2, boolean goTo3, boolean goTo4) {
         if ((goTo1 || goTo2 || goTo3) && liftyUppy.getMode() == DcMotor.RunMode.RUN_USING_ENCODER) {
